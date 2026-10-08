@@ -15,7 +15,7 @@ The skill itself is [skills/researchcomb/SKILL.md](skills/researchcomb/SKILL.md)
 - **Gemini CLI:** `gemini extensions install https://github.com/diaznakh/ResearchComb` installs the repository as an extension with the same skill.
 - **Claude Code:** The repository includes `.claude-plugin/plugin.json` and `skills/researchcomb/`. An agent can install the skill into `~/.claude/skills/researchcomb/` directly from GitHub.
 - **Codex:** An agent can install the skill into `~/.codex/skills/researchcomb/` directly from GitHub. The repository also includes a portable `plugin.json` for clients that support Agent Plugins.
-- **Antigravity:** An agent can install the skill into `~/.gemini/config/skills/researchcomb/` or a project's `.agent/skills/researchcomb/`.
+- **Antigravity:** An agent can install the skill into `~/.gemini/config/skills/researchcomb/` or a project's `.agents/skills/researchcomb/`.
 
 Codex and Claude Code also support plugin installation from this GitHub repository through their built-in marketplace commands. Those commands register this repository as the source; they do not require a third-party marketplace listing. The chat prompt above uses each host's skill directory when a direct plugin command is unavailable.
 
