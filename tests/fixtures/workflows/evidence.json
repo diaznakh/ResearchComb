@@ -1,0 +1,28 @@
+{
+  "question": "Compare the supplied synthetic study excerpts",
+  "sources": [
+    {
+      "id": "S-A",
+      "title": "CPU threshold classifier",
+      "authors": ["ResearchComb Tests"],
+      "year": 2024,
+      "url": "inputs/source-a.md",
+      "doi": null,
+      "access": "excerpt",
+      "identity_status": "provided",
+      "link_status": "not_checked"
+    },
+    {
+      "id": "S-B",
+      "title": "GPU encoder classifier",
+      "authors": ["ResearchComb Tests"],
+      "year": 2025,
+      "url": "inputs/source-b.md",
+      "doi": null,
+      "access": "excerpt",
+      "identity_status": "provided",
+      "link_status": "not_checked"
+    }
+  ],
+  "claims": []
+}

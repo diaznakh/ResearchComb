@@ -4,8 +4,8 @@ These cases evaluate actual model-generated artifacts. They use the host's norma
 skills, browser, and file tools. No test connects an API client, installs a server,
 or requires a new API key. The local checker uses Python's standard library.
 
-Create an isolated output directory with four folders: `survey`, `check`, `trace`,
-and `manuscript`. Copy `fixtures/citation-draft.md` into `check/draft.md` and
+Create an isolated output directory. The first four cases use `survey`, `check`,
+`trace`, and `manuscript`. Copy `fixtures/citation-draft.md` into `check/draft.md` and
 `fixtures/code-study/` into `trace/study/`. The study is synthetic and must not be
 run. An optional local Git commit of that fixture lets the audit record provenance.
 Do not give the expected findings below to the model being evaluated.
@@ -14,6 +14,11 @@ Run these prompts in Codex or Antigravity, substituting absolute paths for `REPO
 and `OUTPUT`. Use the current skill files, including supporting references. Save
 deliverables in the named case directory. Use a fresh conversation for independent
 cases; the manuscript deliberately reuses the survey artifacts.
+
+The other seven workflow cases and the general skill's discovery/routing case are
+specified in [remaining cases](remaining_cases.md). Together they exercise all
+eleven workflows and the general skill. Each workflow receives a representative
+behavioral case; this is not exhaustive coverage of every input or host condition.
 
 ## Survey
 

@@ -22,6 +22,35 @@ The GitHub package was installed as ResearchComb 0.5.0. A fresh native Codex run
 discovered and loaded `comb-check/SKILL.md` and the shared evidence reference from
 the installed plugin cache, confirming activation without a source-tree path.
 
+## Coverage of every workflow
+
+The remaining seven workflows were tested in two bounded native Codex batches
+using the installed 0.5.0 plugin and local synthetic fixtures. The native logs
+confirmed that each corresponding installed `SKILL.md` was read. All generated
+artifacts passed the local checks and their reports were reviewed against the
+fixture facts and constraints.
+
+| Workflow | Observed result | Outcome |
+| --- | --- | --- |
+| comb-align | Preserved sample sizes, class balances, and baseline metrics; declined a direct ranking across incompatible datasets. | Passed |
+| comb-investigate | Kept a question ledger and supplied-corpus scope; preferred the CPU-feasible option without claiming a live search or a universal accuracy advantage. | Passed |
+| comb-digest | Preserved the 20-example sample, 95% class balance, 95% accuracy, matching baseline, and excerpt-only access limits. | Passed |
+| comb-blueprint | Ranked the CPU-only option as feasible, rejected GPU/download/dependency requirements, and separated reported study metrics from an unexecuted six-example demonstration. | Passed |
+| comb-critique | Flagged the invalid cross-dataset ranking and causal/generalization claims with severity, evidence, and concrete revisions. Input unchanged. | Passed |
+| comb-cycle | Executed baseline and exactly two authorized trials: accuracy 5/6, then 1.0 (kept), then 0.5 (rejected). Saved threshold 1 as best; code, data, and original config unchanged. | Passed |
+| comb-rerun | Executed threshold 0 and observed accuracy 5/6, outside tolerance 0.01 of claimed 0.95. Correctly reported not reproduced, with command and Python version. Inputs unchanged. | Passed |
+
+The native logs show the four actual Python benchmark commands for the cycle and
+reproduction cases. These were executed tests rather than written run plans.
+The general `researchcomb` skill also passed discovery of all twelve skills and
+routing of citation, comparison, reproduction, and writing requests.
+
+Coverage now includes one passing representative behavioral case for **all eleven
+workflow skills**, plus the general discovery/routing case. This covers the tested
+inputs and constraints, not every possible research task. The seven added cases
+are local synthetic tests; the original survey and citation check used real public
+paper sources. Antigravity behavioral coverage remains unavailable as noted below.
+
 Two grading assumptions were corrected during evaluation: a seed declaration can
 be qualified when its implementation is absent, and a canonical publisher link is
 a valid reference even when the DOI is not written literally in the document.
