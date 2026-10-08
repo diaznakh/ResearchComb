@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.jpg" alt="ResearchComb logo: a comb passing through a sheet of paper" width="220" height="220">
+  <img src="assets/logo.png" alt="ResearchComb logo: a comb passing through a sheet of paper" width="220" height="220">
 </p>
 
 <h1 align="center">ResearchComb</h1>
