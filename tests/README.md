@@ -91,6 +91,10 @@ and the distinction between estimated pages and measured pagination. A genuinely
 blocked task must be reported partial, which is honest behavior but does not pass
 this completion regression.
 
+The installed `researchcomb/scripts/check_completion.py` also checks open-ended
+search coverage and a requested manuscript word range. Run its offline regression
+with `python3 -m unittest tests/test_completion_gate.py` from the repository root.
+
 ## Local checks
 
 ```text

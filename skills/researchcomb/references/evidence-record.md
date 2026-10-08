@@ -18,6 +18,14 @@ The JSON form has a question, a source register, and a claim register:
 }
 ```
 
+For an open-ended live academic search with file access, add a `searches` list. Include one entry per broad source in the [search guide](search-sources.md), using the URL from the actual browser call. Example:
+
+```json
+{"source":"Crossref","direct":{"url":"https://search.crossref.org/?q=example","outcome":"inaccessible"},"fallback":{"query":"example site:search.crossref.org","outcome":"relevant results found"}}
+```
+
+Use `searched` or `inaccessible` for the direct outcome. When direct search is inaccessible, record the exact fallback query and its outcome. Never fill this record from an imagined tool call. The local coverage checker tests completeness of the record, not whether a browser call really occurred; compare it with the host tool log.
+
 Each source contains:
 
 | Field | Content |

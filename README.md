@@ -39,8 +39,8 @@ Use your native plugin installer if it accepts this
 GitHub repository; otherwise copy every complete skill
 folder under skills/, including supporting files, into
 your user skills directory. Confirm researchcomb and all
-twelve comb-* commands are available. Do not run
-repository code.
+twelve comb-* commands are available. Do not execute
+repository code during installation.
 ```
 
 The host may ask for its normal approval to fetch GitHub or write to its skills directory. Use the instruction above to request installation; a bare link may only open the repository.
@@ -151,6 +151,8 @@ The supporting source is the [Nature Communications paper](https://www.nature.co
 5. **Deliver with limits visible.** Report the result, measured completion checks, and remaining unknowns.
 
 The [shared evidence record](skills/researchcomb/references/evidence-record.md) keeps bibliographic identity, link access, and claim support separate. Claims can be **supported**, **qualified**, **contradicted**, **unsupported**, or **unverified**. A substantial task can save the record as `evidence.json`; a narrow lookup can use a compact table in context.
+
+For open-ended live searches and manuscripts with a requested word range, the installed skills instruct the host to run a local [completion checker](skills/researchcomb/scripts/check_completion.py). It flags missing broad-source search attempts or fallbacks and drafts outside the requested word range. It uses Python's standard library, with no ResearchComb server or API key. A host can skip the checker, and it cannot verify that a logged browser call happened or that a citation supports a claim; inspect the host tool log and use `comb-check` for those judgments.
 
 ### Paper and topic search sources
 
