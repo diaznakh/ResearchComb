@@ -9,7 +9,7 @@ Work inside the current chat with the host's existing browsing, file, code, exec
 
 ## Select a workflow
 
-The package includes these focused skills. Use the matching available skill for an explicit workflow request; keep this general workflow for tasks combining several stages. If asked for help or available commands, show the names and their purposes. Invocation syntax belongs to the host: slash commands in Antigravity, skill selection with `$` in Codex or `@` in ChatGPT.
+The package supports Codex and Antigravity and includes these focused skills. Use the matching available skill for an explicit workflow request; keep this general workflow for tasks combining several stages. If asked for help or available commands, show the names and their purposes. Invocation syntax belongs to the host: slash commands in Antigravity and skill selection with `$` in Codex.
 
 - `comb-trace`: Trace paper claims into companion code and identify mismatches.
 - `comb-cycle`: Run a bounded local experiment loop against a fixed metric.
