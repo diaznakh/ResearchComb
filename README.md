@@ -132,31 +132,22 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 
 ## From a topic to a research paper
 
-Use `researchcomb` to coordinate the full process in one request, or call the focused workflows in this order. Keep the same [evidence record](skills/researchcomb/references/evidence-record.md) and source IDs as you move between steps.
+Follow the `/comb-*` commands below; each links to its instructions in the workflow table above. Use `researchcomb` to coordinate the whole process in one request.
 
 ```mermaid
 flowchart TD
-    A["Topic → define question, scope, paper type, and requested length"] --> B["comb-survey → map the literature and gaps"]
-    B --> C["comb-investigate → test the research question against primary sources"]
-    C --> D["comb-digest → read key papers and record source locations"]
-    D --> E["comb-align → compare methods, results, and disagreements"]
-    E --> F{"Does this paper need code checks or original results?"}
-    F -- "No: literature or review paper" --> J["comb-manuscript → draft in sections from the evidence"]
-    F -- "Yes: with access and authorization" --> G["comb-trace → inspect paper claims against code, if relevant"]
-    G --> H["comb-blueprint → plan the method or experiment"]
-    H --> I["comb-rerun or comb-cycle → run and record results, if authorized"]
-    I --> J
-    J --> K{"Requested sections and word range met?"}
-    K -- "No: gather evidence or keep writing" --> C
-    K -- Yes --> L["comb-critique → identify methodological and argument gaps"]
-    L --> M["Revise the manuscript"]
-    M --> N["comb-check → verify claims, numbers, and citations"]
-    N --> O{"Material issues remain?"}
-    O -- "Yes: repair evidence or draft" --> C
-    O -- No --> P["Final paper → linked references, measured length, and stated limits"]
+    A["Topic and paper goal"] --> B["/comb-survey + /comb-investigate<br/>find and assess sources"]
+    B --> C["/comb-digest + /comb-align<br/>read and compare evidence"]
+    C --> D["/comb-manuscript<br/>draft to the requested length"]
+    D --> E["/comb-critique + /comb-check<br/>review and verify"]
+    E --> F{"Complete and supported?"}
+    F -- No --> B
+    F -- Yes --> G["Final paper with sources and limitations"]
+    C -. "If relevant and authorized" .-> H["/comb-trace + /comb-blueprint<br/>/comb-rerun or /comb-cycle"]
+    H -.-> D
 ```
 
-For a paper based only on supplied sources, start at `comb-digest`. Skip code and experiment steps for a literature review. Run the [local completion checker](skills/researchcomb/scripts/check_completion.py) for open-ended live searches and a requested word range; it uses the bounds you give, not a fixed target. If evidence or access is still insufficient, deliver a clearly labeled partial draft rather than inventing results or treating the first short draft as a finished paper.
+Keep one [evidence record](skills/researchcomb/references/evidence-record.md) throughout. For supplied sources, start at `/comb-digest`; skip the optional branch for a literature review. Run experiments only with authorization. Check search coverage and the requested word range before calling the paper complete; label it partial if evidence is still insufficient.
 
 ## A citation check in practice
 
