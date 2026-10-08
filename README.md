@@ -49,13 +49,63 @@ The workflow names are shared across both hosts. Antigravity exposes them as sla
 | `/comb-check` | Check citations, attribution, quotations, and numbers against source evidence. |
 | `/comb-digest` | Summarize a paper, PDF, report, README, or local artifact through focused reading. |
 
-Try: “Use ResearchComb to find recent papers on retrieval-augmented generation, compare their findings, inspect linked code, and give verified DOI links.”
-
 Live paper search, code execution, and background monitoring depend on the host's available browsing, execution, and scheduling tools. ResearchComb will state when one of those tools is unavailable.
 
 Research, writing, comparison, and review reuse a [shared evidence record](skills/researchcomb/references/evidence-record.md). It records which source passage supports each claim and keeps inaccessible or unchecked evidence visible. A resolving DOI alone does not verify a scientific claim. Manuscripts check requested length against a measured count before being marked complete.
 
 See [workflow regression checks](tests/README.md) for realistic test prompts, local checks, and recorded results.
+
+## Prompt examples
+
+These plain-language prompts work in both Codex and Antigravity. You can also select the corresponding skill with `$` in Codex or `/` in Antigravity before entering the request. Replace example filenames, folders, topics, and environment choices with your own.
+
+**General research — `researchcomb`**
+
+> Use ResearchComb to research when retrieval-augmented generation improves factual accuracy and when it fails. Find primary sources, compare their findings, and produce a cited brief with an evidence record and unresolved questions.
+
+**Paper-to-code audit — `comb-trace`**
+
+> Use comb-trace to audit paper.pdf against its companion repository in ./paper-code. Check data splits, hyperparameters, and evaluation metrics. Cite paper sections and code locations, grade mismatches by severity, and inspect without running the code.
+
+**Experiment loop — `comb-cycle`**
+
+> Use comb-cycle to optimize validation F1 in ./benchmark using my existing local .venv. You may run the benchmark and change only the decision threshold. Keep the validation data fixed, use at most three trials and fifteen minutes, preserve the original configuration, and record which measured changes you keep or reject.
+
+**Source comparison — `comb-align`**
+
+> Use comb-align to compare paper-a.pdf and paper-b.pdf. Build a cited matrix covering study design, datasets, baselines, results, and limitations. Explain agreements and disagreements, and identify results that cannot be compared directly.
+
+**Deep investigation — `comb-investigate`**
+
+> Use comb-investigate to examine whether CO2-assisted propane dehydrogenation can reduce emissions under industrial conditions. Find evidence supporting and challenging the claim, separate laboratory results from life-cycle estimates, and save a research brief and evidence.json.
+
+**Manuscript writing — `comb-manuscript`**
+
+> Use comb-manuscript to turn findings.md and evidence.json into a 6,000–6,500-word review, excluding the bibliography. Include an abstract, introduction, thematic comparison, limitations, research priorities, and conclusion. Preserve source IDs, use linked references, save manuscript.md, and report its measured word count.
+
+**Literature survey — `comb-survey`**
+
+> Use comb-survey to review research on CO2-assisted propane dehydrogenation published during the past five years. Record search terms and screening criteria, distinguish primary studies from reviews and preprints, and deliver a literature matrix, thematic synthesis, gaps, and linked bibliography.
+
+**Implementation planning — `comb-blueprint`**
+
+> Use comb-blueprint to rank practical methods for searching my local document collection on a CPU-only laptop with 8 GB RAM. Support the options with papers, code, and documentation. Give prerequisites, resource estimates, evaluation plans, and failure points. Produce a plan without installing or executing anything.
+
+**Result reproduction — `comb-rerun`**
+
+> Use comb-rerun to reproduce the accuracy in Table 2 of paper.pdf using ./paper-code, ./data, and my existing local .venv. Local execution is authorized; preserve the original code and data and do not install dependencies. Record the protocol, commands, expected and observed results, and deviations. Report whether the result reproduces within one percentage point.
+
+**Research critique — `comb-critique`**
+
+> Use comb-critique to review draft.md with evidence.json. Check methods, controls, baselines, uncertainty, and whether the conclusions follow from the evidence. Give critical, major, and minor findings with source locations and a prioritized revision plan. Leave the draft unchanged.
+
+**Citation and claim verification — `comb-check`**
+
+> Use comb-check to verify draft.md against evidence.json and the underlying sources. Check citation identities, numerical claims, quotations, and attribution. Return a correction table and updated verification statuses, distinguish inaccessible sources from broken links, and leave the draft unchanged.
+
+**Source summary — `comb-digest`**
+
+> Use comb-digest to summarize paper.pdf in about 300 words. Cover its question, method, main findings, important numerical conditions, and limitations, with page or section references. State whether you inspected the full text or only part of it.
 
 ## License
 
