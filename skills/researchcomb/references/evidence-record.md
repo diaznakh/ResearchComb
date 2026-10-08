@@ -4,6 +4,8 @@ Use one record across discovery, comparison, writing, critique, and verification
 
 For a substantial task with file access, save `evidence.json` beside the deliverable. For a narrow lookup or a host without persistent files, keep an equivalent compact table in the working context. Follow a user-requested format. Read only the records needed for the task, and avoid copying large source texts into the record.
 
+When a workflow needs live paper or topic discovery, read the [search source guide](search-sources.md), including Google Scholar and ResearchGate. Follow the user's source restrictions and record the searches and access actually available. Supplied-only tasks do not require live searches.
+
 ## Structure
 
 The JSON form has a question, a source register, and a claim register:

@@ -147,6 +147,23 @@ The supporting source is the [Nature Communications paper](https://www.nature.co
 
 The [shared evidence record](skills/researchcomb/references/evidence-record.md) keeps bibliographic identity, link access, and claim support separate. Claims can be **supported**, **qualified**, **contradicted**, **unsupported**, or **unverified**. A substantial task can save the record as `evidence.json`; a narrow lookup can use a compact table in context.
 
+### Paper and topic search sources
+
+The [shared search guide](skills/researchcomb/references/search-sources.md) includes **Google Scholar** and **ResearchGate**, alongside Crossref, OpenAlex, Semantic Scholar, PubMed, Europe PMC, and preprint repositories. It also covers GitHub and Hugging Face when code or datasets matter, and official primary websites for broader topics.
+
+- **Google Scholar:** topic, title, and author searches; citation trails and alternative paper versions.
+- **ResearchGate:** publication and researcher discovery, with public paper copies where available.
+
+These sources use the host's existing browser; ResearchComb maintains no separate search index or API integration. Access depends on the host and website. Blocked or login-only content is recorded as inaccessible, with accessible sources used instead. A search result or profile listing does not verify a paper's claims.
+
+```text
+Use comb-survey to find papers on battery recycling.
+Search Google Scholar and ResearchGate alongside other
+relevant sources. Record searches and access limits,
+deduplicate papers, and verify findings against the
+underlying papers or abstracts before citing them.
+```
+
 ## Prompt examples
 
 Expand a workflow and copy its prompt. Replace filenames, topics, folders, and environment choices with your own.

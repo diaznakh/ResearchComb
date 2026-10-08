@@ -57,6 +57,21 @@ a valid reference even when the DOI is not written literally in the document.
 These changes accept accurate, appropriately qualified outputs; the three actual
 code mismatches and two citation errors remain required findings.
 
+## Search source checks — 8 October 2026
+
+Version 0.5.3 adds a shared browser search guide for Google Scholar and ResearchGate.
+All twelve skills reach it through the existing evidence reference. Local links,
+skill metadata, and all four checker unit tests passed.
+
+A live lookup for "Attention Is All You Need" could not fetch either service's
+direct search results through the host web tool. An ordinary web search restricted
+to public ResearchGate publication pages returned candidates, including different
+works and later uploaded records; these were not treated as verified original
+publication metadata. The canonical arXiv abstract was accessible for checking
+identity. Google Scholar search access remains unverified. This is a browser
+access check, not a new model behavioral pass; the workflow cases above were not
+rerun for this instruction update.
+
 ## Limits
 
 Several publisher pages were inaccessible. The survey and manuscript explicitly
