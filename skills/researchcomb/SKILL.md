@@ -28,7 +28,7 @@ The package supports Codex and Antigravity and includes these focused skills. Us
 ## Frame the question and gather evidence
 
 - For an open-ended task, keep a compact question list (questions, status, evidence needed) and search plan (search terms, databases, source types, date limits). Keep these in the working context or a file when the task spans sessions. Skip the list for a narrow lookup.
-- For live paper or topic discovery, read the [search source guide](references/search-sources.md). Use Google Scholar and ResearchGate alongside field-appropriate scholarly indexes, primary websites, and code or dataset repositories. Use a second source when coverage is thin or a critical claim needs corroboration, and record blocked access honestly.
+- For live paper or topic discovery, read and follow the [search source guide](references/search-sources.md). An open-ended academic search uses general web search and the relevant scholarly sources in that guide; record a searched, inaccessible, or scoped-out outcome for each applicable source. Use additional evidence when coverage is thin or a critical claim needs corroboration.
 - For each candidate paper, record title, authors, year, venue or preprint server, DOI or stable URL, relevance, and whether you read the title, abstract, or full text. Distinguish preprints from peer-reviewed articles only when verified. Search snippets alone do not establish findings.
 - Open abstracts or full texts before describing results. Follow cited references or related work when they answer a question on the list. Stop expanding when another search is unlikely to change the answer materially.
 

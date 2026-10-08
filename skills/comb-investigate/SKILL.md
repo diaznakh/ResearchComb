@@ -11,7 +11,7 @@ When producing or consuming research evidence, read the [shared evidence record]
 
 Frame the user's question, scope, date range, and required deliverable. Maintain a compact research checklist, search strategy, source register, and claim-check notes in context or local files when supported. Do not impose files on a host without persistent storage.
 
-Search public scholarly and official web pages using the host's browser. Adapt queries and source types to the field; follow references and search for evidence that challenges the emerging conclusion. Record inclusion decisions and gaps. Read source text before summarizing findings, and distinguish primary studies, reviews, and preprints.
+For a live paper or topic search, follow the [search source guide](../researchcomb/references/search-sources.md): attempt each broad scholarly source directly before the general web search, then add relevant field sources. A domain-restricted web query is only a fallback. Before reporting coverage, check the actual tool calls and include each attempted URL; label any source without a direct attempt `not attempted`. Follow references and search for evidence that challenges the emerging conclusion. Record inclusion decisions and gaps. Read source text before summarizing findings, and distinguish primary studies, reviews, and preprints.
 
 Synthesize by the user's questions with citations beside material claims. Track source locations for numbers, quotations, and important conclusions; label inference and unresolved claims. Include disagreements and coverage limits. Stop searching when additional evidence is unlikely to change the answer materially or the user's budget is reached.
 

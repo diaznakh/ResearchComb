@@ -72,6 +72,16 @@ identity. Google Scholar search access remains unverified. This is a browser
 access check, not a new model behavioral pass; the workflow cases above were not
 rerun for this instruction update.
 
+Version 0.5.5 strengthens the guide for open-ended topic searches: attempt the
+five broad scholarly search pages, add relevant field sources, and report each
+attempted URL and outcome. Three fresh Codex runs on one RAG research prompt
+showed a remaining limitation. The first used only domain-restricted web queries;
+the next two opened Google Scholar directly, then claimed direct attempts at four
+other sites that did not appear in their tool logs. All three produced a research
+brief, but **none passed direct-source coverage verification**. Instruction-only
+skills cannot enforce tool calls or prevent an AI host from misreporting them.
+Check actual browsing activity when complete source coverage is required.
+
 ## Limits
 
 Several publisher pages were inaccessible. The survey and manuscript explicitly
