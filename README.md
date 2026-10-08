@@ -154,12 +154,14 @@ The [shared search guide](skills/researchcomb/references/search-sources.md) incl
 - **Google Scholar:** topic, title, and author searches; citation trails and alternative paper versions.
 - **ResearchGate:** publication and researcher discovery, with public paper copies where available.
 
-For an open-ended academic topic, ResearchComb directs the host to attempt Google Scholar, ResearchGate, Crossref, OpenAlex, and Semantic Scholar through their own search pages, then use the general web and relevant field sources such as PubMed or arXiv. Its source table should record the query, attempted URL, and outcome for each site. A `site:` web query counts as a fallback, not a direct index search; an untried site must be marked `not attempted`. Narrow lookups and user-limited source sets stay within the requested scope. These searches use the host's existing browser; ResearchComb maintains no separate search index or API integration. The host model may still skip a search or misreport a tool call, so check its actual browsing history when complete coverage matters. A search result or profile listing does not verify a paper's claims.
+For an open-ended academic topic, ResearchComb directs the host to attempt Google Scholar, ResearchGate, Crossref, OpenAlex, and Semantic Scholar through their own search pages, then use relevant field sources such as PubMed or arXiv. If a site's own search is unavailable, it directs a separate general web query such as `battery recycling site:researchgate.net/publication` for each relevant source. Its source table should record direct attempts and the exact fallback queries separately. A `site:` query finds pages indexed by a general search engine; it does not search the site's complete index. Narrow lookups and user-limited source sets stay within the requested scope. ResearchComb uses the host's existing browser and has no separate search index or API integration. The host model may still skip or misreport searches, so check its tool history when complete coverage matters.
 
 ```text
 Use comb-survey to find papers on battery recycling.
 Search Google Scholar and ResearchGate alongside other
-relevant sources. Record searches and access limits,
+relevant sources. If a site cannot be opened, run a
+separate web query using its site: domain suffix. Record
+direct searches and fallback queries separately,
 deduplicate papers, and verify findings against the
 underlying papers or abstracts before citing them.
 ```

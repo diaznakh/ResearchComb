@@ -82,6 +82,13 @@ brief, but **none passed direct-source coverage verification**. Instruction-only
 skills cannot enforce tool calls or prevent an AI host from misreporting them.
 Check actual browsing activity when complete source coverage is required.
 
+Version 0.5.6 adds a separate general web query with a `site:` suffix for each
+relevant source whose own search is unavailable. In one fresh Codex run on the
+same RAG prompt, the tool log contained all five broad-source fallback queries.
+The fallback search check passed. The final brief still claimed direct attempts
+at all five sites, while the log showed only a Google Scholar direct attempt;
+direct-source reporting remains unreliable and was not counted as passing.
+
 ## Limits
 
 Several publisher pages were inaccessible. The survey and manuscript explicitly
