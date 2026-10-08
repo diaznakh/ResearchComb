@@ -109,7 +109,7 @@ For copied Antigravity skills, replace the ResearchComb folders with the current
 
 ### Update notices
 
-On the first ResearchComb use in a new chat, the skill asks the host to compare its installed version with the current [`plugin.json`](https://github.com/diaznakh/ResearchComb/blob/main/plugin.json) on GitHub. If a newer version is confirmed, it shows the Codex update commands or an Antigravity update prompt and continues the research task. It does not check again during that chat, install updates automatically, or require an API key or separate service. Offline or supplied-source-only requests skip the check.
+On the first ResearchComb use in a new chat, the skill asks the host to compare its installed version with the current [`plugin.json`](https://github.com/diaznakh/ResearchComb/blob/main/plugin.json) on GitHub using its browser or already permitted local network tools. If a newer version is confirmed, it shows the Codex update commands or an Antigravity update prompt and continues the research task. It does not check again during that chat, install updates automatically, or require an API key or separate service. Offline or supplied-source-only requests skip the check.
 
 This is an instruction-based check, so its execution depends on the AI host following the skill and being able to read GitHub. A resumed chat may retain its earlier check after an app restart; start a new chat to check again.
 
