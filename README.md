@@ -32,11 +32,14 @@ ResearchComb helps your AI assistant find literature, connect findings, inspect 
 Paste this into Codex or Antigravity with GitHub and local file access:
 
 ```text
-Install ResearchComb from https://github.com/diaznakh/ResearchComb for my account.
-Use your native plugin installer if it accepts this GitHub repository; otherwise
-copy every complete skill folder under skills/, including supporting files, into
-your user skills directory. Confirm researchcomb and all eleven comb-* workflows
-are available. Do not run repository code.
+Install ResearchComb from
+https://github.com/diaznakh/ResearchComb for my account.
+Use your native plugin installer if it accepts this
+GitHub repository; otherwise copy every complete skill
+folder under skills/, including supporting files, into
+your user skills directory. Confirm researchcomb and all
+eleven comb-* workflows are available. Do not run
+repository code.
 ```
 
 The host may ask for its normal approval to fetch GitHub or write to its skills directory. Use the instruction above to request installation; a bare link may only open the repository.
@@ -44,9 +47,11 @@ The host may ask for its normal approval to fetch GitHub or write to its skills 
 ### 2. Start a new chat and give it a task
 
 ```text
-Use comb-survey to review recent work on retrieval-augmented generation.
-Compare methods and limitations, distinguish preprints from published studies,
-and give a literature matrix with linked references.
+Use comb-survey to review recent work on
+retrieval-augmented generation. Compare methods and
+limitations, distinguish preprints from published
+studies, and give a literature matrix with linked
+references.
 ```
 
 In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*` slash command. Plain-language requests such as “Use comb-check to…” work in either host. A plugin may display the ResearchComb namespace with the skill name.
@@ -149,9 +154,11 @@ Expand a workflow and copy its prompt. Replace filenames, topics, folders, and e
 <summary><strong>General research</strong> · <code>researchcomb</code></summary>
 
 ```text
-Use ResearchComb to research when retrieval-augmented generation improves factual
-accuracy and when it fails. Find primary sources, compare their findings, and produce a
-cited brief with an evidence record and unresolved questions.
+Use ResearchComb to research when retrieval-augmented
+generation improves factual accuracy and when it fails.
+Find primary sources, compare their findings, and
+produce a cited brief with an evidence record and
+unresolved questions.
 ```
 
 </details>
@@ -160,9 +167,11 @@ cited brief with an evidence record and unresolved questions.
 <summary><strong>Paper-to-code audit</strong> · <code>comb-trace</code></summary>
 
 ```text
-Use comb-trace to audit paper.pdf against its companion repository in ./paper-code.
-Check data splits, hyperparameters, and evaluation metrics. Cite paper sections and code
-locations, grade mismatches by severity, and inspect without running the code.
+Use comb-trace to audit paper.pdf against its companion
+repository in ./paper-code. Check data splits,
+hyperparameters, and evaluation metrics. Cite paper
+sections and code locations, grade mismatches by
+severity, and inspect without running the code.
 ```
 
 </details>
@@ -171,10 +180,12 @@ locations, grade mismatches by severity, and inspect without running the code.
 <summary><strong>Experiment loop</strong> · <code>comb-cycle</code></summary>
 
 ```text
-Use comb-cycle to optimize validation F1 in ./benchmark using my existing local .venv.
-You may run the benchmark and change only the decision threshold. Keep the validation
-data fixed, use at most three trials and fifteen minutes, preserve the original
-configuration, and record which measured changes you keep or reject.
+Use comb-cycle to optimize validation F1 in ./benchmark
+using my existing local .venv. You may run the benchmark
+and change only the decision threshold. Keep the
+validation data fixed, use at most three trials and
+fifteen minutes, preserve the original configuration,
+and record which measured changes you keep or reject.
 ```
 
 </details>
@@ -183,9 +194,11 @@ configuration, and record which measured changes you keep or reject.
 <summary><strong>Source comparison</strong> · <code>comb-align</code></summary>
 
 ```text
-Use comb-align to compare paper-a.pdf and paper-b.pdf. Build a cited matrix covering
-study design, datasets, baselines, results, and limitations. Explain agreements and
-disagreements, and identify results that cannot be compared directly.
+Use comb-align to compare paper-a.pdf and paper-b.pdf.
+Build a cited matrix covering study design, datasets,
+baselines, results, and limitations. Explain agreements
+and disagreements, and identify results that cannot be
+compared directly.
 ```
 
 </details>
@@ -194,10 +207,12 @@ disagreements, and identify results that cannot be compared directly.
 <summary><strong>Deep investigation</strong> · <code>comb-investigate</code></summary>
 
 ```text
-Use comb-investigate to examine whether CO2-assisted propane dehydrogenation can reduce
-emissions under industrial conditions. Find evidence supporting and challenging the
-claim, separate laboratory results from life-cycle estimates, and save a research brief
-and evidence.json.
+Use comb-investigate to examine whether CO2-assisted
+propane dehydrogenation can reduce emissions under
+industrial conditions. Find evidence supporting and
+challenging the claim, separate laboratory results from
+life-cycle estimates, and save a research brief and
+evidence.json.
 ```
 
 </details>
@@ -206,10 +221,13 @@ and evidence.json.
 <summary><strong>Manuscript writing</strong> · <code>comb-manuscript</code></summary>
 
 ```text
-Use comb-manuscript to turn findings.md and evidence.json into a 6,000–6,500-word
-review, excluding the bibliography. Include an abstract, introduction, thematic
-comparison, limitations, research priorities, and conclusion. Preserve source IDs, use
-linked references, save manuscript.md, and report its measured word count.
+Use comb-manuscript to turn findings.md and
+evidence.json into a 6,000–6,500-word review, excluding
+the bibliography. Include an abstract, introduction,
+thematic comparison, limitations, research priorities,
+and conclusion. Preserve source IDs, use linked
+references, save manuscript.md, and report its measured
+word count.
 ```
 
 </details>
@@ -218,10 +236,12 @@ linked references, save manuscript.md, and report its measured word count.
 <summary><strong>Literature survey</strong> · <code>comb-survey</code></summary>
 
 ```text
-Use comb-survey to review research on CO2-assisted propane dehydrogenation published
-during the past five years. Record search terms and screening criteria, distinguish
-primary studies from reviews and preprints, and deliver a literature matrix, thematic
-synthesis, gaps, and linked bibliography.
+Use comb-survey to review research on CO2-assisted
+propane dehydrogenation published during the past five
+years. Record search terms and screening criteria,
+distinguish primary studies from reviews and preprints,
+and deliver a literature matrix, thematic synthesis,
+gaps, and linked bibliography.
 ```
 
 </details>
@@ -230,10 +250,12 @@ synthesis, gaps, and linked bibliography.
 <summary><strong>Implementation planning</strong> · <code>comb-blueprint</code></summary>
 
 ```text
-Use comb-blueprint to rank practical methods for searching my local document collection
-on a CPU-only laptop with 8 GB RAM. Support the options with papers, code, and
-documentation. Give prerequisites, resource estimates, evaluation plans, and failure
-points. Produce a plan without installing or executing anything.
+Use comb-blueprint to rank practical methods for
+searching my local document collection on a CPU-only
+laptop with 8 GB RAM. Support the options with papers,
+code, and documentation. Give prerequisites, resource
+estimates, evaluation plans, and failure points. Produce
+a plan without installing or executing anything.
 ```
 
 </details>
@@ -242,11 +264,13 @@ points. Produce a plan without installing or executing anything.
 <summary><strong>Result reproduction</strong> · <code>comb-rerun</code></summary>
 
 ```text
-Use comb-rerun to reproduce the accuracy in Table 2 of paper.pdf using ./paper-code,
-./data, and my existing local .venv. Local execution is authorized; preserve the
-original code and data and do not install dependencies. Record the protocol, commands,
-expected and observed results, and deviations. Report whether the result reproduces
-within one percentage point.
+Use comb-rerun to reproduce the accuracy in Table 2 of
+paper.pdf using ./paper-code, ./data, and my existing
+local .venv. Local execution is authorized; preserve the
+original code and data and do not install dependencies.
+Record the protocol, commands, expected and observed
+results, and deviations. Report whether the result
+reproduces within one percentage point.
 ```
 
 </details>
@@ -255,10 +279,12 @@ within one percentage point.
 <summary><strong>Research critique</strong> · <code>comb-critique</code></summary>
 
 ```text
-Use comb-critique to review draft.md with evidence.json. Check methods, controls,
-baselines, uncertainty, and whether the conclusions follow from the evidence. Give
-critical, major, and minor findings with source locations and a prioritized revision
-plan. Leave the draft unchanged.
+Use comb-critique to review draft.md with evidence.json.
+Check methods, controls, baselines, uncertainty, and
+whether the conclusions follow from the evidence. Give
+critical, major, and minor findings with source
+locations and a prioritized revision plan. Leave the
+draft unchanged.
 ```
 
 </details>
@@ -267,10 +293,12 @@ plan. Leave the draft unchanged.
 <summary><strong>Citation and claim verification</strong> · <code>comb-check</code></summary>
 
 ```text
-Use comb-check to verify draft.md against evidence.json and the underlying sources.
-Check citation identities, numerical claims, quotations, and attribution. Return a
-correction table and updated verification statuses, distinguish inaccessible sources
-from broken links, and leave the draft unchanged.
+Use comb-check to verify draft.md against evidence.json
+and the underlying sources. Check citation identities,
+numerical claims, quotations, and attribution. Return a
+correction table and updated verification statuses,
+distinguish inaccessible sources from broken links, and
+leave the draft unchanged.
 ```
 
 </details>
@@ -279,9 +307,11 @@ from broken links, and leave the draft unchanged.
 <summary><strong>Source summary</strong> · <code>comb-digest</code></summary>
 
 ```text
-Use comb-digest to summarize paper.pdf in about 300 words. Cover its question, method,
-main findings, important numerical conditions, and limitations, with page or section
-references. State whether you inspected the full text or only part of it.
+Use comb-digest to summarize paper.pdf in about 300
+words. Cover its question, method, main findings,
+important numerical conditions, and limitations, with
+page or section references. State whether you inspected
+the full text or only part of it.
 ```
 
 </details>
