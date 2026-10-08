@@ -1,5 +1,7 @@
 # ResearchComb
 
+<img src="assets/logo.jpg" alt="ResearchComb logo: a comb passing through a sheet of paper" width="180" height="180">
+
 ResearchComb is a free, MIT-licensed research skill for **Codex and Antigravity**. It helps find papers and citations, inspect linked code, draft reports, review weaknesses, and check claims against sources. It uses the host's existing tools; there is no ResearchComb server, API key, or paid service to configure.
 
 The package contains the general [researchcomb skill](skills/researchcomb/SKILL.md), eleven focused workflow skills, a portable [plugin manifest](plugin.json), and a [Codex marketplace](.agents/plugins/marketplace.json). The skills contain instructions and a shared evidence-record reference. There are no bundled servers or API clients. The regression checks under `tests/` run locally and are not runtime tools.
