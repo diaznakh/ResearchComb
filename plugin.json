@@ -1,0 +1,8 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "researchcomb",
+  "version": "0.2.0",
+  "description": "Research papers, code, evidence, citations, and replication workflows inside AI chats.",
+  "repository": "https://github.com/diaznakh/ResearchComb",
+  "license": "MIT"
+}
