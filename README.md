@@ -107,6 +107,12 @@ For copied Antigravity skills, replace the ResearchComb folders with the current
 
 </details>
 
+### Update notices
+
+On the first ResearchComb use in a new chat, the skill asks the host to compare its installed version with the current [`plugin.json`](https://github.com/diaznakh/ResearchComb/blob/main/plugin.json) on GitHub. If a newer version is confirmed, it shows the Codex update commands or an Antigravity update prompt and continues the research task. It does not check again during that chat, install updates automatically, or require an API key or separate service. Offline or supplied-source-only requests skip the check.
+
+This is an instruction-based check, so its execution depends on the AI host following the skill and being able to read GitHub. A resumed chat may retain its earlier check after an app restart; start a new chat to check again.
+
 ## Workflows
 
 Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several stages, or select the focused skill that fits your goal. The commands below use Antigravity's slash syntax; Codex exposes the same names through its skill selector.
@@ -387,6 +393,7 @@ Experiments need available local execution tools and an authorized environment. 
 
 - [`skills/`](skills/) — the general skill, eleven workflows, and shared evidence guidance.
 - [`plugin.json`](plugin.json) — portable package and Codex presentation metadata.
+- [`skills/researchcomb/VERSION`](skills/researchcomb/VERSION) — installed version for skills copied without the plugin manifest.
 - [Codex marketplace](.agents/plugins/marketplace.json) — GitHub installation source.
 - [`tests/`](tests/) — fixtures, local checks, and recorded native Codex outcomes.
 - [`assets/`](assets/) — the ResearchComb logo and local README badges.
