@@ -1,8 +1,18 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "researchcomb",
-  "version": "0.2.0",
-  "description": "Research papers, code, evidence, citations, and replication workflows inside AI chats.",
+  "version": "0.3.0",
+  "description": "Find research papers, assess evidence, and verify citations in the current chat.",
   "repository": "https://github.com/diaznakh/ResearchComb",
-  "license": "MIT"
+  "license": "MIT",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "ResearchComb",
+        "shortDescription": "Find papers and verify citations",
+        "developerName": "ResearchComb contributors",
+        "category": "Productivity"
+      }
+    }
+  }
 }

@@ -1,9 +1,5 @@
 {
   "name": "researchcomb",
-  "description": "ResearchComb research skill",
-  "owner": {
-    "name": "ResearchComb contributors"
-  },
   "interface": {
     "displayName": "ResearchComb"
   },
@@ -14,7 +10,7 @@
         "source": "url",
         "url": "https://github.com/diaznakh/ResearchComb.git"
       },
-      "description": "Research papers and verify claims with sources inside the current AI chat.",
+      "description": "Find research papers, assess evidence, and verify citations in the current chat.",
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"

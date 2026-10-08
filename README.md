@@ -1,27 +1,47 @@
 # ResearchComb
 
-ResearchComb is a free, MIT-licensed research skill for AI assistants. It helps find papers and citations, inspect linked code, draft reports, review weaknesses, and check claims against sources. It uses the assistant's existing tools; there is no server, API key, or paid service to configure.
+ResearchComb is a free, MIT-licensed research skill for **Codex, ChatGPT, and Antigravity**. It helps find papers and citations, inspect linked code, draft reports, review weaknesses, and check claims against sources. It uses the host's existing tools; there is no ResearchComb server, API key, or paid service to configure.
 
-## Install by asking your AI
+The package contains one [researchcomb skill](skills/researchcomb/SKILL.md), a portable [plugin manifest](plugin.json), and a [Codex/ChatGPT marketplace](.agents/plugins/marketplace.json). No scripts run during installation.
 
-Paste this into a coding agent with GitHub access and permission to install local skills, such as Codex, Claude Code, Gemini CLI, or Antigravity:
+## Install from GitHub
 
-> Install ResearchComb from https://github.com/diaznakh/ResearchComb for my user account. Read `skills/researchcomb/SKILL.md`, place that skill in your native user-level skills directory, and verify it appears in your available skills. Use the repository's native plugin or extension format if your host supports direct GitHub installation. Do not run scripts from the repository. If you cannot install skills from this chat, tell me the exact manual step for this host.
+In an agent with GitHub and local file access, paste:
 
-The skill itself is [skills/researchcomb/SKILL.md](skills/researchcomb/SKILL.md). An agent can copy that directory into its user skills location. Installation may require the host's normal approval for fetching a GitHub repository or writing to its skills directory.
+> Install ResearchComb from https://github.com/diaznakh/ResearchComb for my account. Use your native plugin installer if it accepts this GitHub repository; otherwise copy `skills/researchcomb/` into your user skills directory. Confirm that `researchcomb` appears in your available skills. Do not run repository code.
 
-## Native package formats
+The host may ask you to approve GitHub access or a local file write. A link by itself may only open or summarize the repository; use the instruction above to request installation.
 
-- **Gemini CLI:** `gemini extensions install https://github.com/diaznakh/ResearchComb` installs the repository as an extension with the same skill.
-- **Claude Code:** The repository includes `.claude-plugin/plugin.json` and `skills/researchcomb/`. An agent can install the skill into `~/.claude/skills/researchcomb/` directly from GitHub.
-- **Codex:** An agent can install the skill into `~/.codex/skills/researchcomb/` directly from GitHub. The repository also includes a portable `plugin.json` for clients that support Agent Plugins.
-- **Antigravity:** An agent can install the skill into `~/.gemini/config/skills/researchcomb/` or a project's `.agents/skills/researchcomb/`.
+### Codex
 
-Codex and Claude Code also support plugin installation from this GitHub repository through their built-in marketplace commands. Those commands register this repository as the source; they do not require a third-party marketplace listing. The chat prompt above uses each host's skill directory when a direct plugin command is unavailable.
+For the plugin in Codex CLI or the ChatGPT desktop app, register this repository as a marketplace, then install `researchcomb@researchcomb`:
 
-Browser-only chats can use the linked skill as instructions during a conversation, but they cannot persistently install files unless their host exposes a skill or plugin installation feature. Live paper search, code execution, and background monitoring depend on the host's available tools.
+```text
+codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git
+codex plugin add researchcomb@researchcomb
+```
+
+Start a new chat and ask Codex to use ResearchComb, or select its skill with `$researchcomb`. If plugin installation is unavailable, ask `$skill-installer` to install `skills/researchcomb/` from this repository.
+
+### ChatGPT
+
+In the **ChatGPT desktop app**, add this repository as a personal plugin marketplace using the Codex command above, restart the app, and install ResearchComb from the Plugins Directory. Then start a new Chat or Work conversation and select `@researchcomb` or ask for a research task.
+
+For a **ChatGPT workspace**, an admin can import `https://github.com/diaznakh/ResearchComb` under **Admin → Plugins → Add → Import marketplace**. The marketplace file is `.agents/plugins/marketplace.json`. After the admin makes the plugin available, members can install it in ChatGPT on the web, desktop, or mobile. A regular ChatGPT web chat cannot persistently install an unpublished plugin just because you paste a GitHub URL. Public directory installation would require a separate plugin submission and review.
+
+### Antigravity
+
+In the Antigravity IDE, ask its agent to copy `skills/researchcomb/` from this repository to `~/.gemini/config/skills/researchcomb/` for all workspaces, or `<workspace-root>/.agents/skills/researchcomb/` for one workspace. Check **Customizations → Skills** or ask which skills are available. Antigravity CLI can also install the GitHub package with:
+
+```text
+agy plugin install https://github.com/diaznakh/ResearchComb
+```
+
+## Use
 
 Try: “Use ResearchComb to find recent papers on retrieval-augmented generation, compare their findings, inspect linked code, and give verified DOI links.”
+
+Live paper search, code execution, and background monitoring depend on the host's available browsing, execution, and scheduling tools. ResearchComb will state when one of those tools is unavailable.
 
 ## License
 
