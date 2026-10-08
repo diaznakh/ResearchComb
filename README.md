@@ -2,13 +2,13 @@
 
 ResearchComb is a free, MIT-licensed research skill for **Codex and Antigravity**. It helps find papers and citations, inspect linked code, draft reports, review weaknesses, and check claims against sources. It uses the host's existing tools; there is no ResearchComb server, API key, or paid service to configure.
 
-The package contains the general [researchcomb skill](skills/researchcomb/SKILL.md), ten focused workflow skills, a portable [plugin manifest](plugin.json), and a [Codex marketplace](.agents/plugins/marketplace.json). The skills contain instructions only. There are no bundled servers, API clients, or executable scripts.
+The package contains the general [researchcomb skill](skills/researchcomb/SKILL.md), eleven focused workflow skills, a portable [plugin manifest](plugin.json), and a [Codex marketplace](.agents/plugins/marketplace.json). The skills contain instructions and a shared evidence-record reference. There are no bundled servers or API clients. The regression checks under `tests/` run locally and are not runtime tools.
 
 ## Install from GitHub
 
 In Codex or Antigravity with GitHub and local file access, paste:
 
-> Install ResearchComb from https://github.com/diaznakh/ResearchComb for my account. Use your native plugin installer if it accepts this GitHub repository; otherwise copy every skill folder under `skills/` into your user skills directory. Confirm that `researchcomb` and the ten `comb-*` workflows appear in your available skills. Do not run repository code.
+> Install ResearchComb from https://github.com/diaznakh/ResearchComb for my account. Use your native plugin installer if it accepts this GitHub repository; otherwise copy every complete skill folder under `skills/`, including its supporting files, into your user skills directory. Confirm that `researchcomb` and the eleven `comb-*` workflows appear in your available skills. Do not run repository code.
 
 The host may ask you to approve GitHub access or a local file write. A link by itself may only open or summarize the repository; use the instruction above to request installation.
 
@@ -46,11 +46,16 @@ The workflow names are shared across both hosts. Antigravity exposes them as sla
 | `/comb-blueprint` | Rank feasible technical approaches and provide implementation plans. |
 | `/comb-rerun` | Plan or execute a local reproduction with expected-versus-observed results. |
 | `/comb-critique` | Produce critical, major, and minor findings with a revision plan. |
+| `/comb-check` | Check citations, attribution, quotations, and numbers against source evidence. |
 | `/comb-digest` | Summarize a paper, PDF, report, README, or local artifact through focused reading. |
 
 Try: “Use ResearchComb to find recent papers on retrieval-augmented generation, compare their findings, inspect linked code, and give verified DOI links.”
 
 Live paper search, code execution, and background monitoring depend on the host's available browsing, execution, and scheduling tools. ResearchComb will state when one of those tools is unavailable.
+
+Research, writing, comparison, and review reuse a [shared evidence record](skills/researchcomb/references/evidence-record.md). It records which source passage supports each claim and keeps inaccessible or unchecked evidence visible. A resolving DOI alone does not verify a scientific claim. Manuscripts check requested length against a measured count before being marked complete.
+
+See [workflow regression checks](tests/README.md) for realistic test prompts, local checks, and recorded results.
 
 ## License
 

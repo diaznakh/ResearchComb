@@ -1,0 +1,5 @@
+{
+  "batch_size": 64,
+  "dropout": 0.5,
+  "seed": 42
+}
