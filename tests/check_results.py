@@ -64,7 +64,8 @@ def validate_record(record):
 def linked_sources_present(record, report):
     text = report.lower()
     return all(
-        str(source.get("doi")).lower() in text or str(source.get("url")).lower() in text
+        source["doi"].lower() in text
+        or (isinstance(source.get("url"), str) and source["url"].lower() in text)
         for source in record["sources"] if source.get("doi") in DOIS
     )
 

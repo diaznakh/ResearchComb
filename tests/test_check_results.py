@@ -39,6 +39,8 @@ class EvidenceChecks(unittest.TestCase):
         record = {"sources": [{"doi": "10.1038/s41467-018-03793-w", "url": "https://www.nature.com/articles/s41467-018-03793-w"}]}
         self.assertTrue(linked_sources_present(record, "[Paper](https://www.nature.com/articles/s41467-018-03793-w)"))
         self.assertFalse(linked_sources_present(record, "Paper with no link"))
+        record["sources"][0]["url"] = None
+        self.assertFalse(linked_sources_present(record, "None of the sources is linked"))
 
 
 if __name__ == "__main__":

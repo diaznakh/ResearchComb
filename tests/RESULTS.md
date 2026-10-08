@@ -18,6 +18,10 @@ reviewed for source access disclosure, attribution, inspection-versus-execution
 claims, and honest completion reporting. The artifact checks do not prove every
 scientific assertion correct.
 
+The GitHub package was installed as ResearchComb 0.5.0. A fresh native Codex run
+discovered and loaded `comb-check/SKILL.md` and the shared evidence reference from
+the installed plugin cache, confirming activation without a source-tree path.
+
 Two grading assumptions were corrected during evaluation: a seed declaration can
 be qualified when its implementation is absent, and a canonical publisher link is
 a valid reference even when the DOI is not written literally in the document.
@@ -30,6 +34,10 @@ Several publisher pages were inaccessible. The survey and manuscript explicitly
 recorded abstract or indexed-excerpt access for those sources. Only two of the
 manuscript's nine sources were inspected in full text, so a passing run does not
 establish complete verification of the wider literature.
+
+An additional independent review of the entire manuscript was stopped after
+installed-skill activation was confirmed. It produced no completed verification
+report, and is not counted among the four passing regression cases.
 
 An Antigravity plan with the same cases was prepared, but native window input was
 unavailable and the local browser interface was blocked. No Antigravity behavior
