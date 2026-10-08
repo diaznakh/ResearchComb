@@ -130,6 +130,34 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 | Reproduce a result | [`/comb-rerun`](skills/comb-rerun/SKILL.md) | Expected-versus-observed results with commands and deviations |
 | Check for an update | [`/comb-update`](skills/comb-update/SKILL.md) | Installed and latest versions, with the right update step |
 
+## From a topic to a research paper
+
+Use `researchcomb` to coordinate the full process in one request, or call the focused workflows in this order. Keep the same [evidence record](skills/researchcomb/references/evidence-record.md) and source IDs as you move between steps.
+
+```mermaid
+flowchart TD
+    A["Topic → define question, scope, paper type, and requested length"] --> B["comb-survey → map the literature and gaps"]
+    B --> C["comb-investigate → test the research question against primary sources"]
+    C --> D["comb-digest → read key papers and record source locations"]
+    D --> E["comb-align → compare methods, results, and disagreements"]
+    E --> F{"Does this paper need code checks or original results?"}
+    F -- "No: literature or review paper" --> J["comb-manuscript → draft in sections from the evidence"]
+    F -- "Yes: with access and authorization" --> G["comb-trace → inspect paper claims against code, if relevant"]
+    G --> H["comb-blueprint → plan the method or experiment"]
+    H --> I["comb-rerun or comb-cycle → run and record results, if authorized"]
+    I --> J
+    J --> K{"Requested sections and word range met?"}
+    K -- "No: gather evidence or keep writing" --> C
+    K -- Yes --> L["comb-critique → identify methodological and argument gaps"]
+    L --> M["Revise the manuscript"]
+    M --> N["comb-check → verify claims, numbers, and citations"]
+    N --> O{"Material issues remain?"}
+    O -- "Yes: repair evidence or draft" --> C
+    O -- No --> P["Final paper → linked references, measured length, and stated limits"]
+```
+
+For a paper based only on supplied sources, start at `comb-digest`. Skip code and experiment steps for a literature review. Run the [local completion checker](skills/researchcomb/scripts/check_completion.py) for open-ended live searches and a requested word range; it uses the bounds you give, not a fixed target. If evidence or access is still insufficient, deliver a clearly labeled partial draft rather than inventing results or treating the first short draft as a finished paper.
+
 ## A citation check in practice
 
 In our [citation regression fixture](tests/fixtures/citation-draft.md), a draft uses a real DOI to claim that FeNi and NiPt are equally selective for producing propylene. `comb-check` reads the underlying evidence and returns:
