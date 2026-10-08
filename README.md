@@ -8,7 +8,7 @@
 <p align="center">Research workflows for Codex and Antigravity, right inside your AI chat.</p>
 
 <p align="center">
-  <img src="assets/badges.svg" alt="Supports Codex and Antigravity; twelve commands; MIT licensed" width="366" height="28">
+  <img src="assets/badges.svg" alt="Supports Codex and Antigravity; thirteen commands; MIT licensed" width="366" height="28">
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 
 ResearchComb helps your AI assistant find literature, connect findings, inspect companion code, write manuscripts, and check claims against sources. Bring a question, a paper, or a draft; choose a workflow or let the general `researchcomb` skill guide the task.
 
-**Free and open source. Eleven research workflows plus an update command. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
+**Free and open source. Twelve research workflows plus an update command. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
 
 ## Quick start
 
@@ -39,7 +39,7 @@ Use your native plugin installer if it accepts this
 GitHub repository; otherwise copy every complete skill
 folder under skills/, including supporting files, into
 your user skills directory. Confirm researchcomb and all
-twelve comb-* commands are available. Do not execute
+thirteen comb-* commands are available. Do not execute
 repository code during installation.
 ```
 
@@ -48,11 +48,11 @@ The host may ask for its normal approval to fetch GitHub or write to its skills 
 ### 2. Start a new chat and give it a task
 
 ```text
-Use comb-survey to review recent work on
-retrieval-augmented generation. Compare methods and
-limitations, distinguish preprints from published
-studies, and give a literature matrix with linked
-references.
+Use comb-paper to write a 3,000–3,500-word review of
+when retrieval-augmented generation improves factual
+accuracy. Research the topic, compare primary studies,
+draft the paper, critique it, verify claims and citations,
+and save paper.md, evidence.json, and checks.md.
 ```
 
 In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*` slash command. Plain-language requests such as “Use comb-check to…” work in either host. A plugin may display the ResearchComb namespace with the skill name.
@@ -83,7 +83,7 @@ Ask the agent to copy every complete folder under `skills/`, preserving names an
 | All workspaces | `~/.gemini/config/skills/` |
 | One workspace | `<workspace-root>/.agents/skills/` |
 
-Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the twelve `comb-*` skills.
+Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the thirteen `comb-*` skills.
 
 Antigravity CLI also supports the GitHub package:
 
@@ -117,6 +117,7 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 
 | Your goal | Workflow | What you receive |
 | --- | --- | --- |
+| Write a paper from a topic | [`/comb-paper`](skills/comb-paper/SKILL.md) | A sourced paper, evidence record, and critique and verification findings |
 | Find the literature | [`/comb-survey`](skills/comb-survey/SKILL.md) | A literature matrix, themes, gaps, and bibliography |
 | Investigate a question | [`/comb-investigate`](skills/comb-investigate/SKILL.md) | A cited brief with a search strategy and verification record |
 | Understand a source | [`/comb-digest`](skills/comb-digest/SKILL.md) | A focused summary with source locations and limitations |
@@ -132,11 +133,11 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 
 ## From a topic to a research paper
 
-Follow the `/comb-*` commands below; each links to its instructions in the workflow table above. Use `researchcomb` to coordinate the whole process in one request.
+Use `/comb-paper` for the complete workflow in one request. The chart shows the stages it follows; the table above links to each focused command.
 
 ```mermaid
 flowchart TD
-    A["Topic and paper goal"] --> B["/comb-survey + /comb-investigate<br/>find and assess sources"]
+    A["Topic and paper goal → /comb-paper"] --> B["/comb-survey + /comb-investigate<br/>find and assess sources"]
     B --> C["/comb-digest + /comb-align<br/>read and compare evidence"]
     C --> D["/comb-manuscript<br/>draft to the requested length"]
     D --> E["/comb-critique + /comb-check<br/>review and verify"]
@@ -147,7 +148,7 @@ flowchart TD
     H -.-> D
 ```
 
-Keep one [evidence record](skills/researchcomb/references/evidence-record.md) throughout. For supplied sources, start at `/comb-digest`; skip the optional branch for a literature review. Run experiments only with authorization. Check search coverage and the requested word range before calling the paper complete; label it partial if evidence is still insufficient.
+`/comb-paper` keeps one [evidence record](skills/researchcomb/references/evidence-record.md) throughout. It skips live search for a supplied-only corpus and skips the optional branch for a literature review. Experiments require authorization. It checks the requested word range and material claims before calling the paper complete; if evidence is insufficient, it labels the draft partial.
 
 ## A citation check in practice
 
@@ -195,6 +196,22 @@ underlying papers or abstracts before citing them.
 ## Prompt examples
 
 Expand a workflow and copy its prompt. Replace filenames, topics, folders, and environment choices with your own.
+
+<details>
+<summary><strong>Complete research paper</strong> · <code>comb-paper</code></summary>
+
+```text
+Use comb-paper to write a 3,000–3,500-word literature
+review on CO2-assisted propane dehydrogenation. Search
+primary studies, record what you could actually read,
+compare catalyst pathways, and write the paper in
+sections. Then critique the draft and verify its claims
+and citations. Save paper.md, evidence.json, and
+checks.md. If evidence is insufficient, label the paper
+partial and name the specific gaps.
+```
+
+</details>
 
 <details>
 <summary><strong>General research</strong> · <code>researchcomb</code></summary>
@@ -375,18 +392,19 @@ right step for this AI client and ask before installing it.
 
 ## Tested in Codex
 
-Recorded on **8 October 2026**, using native Codex runs and the host's existing tools:
+Earlier cases were recorded on **8 October 2026**, using native Codex runs and the host's existing tools. The `/comb-paper` case was run on **9 October 2026**:
 
 | Check | Recorded result |
 | --- | --- |
-| Focused workflow cases | **11 / 11 passed** |
-| General command discovery and routing | **Passed** — twelve skills discovered and four requests routed |
+| Earlier focused workflow cases | **11 / 11 passed** |
+| One-request `/comb-paper` case | **567 measured body words** within the requested 400–600 range; source IDs and critique and verification records preserved |
+| Earlier general command discovery and routing | **Passed** — twelve skills discovered at that time and four requests routed |
 | Local checker tests | **4 / 4 passed** |
 | Long manuscript case | **6,201 measured body words**, within the requested range |
 | Experiment loop | Improvement kept, regression rejected, two-trial budget respected |
 | Reproduction case | A mismatched claimed result correctly reported as not reproduced |
 
-Coverage is one representative case per workflow. Seven cases use local synthetic fixtures; the initial survey and citation checks use real public paper sources. Some publisher text was inaccessible and remained labelled as abstract or excerpt evidence. Antigravity skill installation was checked; its behavioral tests remain unverified.
+Coverage is one representative Codex case per research workflow. Eight cases use local synthetic fixtures; the initial survey and citation checks use real public paper sources. Some publisher text was inaccessible and remained labelled as abstract or excerpt evidence. Antigravity skill installation was checked; its behavioral tests remain unverified.
 
 [Read the results and limits](tests/RESULTS.md) · [Run the regression checks](tests/README.md)
 
@@ -422,7 +440,7 @@ Experiments need available local execution tools and an authorized environment. 
 
 ## Inside the repository
 
-- [`skills/`](skills/) — the general skill, eleven research workflows, the update command, and shared evidence guidance.
+- [`skills/`](skills/) — the general skill, twelve research workflows, the update command, and shared evidence guidance.
 - [`plugin.json`](plugin.json) — portable package and Codex presentation metadata.
 - [`skills/researchcomb/VERSION`](skills/researchcomb/VERSION) — installed version for skills copied without the plugin manifest.
 - [Codex marketplace](.agents/plugins/marketplace.json) — GitHub installation source.

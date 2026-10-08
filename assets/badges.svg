@@ -1,12 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="366" height="28" viewBox="0 0 366 28" role="img" aria-labelledby="title">
-  <title id="title">Codex and Antigravity; twelve commands; MIT licensed</title>
+  <title id="title">Codex and Antigravity; thirteen commands; MIT licensed</title>
   <g font-family="Arial, Helvetica, sans-serif" font-size="12" font-weight="600" text-anchor="middle" fill="#ffffff">
     <rect x="0" y="2" width="66" height="24" rx="6" fill="#334155"/>
     <text x="33" y="18">Codex</text>
     <rect x="74" y="2" width="92" height="24" rx="6" fill="#1d4ed8"/>
     <text x="120" y="18">Antigravity</text>
     <rect x="174" y="2" width="98" height="24" rx="6" fill="#047857"/>
-    <text x="223" y="18">12 commands</text>
+    <text x="223" y="18">13 commands</text>
     <rect x="280" y="2" width="86" height="24" rx="6" fill="#475569"/>
     <text x="323" y="18">MIT licensed</text>
   </g>

@@ -15,10 +15,11 @@ and `OUTPUT`. Use the current skill files, including supporting references. Save
 deliverables in the named case directory. Use a fresh conversation for independent
 cases; the manuscript deliberately reuses the survey artifacts.
 
-The other seven workflow cases and the general skill's discovery/routing case are
-specified in [remaining cases](remaining_cases.md). Together they exercise all
-eleven workflows and the general skill. Each workflow receives a representative
-behavioral case; this is not exhaustive coverage of every input or host condition.
+The other seven focused cases and the general skill's discovery/routing case are
+specified in [remaining cases](remaining_cases.md). The one-request `comb-paper`
+case is below. Together they exercise all twelve research workflows and the
+general skill. Each workflow receives a representative behavioral case; this is
+not exhaustive coverage of every input or host condition.
 
 ## Survey
 
@@ -94,6 +95,18 @@ this completion regression.
 The installed `researchcomb/scripts/check_completion.py` also checks open-ended
 search coverage and a requested manuscript word range. Run its offline regression
 with `python3 -m unittest tests/test_completion_gate.py` from the repository root.
+
+## One-request paper workflow
+
+In a fresh chat, ask the host to use `comb-paper` at
+`REPO/skills/comb-paper/SKILL.md` on only
+`tests/fixtures/workflows/source-a.md` and `source-b.md`, with their
+`evidence.json`. Request a 400–600-word review of whether the studies establish
+which approach is preferable on a CPU-only machine. Forbid browsing and execution.
+Ask it to save `paper.md`, `evidence.json`, and `checks.md` in an isolated output
+folder. Check that it reads both sources, preserves their IDs, avoids a direct
+accuracy ranking, measures the requested body length, records critique and claim
+checks, and says which conclusions remain limited by excerpt-level evidence.
 
 ## Local checks
 

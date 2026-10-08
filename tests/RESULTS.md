@@ -45,8 +45,8 @@ reproduction cases. These were executed tests rather than written run plans.
 The general `researchcomb` skill also passed discovery of all twelve skills and
 routing of citation, comparison, reproduction, and writing requests.
 
-Coverage now includes one passing representative behavioral case for **all eleven
-workflow skills**, plus the general discovery/routing case. This covers the tested
+At the time of this run, coverage included one passing representative behavioral
+case for **all eleven workflow skills**, plus the general discovery/routing case. This covers the tested
 inputs and constraints, not every possible research task. The seven added cases
 are local synthetic tests; the original survey and citation check used real public
 paper sources. Antigravity behavioral coverage remains unavailable as noted below.
@@ -88,6 +88,18 @@ same RAG prompt, the tool log contained all five broad-source fallback queries.
 The fallback search check passed. The final brief still claimed direct attempts
 at all five sites, while the log showed only a Google Scholar direct attempt;
 direct-source reporting remains unreliable and was not counted as passing.
+
+## One-request paper workflow — 9 October 2026
+
+ResearchComb 0.5.12's `comb-paper` source was tested in one fresh, isolated Codex
+CLI run against two supplied synthetic excerpts. The host read the orchestrator
+and the relevant stage skills, saved `paper.md`, `evidence.json`, and `checks.md`,
+and passed the local checker at **567 body words** within the requested 400–600.
+Both original source IDs were preserved; seven material claims were recorded and
+checked. The paper rejected a direct accuracy ranking across incompatible test
+sets and disclosed that the sources were synthetic excerpts, not publications.
+No browsing or experiment execution occurred. This is one bounded behavior pass,
+not a live-search or Antigravity pass.
 
 ## Limits
 
