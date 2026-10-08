@@ -8,7 +8,7 @@
 <p align="center">Research workflows for Codex and Antigravity, right inside your AI chat.</p>
 
 <p align="center">
-  <img src="assets/badges.svg" alt="Supports Codex and Antigravity; eleven workflows; MIT licensed" width="366" height="28">
+  <img src="assets/badges.svg" alt="Supports Codex and Antigravity; twelve commands; MIT licensed" width="366" height="28">
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 
 ResearchComb helps your AI assistant find literature, connect findings, inspect companion code, write manuscripts, and check claims against sources. Bring a question, a paper, or a draft; choose a workflow or let the general `researchcomb` skill guide the task.
 
-**Free and open source. Eleven focused workflows. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
+**Free and open source. Eleven research workflows plus an update command. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
 
 ## Quick start
 
@@ -39,7 +39,7 @@ Use your native plugin installer if it accepts this
 GitHub repository; otherwise copy every complete skill
 folder under skills/, including supporting files, into
 your user skills directory. Confirm researchcomb and all
-eleven comb-* workflows are available. Do not run
+twelve comb-* commands are available. Do not run
 repository code.
 ```
 
@@ -83,7 +83,7 @@ Ask the agent to copy every complete folder under `skills/`, preserving names an
 | All workspaces | `~/.gemini/config/skills/` |
 | One workspace | `<workspace-root>/.agents/skills/` |
 
-Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the eleven `comb-*` skills.
+Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the twelve `comb-*` skills.
 
 Antigravity CLI also supports the GitHub package:
 
@@ -107,11 +107,9 @@ For copied Antigravity skills, replace the ResearchComb folders with the current
 
 </details>
 
-### Update notices
+### Check for updates
 
-On the first ResearchComb use in a new chat, the skill asks the host to compare its installed version with the current [`plugin.json`](https://github.com/diaznakh/ResearchComb/blob/main/plugin.json) on GitHub using its browser or already permitted local network tools. If a newer version is confirmed, it shows the Codex update commands or an Antigravity update prompt and continues the research task. It does not check again during that chat, install updates automatically, or require an API key or separate service. Offline or supplied-source-only requests skip the check.
-
-This is an instruction-based check, so its execution depends on the AI host following the skill and being able to read GitHub. A resumed chat may retain its earlier check after an app restart; start a new chat to check again.
+Run [`comb-update`](skills/comb-update/SKILL.md) when you want to check the installed version against [GitHub](https://github.com/diaznakh/ResearchComb/blob/main/plugin.json). It reports whether a newer release exists and asks before updating. Research workflows make no update requests, so they do not add a GitHub lookup to each task. The check needs access to the public repository but no API key or separate ResearchComb service.
 
 ## Workflows
 
@@ -130,6 +128,7 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 | Verify claims and citations | [`/comb-check`](skills/comb-check/SKILL.md) | A correction table with evidence and unresolved statuses |
 | Try measured improvements | [`/comb-cycle`](skills/comb-cycle/SKILL.md) | A bounded experiment ledger and the best measured configuration |
 | Reproduce a result | [`/comb-rerun`](skills/comb-rerun/SKILL.md) | Expected-versus-observed results with commands and deviations |
+| Check for an update | [`/comb-update`](skills/comb-update/SKILL.md) | Installed and latest versions, with the right update step |
 
 ## A citation check in practice
 
@@ -342,6 +341,17 @@ the full text or only part of it.
 
 </details>
 
+<details>
+<summary><strong>Update check</strong> · <code>comb-update</code></summary>
+
+```text
+Use comb-update to check whether my installed ResearchComb
+version is current. If an update is available, show me the
+right step for this AI client and ask before installing it.
+```
+
+</details>
+
 ## Tested in Codex
 
 Recorded on **8 October 2026**, using native Codex runs and the host's existing tools:
@@ -391,7 +401,7 @@ Experiments need available local execution tools and an authorized environment. 
 
 ## Inside the repository
 
-- [`skills/`](skills/) — the general skill, eleven workflows, and shared evidence guidance.
+- [`skills/`](skills/) — the general skill, eleven research workflows, the update command, and shared evidence guidance.
 - [`plugin.json`](plugin.json) — portable package and Codex presentation metadata.
 - [`skills/researchcomb/VERSION`](skills/researchcomb/VERSION) — installed version for skills copied without the plugin manifest.
 - [Codex marketplace](.agents/plugins/marketplace.json) — GitHub installation source.

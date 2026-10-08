@@ -1,4 +1,4 @@
-"""Keep update guidance reachable from every installed workflow."""
+"""Keep the standalone update command and installed version consistent."""
 
 import json
 from pathlib import Path
@@ -14,15 +14,18 @@ class UpdatePackaging(unittest.TestCase):
         installed = (ROOT / "skills/researchcomb/VERSION").read_text().strip()
         self.assertEqual(installed, manifest["version"])
 
-    def test_each_workflow_links_shared_update_check(self):
+    def test_update_check_is_separate_from_research_workflows(self):
         skills = sorted((ROOT / "skills").glob("*/SKILL.md"))
-        self.assertEqual(len(skills), 12)
+        self.assertEqual(len(skills), 13)
         for skill in skills:
             with self.subTest(skill=skill.parent.name):
-                link = ("references/update-check.md" if skill.parent.name == "researchcomb"
-                        else "../researchcomb/references/update-check.md")
-                self.assertIn(f"]({link})", skill.read_text())
-                self.assertTrue((skill.parent / link).is_file())
+                text = skill.read_text()
+                self.assertNotIn("update-check.md", text)
+                if skill.parent.name != "comb-update":
+                    self.assertNotIn("plugin.json?raw=1", text)
+        update = (ROOT / "skills/comb-update/SKILL.md").read_text()
+        self.assertIn("plugin.json?raw=1", update)
+        self.assertIn("researchcomb/VERSION", update)
 
 
 if __name__ == "__main__":
