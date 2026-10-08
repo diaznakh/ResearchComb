@@ -182,7 +182,7 @@ unresolved questions.
 </details>
 
 <details>
-<summary><strong>Paper-to-code audit</strong> · <code>comb-trace</code></summary>
+<summary><strong>Implementation consistency</strong> · <code>comb-trace</code></summary>
 
 ```text
 Use comb-trace to audit paper.pdf against its companion

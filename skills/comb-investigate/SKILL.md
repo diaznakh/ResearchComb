@@ -9,7 +9,7 @@ Use only the host's existing browsing, file, and local execution tools. Do not c
 
 When producing or consuming research evidence, read the [shared evidence record](../researchcomb/references/evidence-record.md) and reuse the supplied source and claim IDs. Use a compact record for this task, expanding it only as the scope requires.
 
-Frame the user's question, scope, date range, and required deliverable. Maintain a compact task ledger, search strategy, source register, and verification log in context or local files when supported. Do not impose files on a host without persistent storage.
+Frame the user's question, scope, date range, and required deliverable. Maintain a compact research checklist, search strategy, source register, and claim-check notes in context or local files when supported. Do not impose files on a host without persistent storage.
 
 Search public scholarly and official web pages using the host's browser. Adapt queries and source types to the field; follow references and search for evidence that challenges the emerging conclusion. Record inclusion decisions and gaps. Read source text before summarizing findings, and distinguish primary studies, reviews, and preprints.
 
