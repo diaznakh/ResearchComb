@@ -1,0 +1,20 @@
+{
+  "name": "researchcomb",
+  "interface": {
+    "displayName": "ResearchComb"
+  },
+  "plugins": [
+    {
+      "name": "researchcomb",
+      "source": {
+        "source": "local",
+        "path": "./plugins/researchcomb"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
