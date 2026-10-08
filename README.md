@@ -16,7 +16,8 @@
   <a href="#workflows">Workflows</a> ·
   <a href="#prompt-examples">Prompt examples</a> ·
   <a href="#tested-in-codex">Test results</a> ·
-  <a href="#faq">FAQ</a>
+  <a href="#faq">FAQ</a> ·
+  <a href="#accuracy-responsibility-and-liability">Notice</a>
 </p>
 
 ---
@@ -374,3 +375,11 @@ Experiments need available local execution tools and an authorized environment. 
 ## License
 
 [MIT](LICENSE). Free to use, modify, and share under the license terms.
+
+## Accuracy, responsibility, and liability
+
+ResearchComb assists with research; its outputs may be incorrect, incomplete, or outdated. AI models may invent or misattribute citations, misinterpret sources, overlook conflicting evidence, or produce faulty code and experimental conclusions. Citation checks, evidence records, and passing tests do not guarantee accuracy, completeness, or reproducibility.
+
+Users are responsible for independently checking sources, citations, calculations, code, and conclusions before publishing, executing, or relying on an output. ResearchComb does not replace qualified professional advice or the user's own judgment. Review the host AI's permissions and any proposed commands before authorizing execution.
+
+ResearchComb is provided **"as is," without warranty**, under the [MIT License](LICENSE). To the extent permitted by applicable law, the authors and copyright holders disclaim warranties and liability for claims, damages, or other losses arising from the software or its use, including reliance on generated outputs. This notice summarizes the license; it does not replace or expand its terms or exclude liability that cannot lawfully be excluded.
