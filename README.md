@@ -33,8 +33,9 @@ ResearchComb helps your AI assistant find literature, connect findings, inspect 
 Paste this into Codex or Antigravity with GitHub and local file access:
 
 ```text
-Install ResearchComb from
+Install ResearchComb version v0.5.20 from
 https://github.com/diaznakh/ResearchComb for my account.
+Check out that release tag before copying or installing.
 Use your native plugin installer if it accepts this
 GitHub repository; otherwise copy every complete skill
 folder under skills/, including supporting files, into
@@ -65,7 +66,7 @@ In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*`
 Register the GitHub source and install the plugin:
 
 ```sh
-codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git
+codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref v0.5.20
 codex plugin add researchcomb@researchcomb
 ```
 
@@ -85,11 +86,7 @@ Ask the agent to copy every complete folder under `skills/`, preserving names an
 
 Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the thirteen `comb-*` skills.
 
-Antigravity CLI also supports the GitHub package:
-
-```sh
-agy plugin install https://github.com/diaznakh/ResearchComb
-```
+For a verifiable install, use the tagged source in the prompt above; a bare GitHub CLI install may fetch the moving branch.
 
 </details>
 
@@ -99,11 +96,12 @@ agy plugin install https://github.com/diaznakh/ResearchComb
 For a GitHub marketplace installed in Codex:
 
 ```sh
-codex plugin marketplace upgrade researchcomb
+codex plugin marketplace remove researchcomb
+codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref VERIFIED_COMMIT_SHA
 codex plugin add researchcomb@researchcomb
 ```
 
-For copied Antigravity skills, replace the ResearchComb folders with the current complete versions from `skills/`. Preserve unrelated skills. Start a new chat after updating.
+For copied Antigravity skills, replace the ResearchComb folders with the complete versions from the chosen release tag's `skills/`. Preserve unrelated skills. Start a new chat after updating.
 
 </details>
 
@@ -172,7 +170,7 @@ The supporting source is the [Nature Communications paper](https://www.nature.co
 
 The [shared evidence record](skills/researchcomb/references/evidence-record.md) keeps bibliographic identity, link access, and claim support separate. Claims can be **supported**, **qualified**, **contradicted**, **unsupported**, or **unverified**. A substantial task can save the record as `evidence.json`; a narrow lookup can use a compact table in context.
 
-For open-ended live academic searches and manuscripts with a requested word range, the installed skills instruct the host to run a local [completion checker](skills/researchcomb/scripts/check_completion.py). It flags missing broad-source attempts or fallbacks, fewer than five distinct discovered papers with titles and DOI/URL identifiers, empty or duplicate paper records, and drafts outside the requested word range (excluding References, Bibliography, or Sources sections). Hosts without direct browsing can record that limitation and use source-specific web-search fallbacks. The five-paper floor does not apply to supplied-only or narrow searches. The checker uses Python's standard library, with no ResearchComb server or API key. A host can skip it, and it cannot verify that a logged browser call happened or that a citation supports a claim; inspect the host tool log and use `comb-check` for those judgments.
+For open-ended live academic searches and manuscripts with a requested word range, the installed skills instruct the host to run a local [completion checker](skills/researchcomb/scripts/check_completion.py). It flags missing broad-source attempts or fallbacks, fewer than five distinct discovered papers with titles and DOI/URL identifiers, empty or duplicate paper records, and drafts outside the requested word range (excluding References, Bibliography, or Sources sections). Hosts without direct browsing can record that limitation and use source-specific web-search fallbacks. The five-paper floor does not apply to supplied-only or narrow searches. A [local safe fetcher](skills/researchcomb/scripts/safe_fetch.py) checks DNS addresses and redirects before retrieving discovered links when Python and network access are available. Both scripts use Python's standard library, with no ResearchComb server or API key. A host can skip them, and the completion checker cannot verify that a logged browser call happened or that a citation supports a claim; inspect the host tool log and use `comb-check` for those judgments.
 
 ### Paper and topic search sources
 

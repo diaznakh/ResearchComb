@@ -27,6 +27,11 @@ class UpdatePackaging(unittest.TestCase):
         self.assertIn("https://raw.githubusercontent.com/diaznakh/ResearchComb/main/plugin.json", update)
         self.assertIn("researchcomb/VERSION", update)
 
+    def test_marketplace_loads_plugin_from_pinned_checkout(self):
+        marketplace = json.loads((ROOT / ".agents/plugins/marketplace.json").read_text())
+        self.assertEqual(marketplace["plugins"][0]["source"], {"source": "local", "path": "./"})
+        self.assertIn("--ref VERIFIED_COMMIT_SHA", (ROOT / "skills/comb-update/SKILL.md").read_text())
+
 
 if __name__ == "__main__":
     unittest.main()
