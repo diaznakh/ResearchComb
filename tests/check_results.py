@@ -7,6 +7,10 @@ import sys
 from pathlib import Path
 
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "skills/researchcomb/scripts"))
+from check_completion import body_word_count
+
+
 STATUSES = {"supported", "qualified", "contradicted", "unsupported", "unverified"}
 DOIS = {
     "10.1038/s41467-018-03793-w",
@@ -23,16 +27,6 @@ def require(condition, message):
 
 def read_json(path):
     return json.loads(path.read_text())
-
-
-def body_word_count(text):
-    # The cases explicitly use whitespace-separated words before the bibliography.
-    body = re.split(
-        r"(?im)^#{1,6}\s+(?:\d+[.)]?\s+)?(?:references|bibliography)\b.*$",
-        text,
-        maxsplit=1,
-    )[0]
-    return len(body.split())
 
 
 def validate_record(record):

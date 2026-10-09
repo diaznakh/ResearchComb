@@ -24,7 +24,7 @@ For an open-ended live academic search with file access, add a `searches` list. 
 {"source":"Crossref","direct":{"url":"https://search.crossref.org/?q=example","outcome":"inaccessible"},"fallback":{"query":"example site:search.crossref.org","outcome":"relevant results found"}}
 ```
 
-Use `searched` or `inaccessible` for the direct outcome. When direct search is inaccessible, record the exact fallback query and its outcome. Never fill this record from an imagined tool call. The local coverage checker tests completeness of the record, not whether a browser call really occurred; compare it with the host tool log.
+Use `searched` or `inaccessible` after a real direct attempt. If the host has no direct browsing tool, use `"direct":{"outcome":"unavailable","reason":"Host only offers web search"}` with no `url`. Both `inaccessible` and `unavailable` require the exact source-specific fallback query and its outcome. Never fill this record from an imagined tool call. The local coverage checker tests completeness of the record, not whether a browser call really occurred; compare it with the host tool log.
 
 Each source contains:
 
@@ -65,3 +65,5 @@ Mark inference and proposed work explicitly in the claim text or note. A resolvi
 Use the same register when writing citations, comparison matrices, and review findings. Match each bibliography entry to its source ID. Cite the public DOI or publisher URL in user-facing documents; internal IDs supplement those links.
 
 Before delivery, resolve or qualify material contradicted and unsupported assertions. If a verification task is review-only, report them without editing the user's draft. Include a brief verification summary describing evidence access, unresolved claims, and what was actually checked. Keep unknowns visible rather than silently promoting them to supported.
+
+For the live search completion gate, each discovered paper needs a nonempty `id`, `title`, and a DOI or stable HTTP(S) URL. Empty records and duplicate IDs, normalized DOIs, or URLs fail the gate; merge duplicates before counting. DOI resolver URLs are matched to DOI identifiers. URL matching ignores scheme and fragments but preserves paths and queries. These checks validate record structure, not paper relevance or authenticity.

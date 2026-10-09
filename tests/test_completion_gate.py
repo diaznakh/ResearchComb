@@ -43,7 +43,7 @@ class CompletionGateTests(unittest.TestCase):
                 {"source": name, "direct": {"url": "https://" + suffix.removeprefix("site:").split("/", 1)[0] + "/search", "outcome": "searched"}}
                 for name, suffix in SOURCES.items()
             ]
-            papers = [{"id": f"S{i}", "url": f"https://example.org/paper/{i}"} for i in range(6)]
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(6)]
             path.write_text(json.dumps({"searches": searches[:2], "sources": papers}))
             self.assertIn("missing search attempt", self.run_gate("search", path).stderr)
             searches[0]["direct"]["outcome"] = "inaccessible"
@@ -59,6 +59,63 @@ class CompletionGateTests(unittest.TestCase):
             searches[0]["direct"]["url"] = "https://example.org/search"
             path.write_text(json.dumps({"searches": searches, "sources": papers}))
             self.assertIn("direct URL must belong", self.run_gate("search", path).stderr)
+
+    def test_bibliography_aliases_and_substantive_sources_heading(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "paper.md"
+            for heading in ("## Sources", "## 8. Sources: ##", "## Bibliography", "## References"):
+                with self.subTest(heading=heading):
+                    path.write_text("one two three\n" + heading + "\n" + "reference " * 100)
+                    self.assertIn("3 body words", self.run_gate("manuscript", path, 100, 110).stderr)
+            text = "one two three\n## Sources of uncertainty\nmore evidence"
+            path.write_text(text)
+            self.assertEqual(self.run_gate("manuscript", path, len(text.split()), len(text.split())).returncode, 0)
+
+    def test_distinct_paper_validation_and_unavailable_browser(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            searches = [
+                {"source": name, "direct": {"outcome": "unavailable", "reason": "Host only offers web search"},
+                 "fallback": {"query": "topic " + suffix, "outcome": "results found"}}
+                for name, suffix in SOURCES.items()
+            ]
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(5)]
+            def run(entries=papers):
+                path.write_text(json.dumps({"searches": searches, "sources": entries}))
+                return self.run_gate("search", path)
+            result = run()
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("0 direct attempts", result.stdout)
+            for entries in ([{}] * 5, [papers[0]] * 5, papers[:4]):
+                self.assertNotEqual(run(entries).returncode, 0)
+            for replacement in (
+                {"url": "http://EXAMPLE.org/paper/0#section"},
+                {"id": "S0"}, {"title": " "}, {"url": None}, {"url": "not a URL"}, {"doi": []},
+            ):
+                with self.subTest(replacement=replacement):
+                    entries = [dict(paper) for paper in papers]
+                    entries[1].update(replacement)
+                    self.assertNotEqual(run(entries).returncode, 0)
+            for alias in ("https://doi.org/10.1234/ABC", "doi:10.1234/abc"):
+                entries = [dict(paper) for paper in papers]
+                entries[0]["doi"] = "10.1234/abc"
+                entries[1]["doi"] = alias
+                self.assertIn("duplicate paper", run(entries).stderr)
+            entries[1].pop("doi")
+            entries[1]["url"] = "https://dx.doi.org/10.1234/ABC"
+            self.assertIn("duplicate paper", run(entries).stderr)
+            for paper in entries:
+                paper["url"] = None
+                paper["doi"] = "10.1234/" + paper["id"]
+            self.assertEqual(run(entries).returncode, 0)
+            searches[0]["direct"].pop("reason")
+            self.assertIn("needs a reason", run().stderr)
+            searches[0]["direct"]["reason"] = "No direct browser"
+            searches[0]["direct"]["url"] = "https://scholar.google.com/"
+            self.assertIn("no attempted URL", run().stderr)
+            searches[0]["direct"].pop("url")
+            searches[0].pop("fallback")
+            self.assertIn("fallback query", run().stderr)
 
 
 if __name__ == "__main__":

@@ -10,9 +10,9 @@ Run the stages below in this chat using the host's existing browser, files, and 
 **Execution contract — open-ended live academic searches:**
 
 1. Conduct source discovery in this conversation. Do not delegate searches or source verification to a subagent or autonomous background process; browser calls must appear in this chat's tool log. Running the local checker is allowed.
-2. Make a real host browser or web-search call for each broad scholarly source before recording its outcome. Try the site's own search; if inaccessible, run its separate `site:` fallback. Copy URLs and queries from actual tool calls, never from memory or inference.
+2. Make a real host browser or web-search call for each broad scholarly source before recording its outcome. Try the site's own search; if inaccessible, run its separate `site:` fallback. If the host has no direct browsing tool, record `unavailable` with the capability reason and no attempted URL, then run the source's fallback query. Copy URLs and queries from actual tool calls, never from memory or inference.
 3. Before drafting, save `evidence.json` and run `python3 <researchcomb-folder>/scripts/check_completion.py search evidence.json` when local files and Python are available. On FAIL, complete the missing work; include the actual PASS line in the report's Search Log. If the checker cannot run, disclose that and do not claim a PASS.
-4. Count a discovered paper only when a DOI, stable URL, or ISSN with volume and page was confirmed in a tool result. List memory-only leads separately as unverified; do not count or cite them as inspected papers.
+4. Count a discovered paper only when a DOI or stable HTTP(S) URL was confirmed in a tool result. List memory-only leads separately as unverified; do not count or cite them as inspected papers.
 
 ## Procedure
 
