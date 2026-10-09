@@ -16,7 +16,7 @@ curl -fsSL --max-time 10 'https://github.com/diaznakh/ResearchComb/raw/refs/head
 curl -fsSL --max-time 10 'https://raw.githubusercontent.com/diaznakh/ResearchComb/main/plugin.json' # only if the first fails or reports an older version
 ```
 
-Compare the three numeric components of `major.minor.patch`. If GitHub reports a version older than the installed version, retry the other URL; if both still report an older version, flag possible caching and do not claim the installation is current. If either version cannot be read or parsed, say the check could not be completed; do not guess from search snippets.
+Compare the three numeric components of `major.minor.patch`. If both branch URLs report an older version than installed, they may be cached. If the host has a permitted shell, get the current main commit with `git ls-remote https://github.com/diaznakh/ResearchComb.git refs/heads/main`, then open `https://raw.githubusercontent.com/diaznakh/ResearchComb/<40-character-commit-hash>/plugin.json` using the hash actually returned. Do not invent a hash or run repository code. If this lookup fails, report the check as inconclusive; do not claim the installation is current. If either version cannot be read or parsed, say the check could not be completed; do not guess from search snippets.
 
 If the installed version is current, report both versions briefly. If GitHub has a newer version, report both and ask whether the user wants to update. Give the step matching their installation:
 
