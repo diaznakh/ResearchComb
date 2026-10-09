@@ -34,7 +34,7 @@ Paste this into Codex or Antigravity with GitHub and local file access:
 
 ```text
 Install ResearchComb version v0.5.22 at commit
-RELEASE_COMMIT_SHA from
+43b79e5f9d12d3d99759f44debc68514deb7f14a from
 https://github.com/diaznakh/ResearchComb for my account.
 Check out that exact commit before copying or installing.
 Use your native plugin installer if it accepts this
@@ -67,7 +67,7 @@ In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*`
 Register the GitHub source and install the plugin:
 
 ```sh
-codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref RELEASE_COMMIT_SHA
+codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref 43b79e5f9d12d3d99759f44debc68514deb7f14a
 codex plugin add researchcomb@researchcomb
 ```
 
