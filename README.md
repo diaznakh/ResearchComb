@@ -33,9 +33,10 @@ ResearchComb helps your AI assistant find literature, connect findings, inspect 
 Paste this into Codex or Antigravity with GitHub and local file access:
 
 ```text
-Install ResearchComb version v0.5.20 from
+Install ResearchComb version v0.5.20 at commit
+559c9d1eda3da549badaa6a1c156c539807bac82 from
 https://github.com/diaznakh/ResearchComb for my account.
-Check out that release tag before copying or installing.
+Check out that exact commit before copying or installing.
 Use your native plugin installer if it accepts this
 GitHub repository; otherwise copy every complete skill
 folder under skills/, including supporting files, into
@@ -66,11 +67,11 @@ In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*`
 Register the GitHub source and install the plugin:
 
 ```sh
-codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref v0.5.20
+codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref 559c9d1eda3da549badaa6a1c156c539807bac82
 codex plugin add researchcomb@researchcomb
 ```
 
-Start a new chat after installation. If plugins are unavailable in your Codex surface, ask `$skill-installer` to install every complete folder under `skills/` from this repository.
+Start a new chat after installation. If plugins are unavailable in your Codex surface, ask `$skill-installer` to install every complete folder under `skills/` from the pinned commit above.
 
 </details>
 
@@ -86,7 +87,7 @@ Ask the agent to copy every complete folder under `skills/`, preserving names an
 
 Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the thirteen `comb-*` skills.
 
-For a verifiable install, use the tagged source in the prompt above; a bare GitHub CLI install may fetch the moving branch.
+For a verifiable install, use the exact commit in the prompt above; a bare GitHub CLI install may fetch the moving branch.
 
 </details>
 
@@ -101,7 +102,7 @@ codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref 
 codex plugin add researchcomb@researchcomb
 ```
 
-For copied Antigravity skills, replace the ResearchComb folders with the complete versions from the chosen release tag's `skills/`. Preserve unrelated skills. Start a new chat after updating.
+For copied Antigravity skills, replace the ResearchComb folders with the complete versions from the verified release commit's `skills/`. Preserve unrelated skills. Start a new chat after updating.
 
 </details>
 
