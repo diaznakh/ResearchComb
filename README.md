@@ -172,7 +172,7 @@ The supporting source is the [Nature Communications paper](https://www.nature.co
 
 The [shared evidence record](skills/researchcomb/references/evidence-record.md) keeps bibliographic identity, link access, and claim support separate. Claims can be **supported**, **qualified**, **contradicted**, **unsupported**, or **unverified**. A substantial task can save the record as `evidence.json`; a narrow lookup can use a compact table in context.
 
-For open-ended live searches and manuscripts with a requested word range, the installed skills instruct the host to run a local [completion checker](skills/researchcomb/scripts/check_completion.py). It flags missing broad-source search attempts or fallbacks and drafts outside the requested word range. It uses Python's standard library, with no ResearchComb server or API key. A host can skip the checker, and it cannot verify that a logged browser call happened or that a citation supports a claim; inspect the host tool log and use `comb-check` for those judgments.
+For open-ended live academic searches and manuscripts with a requested word range, the installed skills instruct the host to run a local [completion checker](skills/researchcomb/scripts/check_completion.py). It flags missing broad-source attempts or fallbacks, fewer than five recorded discovered papers, and drafts outside the requested word range. The five-paper floor does not apply to supplied-only or narrow searches. The checker uses Python's standard library, with no ResearchComb server or API key. A host can skip it, and it cannot verify that a logged browser call happened or that a citation supports a claim; inspect the host tool log and use `comb-check` for those judgments.
 
 ### Paper and topic search sources
 

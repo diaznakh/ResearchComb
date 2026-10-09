@@ -7,7 +7,7 @@ description: Check GitHub for a newer ResearchComb release and give update instr
 
 Run this workflow only when the user requests an update check. It uses the host's existing browser or permitted local shell, public GitHub pages, and no API key, extra server, or paid service. Do not install an update without the user's request.
 
-Read the installed version from `skills/researchcomb/VERSION` under this installed plugin root. For skills copied into Antigravity, read the `researchcomb/VERSION` file beside this `comb-update` skill folder. Do not use a version from the user's project or another checkout.
+Read the installed version from `skills/researchcomb/VERSION` under this installed plugin root. For skills copied into Antigravity, read `<skills-root>/researchcomb/VERSION`, where `<skills-root>` contains all installed ResearchComb skill folders (for example, `~/.gemini/config/skills/`). Do not look inside `comb-update` or use a version from the user's project or another checkout.
 
 Open `https://github.com/diaznakh/ResearchComb/blob/main/plugin.json?raw=1` and read its `version` field. If this fails, try the [GitHub file page](https://github.com/diaznakh/ResearchComb/blob/main/plugin.json). If the browser cannot open either page and the host has a shell, run the following command with the host's normal permissions. If network access is denied, report that the check could not be completed.
 

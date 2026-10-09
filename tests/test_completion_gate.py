@@ -43,16 +43,21 @@ class CompletionGateTests(unittest.TestCase):
                 {"source": name, "direct": {"url": "https://" + suffix.removeprefix("site:").split("/", 1)[0] + "/search", "outcome": "searched"}}
                 for name, suffix in SOURCES.items()
             ]
-            path.write_text(json.dumps({"searches": searches[:2]}))
+            papers = [{"id": f"S{i}", "url": f"https://example.org/paper/{i}"} for i in range(6)]
+            path.write_text(json.dumps({"searches": searches[:2], "sources": papers}))
             self.assertIn("missing search attempt", self.run_gate("search", path).stderr)
             searches[0]["direct"]["outcome"] = "inaccessible"
-            path.write_text(json.dumps({"searches": searches}))
+            path.write_text(json.dumps({"searches": searches, "sources": papers}))
             self.assertIn("fallback query", self.run_gate("search", path).stderr)
             searches[0]["fallback"] = {"query": "topic " + SOURCES["Google Scholar"], "outcome": "no results"}
-            path.write_text(json.dumps({"searches": searches}))
-            self.assertEqual(self.run_gate("search", path).returncode, 0)
+            path.write_text(json.dumps({"searches": searches, "sources": []}))
+            self.assertIn("only 0 source(s)", self.run_gate("search", path).stderr)
+            path.write_text(json.dumps({"searches": searches, "sources": papers}))
+            result = self.run_gate("search", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("6 discovered paper(s)", result.stdout)
             searches[0]["direct"]["url"] = "https://example.org/search"
-            path.write_text(json.dumps({"searches": searches}))
+            path.write_text(json.dumps({"searches": searches, "sources": papers}))
             self.assertIn("direct URL must belong", self.run_gate("search", path).stderr)
 
 

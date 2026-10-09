@@ -41,7 +41,18 @@ def check_search(path):
             fallback = entry.get("fallback", {})
             if not isinstance(fallback, dict) or not isinstance(fallback.get("query"), str) or suffix not in fallback["query"] or not isinstance(fallback.get("outcome"), str) or not fallback["outcome"].strip():
                 raise ValueError(f"{source}: record a separate {suffix} fallback query and outcome")
-    return f"PASS: recorded direct attempts for {len(BROAD_SOURCES)} broad sources and fallbacks where needed"
+    sources = record.get("sources", [])
+    if not isinstance(sources, list):
+        raise ValueError("'sources' must be a list of discovered papers")
+    if len(sources) < 5:
+        raise ValueError(
+            f"only {len(sources)} source(s) recorded in 'sources'; "
+            "a live survey must record at least 5 discovered papers before drafting"
+        )
+    return (
+        f"PASS: recorded direct attempts for {len(BROAD_SOURCES)} broad sources, "
+        f"fallbacks where needed, and {len(sources)} discovered paper(s)"
+    )
 
 
 def check_manuscript(path, minimum, maximum):
