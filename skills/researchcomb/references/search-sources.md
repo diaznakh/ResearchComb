@@ -2,6 +2,15 @@
 
 Use this directory when live source discovery is needed. Search through the host's existing browser or web-search tools. Respect the user's date range, domain restrictions, supplied-only corpus, and search budget; do not browse for a task restricted to local sources.
 
+## Execution contract
+
+For open-ended live academic searches in `comb-survey`, `comb-investigate`, and `comb-paper`:
+
+1. Conduct source discovery in this conversation. Do not delegate searches or source verification to a subagent or autonomous background process; browser calls must appear in this chat's tool log. Running the local checker is allowed.
+2. Make a real host browser or web-search call for each broad scholarly source before recording its outcome. Try the site's own search; if inaccessible, run its separate `site:` fallback. If the host has no direct browsing tool, record `unavailable` with the capability reason and no attempted URL, then run the source's fallback query. Copy URLs and queries from actual tool calls, never from memory or inference.
+3. Before drafting, save `evidence.json` and run `python3 <researchcomb-folder>/scripts/check_completion.py search evidence.json` when local files and Python are available. On FAIL, complete the missing work; include the actual PASS line in the report's Search Log. If the checker cannot run, disclose that and do not claim a PASS.
+4. Count a discovered paper only when a DOI or stable HTTP(S) URL was confirmed in a tool result. List memory-only leads separately as unverified; do not count or cite them as inspected papers.
+
 ## Choose sources
 
 | Source | Useful for |
