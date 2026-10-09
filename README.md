@@ -33,8 +33,8 @@ ResearchComb helps your AI assistant find literature, connect findings, inspect 
 Paste this into Codex or Antigravity with GitHub and local file access:
 
 ```text
-Install ResearchComb version v0.5.21 at commit
-635f69c789feee70e3c88bb000f78277e3cdbea6 from
+Install ResearchComb version v0.5.22 at commit
+RELEASE_COMMIT_SHA from
 https://github.com/diaznakh/ResearchComb for my account.
 Check out that exact commit before copying or installing.
 Use your native plugin installer if it accepts this
@@ -67,7 +67,7 @@ In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*`
 Register the GitHub source and install the plugin:
 
 ```sh
-codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref 635f69c789feee70e3c88bb000f78277e3cdbea6
+codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref RELEASE_COMMIT_SHA
 codex plugin add researchcomb@researchcomb
 ```
 
