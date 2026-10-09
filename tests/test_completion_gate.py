@@ -96,6 +96,15 @@ class CompletionGateTests(unittest.TestCase):
                     entries = [dict(paper) for paper in papers]
                     entries[1].update(replacement)
                     self.assertNotEqual(run(entries).returncode, 0)
+            for unsafe_url in (
+                "http://127.0.0.1:8080/private", "http://127.1/private", "http://169.254.169.254/latest/meta-data/",
+                "http://[::1]/private", "http://localhost/private", "http://papers.local/private",
+                "http://records.home.arpa/private", "http://intranet.internal/private",
+            ):
+                with self.subTest(unsafe_url=unsafe_url):
+                    entries = [dict(paper) for paper in papers]
+                    entries[1]["url"] = unsafe_url
+                    self.assertIn("public hostname", run(entries).stderr)
             for alias in ("https://doi.org/10.1234/ABC", "doi:10.1234/abc"):
                 entries = [dict(paper) for paper in papers]
                 entries[0]["doi"] = "10.1234/abc"

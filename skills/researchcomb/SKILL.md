@@ -37,7 +37,7 @@ The package supports Codex and Antigravity and includes these focused skills. Us
 ## Inspect code and experiments
 
 - When a paper makes implementation or benchmark claims and its code is available, inspect the linked repository at a recorded commit. Trace the model, data pipeline, evaluation metric, configuration, and checkpoint or result files relevant to the claim. Cite file paths and lines where the host supports them. Separate code that exists from code actually executed.
-- For replication requests, extract the required code, data, local environment, metrics, and expected result before running anything. Use the user's chosen local environment or an available suitable isolated environment when execution is authorized; ask only when a missing choice or authorization blocks the run. Do not provision cloud compute or use paid services. Record commands, versions, inputs, outputs, and deviations. Call a result replicated only if the defined checks passed. Without local execution, deliver a runnable plan and mark the result untested.
+- For replication requests, extract the required code, data, local environment, metrics, and expected result before running anything. Follow [comb-rerun](../comb-rerun/SKILL.md) for isolation before executing third-party code. Do not provision cloud compute or use paid services. Record commands, versions, inputs, outputs, and deviations. Call a result replicated only if the defined checks passed. Without local execution, deliver a runnable plan and mark the result untested.
 
 ## Compose and challenge the draft
 

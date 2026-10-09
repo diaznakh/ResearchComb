@@ -1,7 +1,9 @@
 """Check observable ResearchComb search coverage and manuscript length."""
 
 import json
+import ipaddress
 import re
+import socket
 import sys
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
@@ -68,6 +70,20 @@ def check_search(path):
             url = urlsplit(raw_url.strip())
             if url.scheme not in {"http", "https"} or not url.hostname or re.search(r"\s", raw_url.strip()) or url.username or url.password:
                 raise ValueError("discovered paper URL must be an HTTP(S) URL")
+            host = url.hostname.rstrip(".").lower()
+            if "." not in host or host == "home.arpa" or host.endswith((".localhost", ".local", ".internal", ".home.arpa")):
+                raise ValueError("discovered paper URL must use a public hostname")
+            try:
+                ipaddress.ip_address(host)
+            except ValueError:
+                try:
+                    socket.inet_aton(host)
+                except OSError:
+                    pass
+                else:
+                    raise ValueError("discovered paper URL must use a public hostname")
+            else:
+                raise ValueError("discovered paper URL must use a public hostname")
             url_key = (url.hostname.lower(), url.port, url.path or "/", url.query)
             if url.hostname.lower() in {"doi.org", "dx.doi.org"}:
                 url_doi = unquote(url.path.lstrip("/")).lower()

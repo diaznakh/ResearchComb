@@ -434,7 +434,7 @@ It guides verification and records the evidence behind conclusions. Read the ver
 <details>
 <summary><strong>Can it run experiments or monitor a topic?</strong></summary>
 
-Experiments need available local execution tools and an authorized environment. Recurring monitoring needs the host's scheduler and a user request. ResearchComb does not provision cloud compute or paid services; it provides a plan when execution or scheduling is unavailable.
+Experiments need available local execution tools and an authorized environment. Third-party research code runs only in an isolated local environment with access limited to task files, no user secrets, and network access only when needed and authorized. Recurring monitoring needs the host's scheduler and a user request. ResearchComb does not provision cloud compute or paid services; it provides a plan when execution or scheduling is unavailable.
 
 </details>
 

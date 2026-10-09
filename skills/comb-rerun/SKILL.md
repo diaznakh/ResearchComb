@@ -11,7 +11,7 @@ When producing or consuming research evidence, read the [shared evidence record]
 
 Extract the reported result, metric, tolerance, evaluation protocol, code version, data, checkpoints, dependencies, and resource requirements. Define what would count as reproduced, partially reproduced, or not comparable.
 
-Use the user's chosen local environment or the host's available isolated local environment when suitable and authorized. Ask only when a missing environment choice or execution authorization blocks the requested run. Do not use cloud compute or paid services. Without execution, provide a runnable plan and label the result untested.
+Run third-party code only in an authorized, isolated local environment with access limited to the task files, no user secrets or home directory, and no network unless the experiment requires it and the user authorizes it. A local virtual environment alone does not isolate file or network access. If the user's chosen environment lacks these limits, explain the risk and use an isolated option; if none is available, provide a runnable plan and label the result untested unless the user explicitly authorizes the less restricted run. Do not use cloud compute or paid services.
 
 Preserve existing work. Record exact commands, versions, seeds, configurations, inputs, outputs, and deviations from the paper. Run the baseline and requested checks; compare like-for-like metrics and report variability when repeated runs are warranted.
 
