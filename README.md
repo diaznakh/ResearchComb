@@ -33,8 +33,8 @@ ResearchComb helps your AI assistant find literature, connect findings, inspect 
 Paste this into Codex or Antigravity with GitHub and local file access:
 
 ```text
-Install ResearchComb version v0.5.20 at commit
-559c9d1eda3da549badaa6a1c156c539807bac82 from
+Install ResearchComb version v0.5.21 at commit
+RELEASE_COMMIT_SHA from
 https://github.com/diaznakh/ResearchComb for my account.
 Check out that exact commit before copying or installing.
 Use your native plugin installer if it accepts this
@@ -67,7 +67,7 @@ In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*`
 Register the GitHub source and install the plugin:
 
 ```sh
-codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref 559c9d1eda3da549badaa6a1c156c539807bac82
+codex plugin marketplace add https://github.com/diaznakh/ResearchComb.git --ref RELEASE_COMMIT_SHA
 codex plugin add researchcomb@researchcomb
 ```
 
@@ -147,7 +147,7 @@ flowchart TD
     H -.-> D
 ```
 
-`/comb-paper` keeps one [evidence record](skills/researchcomb/references/evidence-record.md) throughout. It skips live search for a supplied-only corpus and skips the optional branch for a literature review. Experiments require authorization. It checks the requested word range and material claims before calling the paper complete; if evidence is insufficient, it labels the draft partial.
+`/comb-paper` keeps one [evidence record](skills/researchcomb/references/evidence-record.md) throughout. For open-ended live research, it checks all eleven scholarly search sources and follows review bibliographies, references, and forward or related-paper trails until a new pass finds no relevant leads within the stated scope. Five papers is only the discovery floor. It skips live search for a supplied-only corpus and skips the optional branch for a literature review. Experiments require authorization. It checks the requested word range and material claims before calling the paper complete; if evidence is insufficient, it labels the draft partial.
 
 ## A citation check in practice
 
@@ -171,7 +171,7 @@ The supporting source is the [Nature Communications paper](https://www.nature.co
 
 The [shared evidence record](skills/researchcomb/references/evidence-record.md) keeps bibliographic identity, link access, and claim support separate. Claims can be **supported**, **qualified**, **contradicted**, **unsupported**, or **unverified**. A substantial task can save the record as `evidence.json`; a narrow lookup can use a compact table in context.
 
-For open-ended live academic searches and manuscripts with a requested word range, the installed skills instruct the host to run a local [completion checker](skills/researchcomb/scripts/check_completion.py). It flags missing broad-source attempts or fallbacks, fewer than five distinct discovered papers with titles and DOI/URL identifiers, empty or duplicate paper records, and drafts outside the requested word range (excluding References, Bibliography, or Sources sections). Hosts without direct browsing can record that limitation and use source-specific web-search fallbacks. The five-paper floor does not apply to supplied-only or narrow searches. A [local safe fetcher](skills/researchcomb/scripts/safe_fetch.py) checks DNS addresses and redirects before retrieving discovered links when Python and network access are available. Both scripts use Python's standard library, with no ResearchComb server or API key. A host can skip them, and the completion checker cannot verify that a logged browser call happened or that a citation supports a claim; inspect the host tool log and use `comb-check` for those judgments.
+For open-ended live academic searches and manuscripts with a requested word range, the installed skills instruct the host to run a local [completion checker](skills/researchcomb/scripts/check_completion.py). It flags missing broad-source attempts or fallbacks, fewer than five distinct discovered papers with titles and DOI/URL identifiers, empty or duplicate paper records, and drafts outside the requested word range (excluding References, Bibliography, or Sources sections). The `paper-search` mode also requires all eleven scholarly source attempts, screened citation trails, and a final search pass with no new relevant leads. Hosts without direct browsing can record that limitation and use source-specific web-search fallbacks. The five-paper floor does not apply to supplied-only or narrow searches. A [local safe fetcher](skills/researchcomb/scripts/safe_fetch.py) checks DNS addresses and redirects before retrieving discovered links when Python and network access are available. Both scripts use Python's standard library, with no ResearchComb server or API key. A host can skip them, and the completion checker cannot verify that a logged browser call happened, that all relevant leads were logged, or that a citation supports a claim; inspect the host tool log and use `comb-check` for those judgments.
 
 ### Paper and topic search sources
 
@@ -180,7 +180,7 @@ The [shared search guide](skills/researchcomb/references/search-sources.md) incl
 - **Google Scholar:** topic, title, and author searches; citation trails and alternative paper versions.
 - **ResearchGate:** publication and researcher discovery, with public paper copies where available.
 
-For an open-ended academic topic, ResearchComb directs the host to attempt Google Scholar, ResearchGate, Crossref, OpenAlex, and Semantic Scholar through their own search pages, then use relevant field sources such as PubMed or arXiv. If a site's own search is unavailable, it directs a separate general web query such as `battery recycling site:researchgate.net/publication` for each relevant source. Its source table should record direct attempts and the exact fallback queries separately. A `site:` query finds pages indexed by a general search engine; it does not search the site's complete index. Narrow lookups and user-limited source sets stay within the requested scope. ResearchComb uses the host's existing browser and has no separate search index or API integration. The host model may still skip or misreport searches, so check its tool history when complete coverage matters.
+For an open-ended academic topic, ResearchComb directs the host to attempt Google Scholar, ResearchGate, Crossref, OpenAlex, and Semantic Scholar through their own search pages. `comb-paper` also attempts PubMed, Europe PMC, alphaXiv, arXiv, bioRxiv, and medRxiv. If a site's own search is unavailable, it directs a separate general web query such as `battery recycling site:researchgate.net/publication` for each source. Its source table should record direct attempts and the exact fallback queries separately. A `site:` query finds pages indexed by a general search engine; it does not search the site's complete index. Narrow lookups and user-limited source sets stay within the requested scope. ResearchComb uses the host's existing browser and has no separate search index or API integration. The host model may still skip or misreport searches, so check its tool history when complete coverage matters.
 
 ```text
 Use comb-survey to find papers on battery recycling.

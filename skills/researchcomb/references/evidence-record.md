@@ -26,6 +26,8 @@ For an open-ended live academic search with file access, add a `searches` list. 
 
 Use `searched` or `inaccessible` after a real direct attempt. If the host has no direct browsing tool, use `"direct":{"outcome":"unavailable","reason":"Host only offers web search"}` with no `url`. Both `inaccessible` and `unavailable` require the exact source-specific fallback query and its outcome. Never fill this record from an imagined tool call. The local coverage checker tests completeness of the record, not whether a browser call really occurred; compare it with the host tool log.
 
+For an open-ended `comb-paper` search, record all eleven scholarly source attempts in `searches` and add `citation_trails`, `trail_leads`, and `search_rounds`. For each included paper, log a backward reference check and a forward citation or related-paper check. Each trail has a `source_id`, a `kind` (`references`, `cited_by`, or `related`), and an `outcome` (`screened` or `inaccessible`, with a reason for inaccessible). Screen review bibliographies for primary studies. Each encountered relevant lead in `trail_leads` has a title and a status: `included` with its `source_id`, `excluded` with a reason, or `inaccessible`. Add a `search_rounds` entry with a nonnegative `new_relevant` count for each follow-up search pass. The final count is zero only after screening all encountered relevant leads within the stated scope. An inaccessible trail or lead cannot pass the paper completion gate; report the paper partial. Do not invent an empty pass to satisfy the checker; if access or budget stops the search, name what remains.
+
 Each source contains:
 
 | Field | Content |

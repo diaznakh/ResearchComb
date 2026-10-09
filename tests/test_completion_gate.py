@@ -60,6 +60,40 @@ class CompletionGateTests(unittest.TestCase):
             path.write_text(json.dumps({"searches": searches, "sources": papers}))
             self.assertIn("direct URL must belong", self.run_gate("search", path).stderr)
 
+    def test_paper_search_requires_all_indexes_and_screened_trails(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            names = ["PubMed", "Europe PMC", "alphaXiv", "arXiv", "bioRxiv", "medRxiv"]
+            suffixes = ["site:pubmed.ncbi.nlm.nih.gov", "site:europepmc.org", "site:alphaxiv.org", "site:arxiv.org", "site:biorxiv.org", "site:medrxiv.org"]
+            searches = [
+                {"source": name, "direct": {"outcome": "unavailable", "reason": "No direct browser"},
+                 "fallback": {"query": "topic " + suffix, "outcome": "no results"}}
+                for name, suffix in list(SOURCES.items()) + list(zip(names, suffixes))
+            ]
+            record = {
+                "searches": searches,
+                "sources": [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(5)],
+                "citation_trails": [{"source_id": f"S{i}", "kind": kind, "outcome": "screened"}
+                                    for i in range(5) for kind in ("references", "cited_by")],
+                "trail_leads": [{"title": "Paper 1", "status": "included", "source_id": "S1"}],
+                "search_rounds": [{"new_relevant": 1}, {"new_relevant": 0}],
+            }
+            def run():
+                path.write_text(json.dumps(record))
+                return self.run_gate("paper-search", path)
+            self.assertEqual(run().returncode, 0, run().stderr)
+            record["searches"] = searches[:-1]
+            self.assertIn("missing search attempt: medRxiv", run().stderr)
+            record["searches"] = searches
+            record["citation_trails"].pop()
+            self.assertIn("backward references", run().stderr)
+            record["citation_trails"].append({"source_id": "S4", "kind": "related", "outcome": "screened"})
+            record["trail_leads"][0]["status"] = "pending"
+            self.assertIn("screening outcome", run().stderr)
+            record["trail_leads"][0]["status"] = "included"
+            record["search_rounds"].pop()
+            self.assertIn("final search round", run().stderr)
+
     def test_bibliography_aliases_and_substantive_sources_heading(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "paper.md"
