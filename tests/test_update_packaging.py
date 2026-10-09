@@ -22,9 +22,9 @@ class UpdatePackaging(unittest.TestCase):
                 text = skill.read_text()
                 self.assertNotIn("update-check.md", text)
                 if skill.parent.name != "comb-update":
-                    self.assertNotIn("plugin.json?raw=1", text)
+                    self.assertNotIn("raw.githubusercontent.com/diaznakh/ResearchComb/main/plugin.json", text)
         update = (ROOT / "skills/comb-update/SKILL.md").read_text()
-        self.assertIn("plugin.json?raw=1", update)
+        self.assertIn("https://raw.githubusercontent.com/diaznakh/ResearchComb/main/plugin.json", update)
         self.assertIn("researchcomb/VERSION", update)
 
 
