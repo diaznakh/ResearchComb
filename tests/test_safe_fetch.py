@@ -145,17 +145,19 @@ class SafeFetchTests(unittest.TestCase):
                 safe_fetch.fetch("https://paper.example.org/study", output)
             self.assertFalse(output.exists())
     
-    def test_proxy_with_tunnel(self):
+    def test_proxy_with_tunnel_uses_https_connection_for_https_targets(self):
         with tempfile.TemporaryDirectory() as directory, \
              patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))]):
             output = Path(directory) / "paper.pdf"
             safe_fetch.os.environ["HTTPS_PROXY"] = "http://proxy.example.org:8080"
             
             tunnel_called = []
+            connection_class_used = []
             
             class HTTPSConn:
-                def __init__(self, host, port, timeout):
+                def __init__(self, host, port, timeout=None, context=None):
                     self.host, self.port = host, port
+                    connection_class_used.append("HTTPSConnection")
                 def request(self, method, target, headers):
                     pass
                 def getresponse(self):
@@ -165,14 +167,25 @@ class SafeFetchTests(unittest.TestCase):
                 def set_tunnel(self, host, port):
                     tunnel_called.append((self.host, self.port, host, port))
             
-            class HTTPConn(HTTPSConn):
-                pass
+            class HTTPConn:
+                def __init__(self, host, port, timeout=None):
+                    self.host, self.port = host, port
+                    connection_class_used.append("HTTPConnection")
+                def request(self, method, target, headers):
+                    pass
+                def getresponse(self):
+                    return Response()
+                def close(self):
+                    pass
+                def set_tunnel(self, host, port):
+                    tunnel_called.append((self.host, self.port, host, port))
             
             with patch.object(safe_fetch.http.client, "HTTPConnection", HTTPConn), \
                  patch.object(safe_fetch.http.client, "HTTPSConnection", HTTPSConn):
                 safe_fetch.fetch("https://paper.example.org/study", output, allow_private=True)
                 self.assertEqual(output.read_bytes(), b"paper")
-                # Verify HTTPConnection was used for HTTP proxy and set_tunnel was called with target
+                # Verify HTTPSConnection was used for HTTPS target even with HTTP proxy
+                self.assertEqual(connection_class_used, ["HTTPSConnection"])
                 self.assertEqual(len(tunnel_called), 1)
                 proxy_host, proxy_port, target_host, target_port = tunnel_called[0]
                 self.assertEqual(proxy_host, "proxy.example.org")
@@ -192,6 +205,65 @@ class SafeFetchTests(unittest.TestCase):
             safe_fetch.fetch("https://paper.example.org/study", output)
             self.assertEqual(output.read_bytes(), b"paper")
 
+    def test_proxy_env_without_opt_in_blocks_private_destinations(self):
+        safe_fetch.os.environ["HTTPS_PROXY"] = "http://proxy.example.org:8080"
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "paper.pdf"
+            
+            # Private DNS should be blocked even with proxy env set
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("10.0.0.1", 443))]):
+                with self.assertRaisesRegex(ValueError, "private"):
+                    safe_fetch.fetch("https://internal.example.org/", output)
+            
+            # Non-global DNS should be blocked
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("169.254.169.254", 443))]):
+                with self.assertRaisesRegex(ValueError, "private"):
+                    safe_fetch.fetch("https://metadata.example.org/", output)
+    
+    def test_proxy_env_with_no_proxy_wildcard_still_blocks_private(self):
+        safe_fetch.os.environ["HTTPS_PROXY"] = "http://proxy.example.org:8080"
+        safe_fetch.os.environ["NO_PROXY"] = "*"
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "paper.pdf"
+            
+            # Private DNS should be blocked even when NO_PROXY bypasses the proxy
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("127.0.0.1", 443))]):
+                with self.assertRaisesRegex(ValueError, "private"):
+                    safe_fetch.fetch("https://localhost.example.org/", output)
+    
+    def test_proxy_env_blocks_private_destinations_on_redirect(self):
+        # Without allow_private, proxy is not used, so redirect to private address is blocked
+        Connection.responses = [Response(302, location="https://internal.example.org/secret")]
+        safe_fetch.os.environ["HTTPS_PROXY"] = "http://proxy.example.org:8080"
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(safe_fetch.socket, "getaddrinfo") as dns, \
+             patch.object(safe_fetch.socket, "create_connection"):
+            output = Path(directory) / "paper.pdf"
+            
+            def resolve(host, port, *args, **kwargs):
+                if host == "public.example.org":
+                    return [(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))]
+                elif host == "internal.example.org":
+                    return [(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("10.0.0.1", 443))]
+                return [(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))]
+            
+            dns.side_effect = resolve
+            with patch.object(safe_fetch.http.client, "HTTPSConnection", Connection):
+                with self.assertRaisesRegex(ValueError, "private"):
+                    safe_fetch.fetch("https://public.example.org/", output)
+    
+    def test_no_proxy_supports_wildcard_in_list(self):
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))]), \
+             patch.object(safe_fetch.socket, "create_connection"), \
+             patch.object(safe_fetch.http.client, "HTTPSConnection", Connection):
+            output = Path(directory) / "paper.pdf"
+            safe_fetch.os.environ["HTTPS_PROXY"] = "http://proxy.example.org:8080"
+            safe_fetch.os.environ["NO_PROXY"] = "other.org, *, more.org"
+            Connection.responses = [Response()]
+            safe_fetch.fetch("https://paper.example.org/study", output, allow_private=True)
+            self.assertEqual(output.read_bytes(), b"paper")
+    
     def test_allow_private_mode_accepts_sandbox_addresses(self):
         Connection.responses = [Response()]
         benchmark = (socket.AF_INET, socket.SOCK_STREAM, 0, "", ("198.18.0.1", 443))

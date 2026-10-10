@@ -39,11 +39,11 @@ def public_endpoint(url, allow_private=False):
 
 
 def in_no_proxy(hostname, no_proxy):
-    if no_proxy == "*":
-        return True
     hostname = hostname.lower()
     for entry in no_proxy.split(","):
         entry = entry.strip().lower()
+        if entry == "*":
+            return True
         if entry == hostname or entry.startswith(".") and hostname.endswith(entry):
             return True
         if hostname == entry.lstrip(".") or hostname.endswith("." + entry.lstrip(".")):
@@ -55,8 +55,10 @@ def is_stub_or_challenge(body):
     if len(body) > 10240:
         return False
     text = body.lower()
-    if b"http-equiv" in text and b"refresh" in text:
-        match = re.search(rb'http-equiv\s*=\s*["\']?\s*refresh\s*["\']?\s+content\s*=\s*["\']?(\d+)', text, re.I)
+    if b"http-equiv" in text and b"refresh" in text and b"content" in text:
+        match = re.search(rb'content\s*=\s*["\']?(\d+)[^"\'<>]*["\']?\s+http-equiv\s*=\s*["\']?\s*refresh', text, re.I)
+        if not match:
+            match = re.search(rb'http-equiv\s*=\s*["\']?\s*refresh["\']?\s+content\s*=\s*["\']?(\d+)', text, re.I)
         if match and int(match.group(1)) < 5:
             return True
     if b"enable cookies" in text and b"pubmed.ncbi.nlm.nih.gov" in text:
@@ -65,12 +67,16 @@ def is_stub_or_challenge(body):
 
 
 def fetch(url, output, allow_private=False, overwrite=False):
-    proxy_url = os.environ.get("HTTPS_PROXY", os.environ.get("HTTP_PROXY")) or \
-                os.environ.get("https_proxy", os.environ.get("http_proxy"))
-    no_proxy = os.environ.get("NO_PROXY", os.environ.get("no_proxy", ""))
+    if allow_private:
+        proxy_url = os.environ.get("HTTPS_PROXY", os.environ.get("HTTP_PROXY")) or \
+                    os.environ.get("https_proxy", os.environ.get("http_proxy"))
+        no_proxy = os.environ.get("NO_PROXY", os.environ.get("no_proxy", ""))
+    else:
+        proxy_url = None
+        no_proxy = ""
     
     for _ in range(MAX_REDIRECTS + 1):
-        parsed, ip, port = public_endpoint(url, allow_private or bool(proxy_url))
+        parsed, ip, port = public_endpoint(url, allow_private)
         use_proxy = proxy_url and not in_no_proxy(parsed.hostname, no_proxy)
         
         if use_proxy:
@@ -80,10 +86,11 @@ def fetch(url, output, allow_private=False, overwrite=False):
             proxy_port = proxy_parsed.port or (8080 if proxy_parsed.scheme == "http" else 443)
             
             if parsed.scheme == "https":
+                options = {"timeout": 10, "context": ssl.create_default_context()}
                 if proxy_parsed.scheme == "https":
-                    connection = http.client.HTTPSConnection(proxy_parsed.hostname, proxy_port, timeout=10)
+                    connection = http.client.HTTPSConnection(proxy_parsed.hostname, proxy_port, **options)
                 else:
-                    connection = http.client.HTTPConnection(proxy_parsed.hostname, proxy_port, timeout=10)
+                    connection = http.client.HTTPSConnection(proxy_parsed.hostname, proxy_port, **options)
                 connection.set_tunnel(parsed.hostname, port)
             else:
                 if proxy_parsed.scheme == "https":
@@ -91,6 +98,7 @@ def fetch(url, output, allow_private=False, overwrite=False):
                 else:
                     connection = http.client.HTTPConnection(proxy_parsed.hostname, proxy_port, timeout=10)
                 connection.set_tunnel(parsed.hostname, port)
+            
             target = urlunsplit(("", "", parsed.path or "/", parsed.query, ""))
         else:
             cls = http.client.HTTPSConnection if parsed.scheme == "https" else http.client.HTTPConnection
@@ -161,22 +169,28 @@ if __name__ == "__main__":
         allow_private = os.environ.get("RESEARCHCOMB_ALLOW_PRIVATE") == "1"
         args = sys.argv[1:]
         overwrite = False
+        url_arg = None
+        output_arg = None
         
-        while args and args[0].startswith("--"):
-            if args[0] == "--allow-private":
+        for arg in args:
+            if arg == "--allow-private":
                 allow_private = True
-                args = args[1:]
-            elif args[0] == "--overwrite":
+            elif arg == "--overwrite":
                 overwrite = True
-                args = args[1:]
+            elif arg.startswith("--"):
+                raise ValueError(f"unknown option: {arg}")
+            elif url_arg is None:
+                url_arg = arg
+            elif output_arg is None:
+                output_arg = arg
             else:
-                raise ValueError(f"unknown option: {args[0]}")
+                raise ValueError("too many arguments")
         
-        if len(args) != 2:
+        if url_arg is None or output_arg is None:
             raise ValueError("usage: safe_fetch.py [--allow-private] [--overwrite] URL OUTPUT_FILE")
         
-        final_url, size = fetch(args[0], args[1], allow_private, overwrite)
+        final_url, size = fetch(url_arg, output_arg, allow_private, overwrite)
         mode = " (private addresses allowed)" if allow_private else ""
-        print(f"Saved {size} bytes from {final_url} to {args[1]}{mode}")
+        print(f"Saved {size} bytes from {final_url} to {output_arg}{mode}")
     except (OSError, ValueError, http.client.HTTPException) as error:
         sys.exit(f"FAIL: {error}")

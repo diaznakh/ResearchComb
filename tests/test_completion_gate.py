@@ -116,6 +116,43 @@ class CompletionGateTests(unittest.TestCase):
             path.write_text(json.dumps({"searches": api_searches + site_searches, "sources": papers}))
             result = self.run_gate("search", path)
             self.assertEqual(result.returncode, 0, result.stderr)
+    
+    def test_europe_pmc_path_prefix_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(5)]
+            
+            # For paper-search mode, need all 11 sources
+            names = ["PubMed", "Europe PMC", "alphaXiv", "arXiv", "bioRxiv", "medRxiv"]
+            suffixes = ["site:pubmed.ncbi.nlm.nih.gov", "site:europepmc.org", "site:alphaxiv.org", 
+                       "site:arxiv.org", "site:biorxiv.org", "site:medrxiv.org"]
+            searches = [
+                {"source": name, "direct": {"outcome": "unavailable", "reason": "No browser"},
+                 "fallback": {"query": "topic " + suffix, "outcome": "no results"}}
+                for name, suffix in [("Google Scholar", "site:scholar.google.com"),
+                                    ("ResearchGate", "site:researchgate.net/publication"),
+                                    ("Crossref", "site:search.crossref.org"),
+                                    ("OpenAlex", "site:openalex.org"),
+                                    ("Semantic Scholar", "site:semanticscholar.org/paper")] + list(zip(names, suffixes))
+            ]
+            
+            # Non-europepmc path on ebi.ac.uk should be rejected
+            for search in searches:
+                if search["source"] == "Europe PMC":
+                    search["direct"] = {"url": "https://www.ebi.ac.uk/ena/browser/api/search?query=test", "outcome": "searched"}
+            
+            record = {
+                "searches": searches,
+                "sources": papers,
+                "citation_trails": [{"source_id": f"S{i}", "kind": kind, "outcome": "screened"}
+                                    for i in range(5) for kind in ("references", "cited_by")],
+                "trail_leads": [{"title": "Paper 1", "status": "included", "source_id": "S1"}],
+                "search_rounds": [{"new_relevant": 1}, {"new_relevant": 0}],
+            }
+            path.write_text(json.dumps(record))
+            result = self.run_gate("paper-search", path)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("must belong to", result.stderr)
 
     def test_bibliography_aliases_and_substantive_sources_heading(self):
         with tempfile.TemporaryDirectory() as directory:

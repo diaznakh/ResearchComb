@@ -26,11 +26,11 @@ PAPER_SOURCES = {
     "medRxiv": "site:medrxiv.org",
 }
 API_DOMAINS = {
-    "Crossref": "api.crossref.org",
-    "OpenAlex": "api.openalex.org",
-    "Semantic Scholar": "api.semanticscholar.org",
-    "Europe PMC": "www.ebi.ac.uk/europepmc",
-    "PubMed": "eutils.ncbi.nlm.nih.gov",
+    "Crossref": ("api.crossref.org", None),
+    "OpenAlex": ("api.openalex.org", None),
+    "Semantic Scholar": ("api.semanticscholar.org", None),
+    "Europe PMC": ("www.ebi.ac.uk", "/europepmc"),
+    "PubMed": ("eutils.ncbi.nlm.nih.gov", None),
 }
 
 
@@ -70,12 +70,21 @@ def check_search(path, paper_mode=False):
                 raise ValueError(f"{source}: record the attempted URL")
             url = urlsplit(direct["url"])
             domain = suffix.removeprefix("site:").split("/", 1)[0]
-            api_domain = API_DOMAINS.get(source)
-            valid_domains = [domain] + ([api_domain] if api_domain else [])
-            if url.scheme not in {"http", "https"} or not url.hostname or not any(
-                url.hostname == d or url.hostname.endswith("." + d) for d in valid_domains
-            ):
-                raise ValueError(f"{source}: direct URL must belong to {domain}" + (f" or {api_domain}" if api_domain else ""))
+            api_entry = API_DOMAINS.get(source)
+            
+            valid = url.scheme in {"http", "https"} and url.hostname and (
+                url.hostname == domain or url.hostname.endswith("." + domain)
+            )
+            
+            if not valid and api_entry:
+                api_host, api_path = api_entry
+                host_match = url.hostname == api_host or url.hostname.endswith("." + api_host)
+                path_match = not api_path or (url.path and url.path.startswith(api_path))
+                valid = host_match and path_match
+            
+            if not valid:
+                api_desc = f" or {api_entry[0]}{api_entry[1] or ''}" if api_entry else ""
+                raise ValueError(f"{source}: direct URL must belong to {domain}{api_desc}")
         if direct["outcome"] in {"inaccessible", "unavailable"}:
             fallback = entry.get("fallback", {})
             if not isinstance(fallback, dict) or not isinstance(fallback.get("query"), str) or suffix not in fallback["query"] or not isinstance(fallback.get("outcome"), str) or not fallback["outcome"].strip():
