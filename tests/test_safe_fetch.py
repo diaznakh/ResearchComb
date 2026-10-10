@@ -287,6 +287,16 @@ class SafeFetchTests(unittest.TestCase):
             with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET6, socket.SOCK_STREAM, 0, "", ("fe80::1", 443))]):
                 with self.assertRaisesRegex(ValueError, "link-local"):
                     safe_fetch.fetch("https://local.example.org/", output, allow_private=True)
+            
+            # Test unspecified IPv4 (0.0.0.0/8 - connects to localhost on Linux)
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("0.0.0.0", 443))]):
+                with self.assertRaisesRegex(ValueError, "unspecified"):
+                    safe_fetch.fetch("https://zero.example.org/", output, allow_private=True)
+            
+            # Test unspecified IPv6 (::)
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET6, socket.SOCK_STREAM, 0, "", ("::", 443))]):
+                with self.assertRaisesRegex(ValueError, "unspecified"):
+                    safe_fetch.fetch("https://zero.example.org/", output, allow_private=True)
     
     def test_https_proxy_url_rejected(self):
         with tempfile.TemporaryDirectory() as directory, \

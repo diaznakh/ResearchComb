@@ -49,7 +49,7 @@ Before opening a discovered web link, use `python3 <installed-researchcomb-folde
 
 In sandboxes or behind corporate proxies where all hostnames resolve to private or benchmark ranges (e.g., 198.18.0.0/15), add `--allow-private` or set `RESEARCHCOMB_ALLOW_PRIVATE=1` to honour proxy environment variables (HTTP_PROXY, HTTPS_PROXY, NO_PROXY) and allow non-global resolved addresses. When using this mode, record `"fetch_mode": "allow_private"` in the source entry's optional fields. Default mode rejects private destinations and ignores proxy settings.
 
-**Security note:** Even in `--allow-private` mode, loopback addresses (127.0.0.0/8, ::1) and link-local / cloud metadata addresses (169.254.0.0/16, fe80::/10) remain blocked. Sandboxes need benchmark ranges like 198.18.0.0/15, not localhost or metadata endpoints.
+**Security note:** Even in `--allow-private` mode, loopback addresses (127.0.0.0/8, ::1), link-local / cloud metadata addresses (169.254.0.0/16, fe80::/10), and unspecified addresses (0.0.0.0/8, ::) remain blocked. On Linux, 0.0.0.0 connects to localhost. Sandboxes need benchmark ranges like 198.18.0.0/15, not localhost or metadata endpoints.
 
 If the helper cannot run, open the link only with a host browser that blocks private destinations after DNS and redirects; otherwise mark the link unverified. Do not use an unrestricted shell fetch as a fallback. A user-supplied local file is a separate input, not a web citation.
 
