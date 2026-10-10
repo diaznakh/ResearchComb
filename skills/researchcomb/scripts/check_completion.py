@@ -25,6 +25,11 @@ PAPER_SOURCES = {
     "bioRxiv": "site:biorxiv.org",
     "medRxiv": "site:medrxiv.org",
 }
+API_DOMAINS = {
+    "Crossref": "api.crossref.org",
+    "OpenAlex": "api.openalex.org",
+    "Semantic Scholar": "api.semanticscholar.org",
+}
 
 
 def check_search(path, paper_mode=False):
@@ -37,7 +42,7 @@ def check_search(path, paper_mode=False):
     by_source = {entry["source"]: entry for entry in searches}
     if len(by_source) != len(searches):
         raise ValueError("duplicate search source")
-    unavailable = 0
+    unavailable, inaccessible, searched = 0, 0, 0
     required_sources = PAPER_SOURCES if paper_mode else BROAD_SOURCES
     for source, suffix in required_sources.items():
         entry = by_source.get(source)
@@ -50,13 +55,21 @@ def check_search(path, paper_mode=False):
             if not isinstance(direct.get("reason"), str) or not direct["reason"].strip() or direct.get("url") is not None:
                 raise ValueError(f"{source}: unavailable browsing needs a reason and no attempted URL")
             unavailable += 1
+        elif direct["outcome"] == "inaccessible":
+            inaccessible += 1
         else:
+            searched += 1
+        if direct["outcome"] != "unavailable":
             if not isinstance(direct.get("url"), str) or not direct["url"].strip():
                 raise ValueError(f"{source}: record the attempted URL")
             url = urlsplit(direct["url"])
             domain = suffix.removeprefix("site:").split("/", 1)[0]
-            if url.scheme not in {"http", "https"} or not url.hostname or not (url.hostname == domain or url.hostname.endswith("." + domain)):
-                raise ValueError(f"{source}: direct URL must belong to {domain}")
+            api_domain = API_DOMAINS.get(source)
+            valid_domains = [domain] + ([api_domain] if api_domain else [])
+            if url.scheme not in {"http", "https"} or not url.hostname or not any(
+                url.hostname == d or url.hostname.endswith("." + d) for d in valid_domains
+            ):
+                raise ValueError(f"{source}: direct URL must belong to {domain}" + (f" or {api_domain}" if api_domain else ""))
         if direct["outcome"] in {"inaccessible", "unavailable"}:
             fallback = entry.get("fallback", {})
             if not isinstance(fallback, dict) or not isinstance(fallback.get("query"), str) or suffix not in fallback["query"] or not isinstance(fallback.get("outcome"), str) or not fallback["outcome"].strip():
@@ -153,9 +166,8 @@ def check_search(path, paper_mode=False):
         ) or rounds[-1]["new_relevant"] != 0:
             raise ValueError("paper search needs a final search round with zero new relevant leads, or report partial")
     return (
-        f"PASS: recorded {len(required_sources) - unavailable} direct attempts, "
-        f"{unavailable} sources with direct browsing unavailable, "
-        f"fallbacks where needed, and {len(sources)} discovered paper(s)"
+        f"PASS: recorded {searched} searched, {inaccessible} inaccessible, "
+        f"{unavailable} unavailable, fallbacks where needed, and {len(sources)} discovered paper(s)"
     )
 
 

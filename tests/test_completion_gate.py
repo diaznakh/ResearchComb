@@ -109,6 +109,24 @@ class CompletionGateTests(unittest.TestCase):
             result = self.run_gate("manuscript", path, 7, 7)
             self.assertEqual(result.returncode, 0, f"Table pipes should not count as words: {result.stderr}")
 
+    def test_api_domains_accepted_and_pass_line_separates_outcomes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            searches = [
+                {"source": "Crossref", "direct": {"url": "https://api.crossref.org/works", "outcome": "searched"}},
+                {"source": "OpenAlex", "direct": {"url": "https://api.openalex.org/works", "outcome": "inaccessible"},
+                 "fallback": {"query": "topic site:openalex.org", "outcome": "no results"}},
+                {"source": "Semantic Scholar", "direct": {"url": "https://api.semanticscholar.org/graph/v1/paper/search", "outcome": "searched"}},
+                {"source": "Google Scholar", "direct": {"outcome": "unavailable", "reason": "No browser"},
+                 "fallback": {"query": "topic site:scholar.google.com", "outcome": "no results"}},
+                {"source": "ResearchGate", "direct": {"url": "https://researchgate.net/publication/search", "outcome": "searched"}},
+            ]
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(6)]
+            path.write_text(json.dumps({"searches": searches, "sources": papers}))
+            result = self.run_gate("search", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("3 searched, 1 inaccessible, 1 unavailable", result.stdout)
+
     def test_distinct_paper_validation_and_unavailable_browser(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "evidence.json"
