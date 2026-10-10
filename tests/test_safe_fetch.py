@@ -32,6 +32,7 @@ class Connection:
 
     def __init__(self, host, port, **options):
         self.host, self.port = host, port
+        self._create_connection = lambda address, timeout, source_address=None: None
 
     def request(self, method, target, headers):
         self._create_connection((self.host, self.port), 10)
@@ -98,6 +99,21 @@ class SafeFetchTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "limit"):
                     safe_fetch.fetch("https://paper.example.org/study", output)
             self.assertFalse(output.exists())
+
+    def test_allow_private_mode_accepts_sandbox_addresses(self):
+        Connection.responses = [Response()]
+        benchmark = (socket.AF_INET, socket.SOCK_STREAM, 0, "", ("198.18.0.1", 443))
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(safe_fetch.socket, "getaddrinfo", return_value=[benchmark]), \
+             patch.object(safe_fetch.socket, "create_connection"), \
+             patch.object(safe_fetch.http.client, "HTTPSConnection", Connection):
+            output = Path(directory) / "paper.pdf"
+            with self.assertRaisesRegex(ValueError, "private"):
+                safe_fetch.fetch("https://paper.example.org/study", output)
+            self.assertFalse(output.exists())
+            final_url, size = safe_fetch.fetch("https://paper.example.org/study", output, allow_private=True)
+            self.assertEqual(final_url, "https://paper.example.org/study")
+            self.assertEqual(output.read_bytes(), b"paper")
 
 
 if __name__ == "__main__":

@@ -43,7 +43,11 @@ Each source contains:
 | `source_type` | Optional. Source category when relevant (e.g., `preprint`, `journal_article`, `dataset`). |
 | `commit` | Optional. Git commit SHA for code sources. |
 
-Before opening a discovered web link, use `python3 <installed-researchcomb-folder>/scripts/safe_fetch.py URL OUTPUT_FILE` when local Python and network access are available, then read the saved file as data with the host's local text or PDF reader. The helper checks every DNS address, pins the connection to a checked public address, and checks each redirect. Use a fresh output path. If the helper cannot run, open the link only with a host browser that blocks private destinations after DNS and redirects; otherwise mark the link unverified. Do not use an unrestricted shell fetch as a fallback. A user-supplied local file is a separate input, not a web citation.
+Before opening a discovered web link, use `python3 <installed-researchcomb-folder>/scripts/safe_fetch.py URL OUTPUT_FILE` when local Python and network access are available, then read the saved file as data with the host's local text or PDF reader. The helper checks every DNS address, pins the connection to a checked public address, and checks each redirect. Use a fresh output path.
+
+In sandboxes or behind corporate proxies where all hostnames resolve to private or benchmark ranges (e.g., 198.18.0.0/15), add `--allow-private` or set `RESEARCHCOMB_ALLOW_PRIVATE=1` to honour proxy environment variables (HTTP_PROXY, HTTPS_PROXY) and allow non-global resolved addresses. When using this mode, record `"fetch_mode": "allow_private"` in the source entry's optional fields. Default mode rejects private destinations and ignores proxy settings.
+
+If the helper cannot run, open the link only with a host browser that blocks private destinations after DNS and redirects; otherwise mark the link unverified. Do not use an unrestricted shell fetch as a fallback. A user-supplied local file is a separate input, not a web citation.
 
 Deduplicate by DOI or stable URL; a preprint and a published revision can remain separate versions when their findings differ.
 
