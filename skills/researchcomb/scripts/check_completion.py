@@ -26,10 +26,16 @@ PAPER_SOURCES = {
     "medRxiv": "site:medrxiv.org",
 }
 API_DOMAINS = {
-    "Crossref": "api.crossref.org",
-    "OpenAlex": "api.openalex.org",
-    "Semantic Scholar": "api.semanticscholar.org",
+    "Crossref": ("api.crossref.org", None),
+    "OpenAlex": ("api.openalex.org", None),
+    "Semantic Scholar": ("api.semanticscholar.org", None),
+    "Europe PMC": ("www.ebi.ac.uk", "/europepmc"),
+    "PubMed": ("eutils.ncbi.nlm.nih.gov", None),
 }
+
+
+def natural_sort_key(s):
+    return [int(part) if part.isdigit() else part.lower() for part in re.split(r'(\d+)', s)]
 
 
 def check_search(path, paper_mode=False):
@@ -64,12 +70,24 @@ def check_search(path, paper_mode=False):
                 raise ValueError(f"{source}: record the attempted URL")
             url = urlsplit(direct["url"])
             domain = suffix.removeprefix("site:").split("/", 1)[0]
-            api_domain = API_DOMAINS.get(source)
-            valid_domains = [domain] + ([api_domain] if api_domain else [])
-            if url.scheme not in {"http", "https"} or not url.hostname or not any(
-                url.hostname == d or url.hostname.endswith("." + d) for d in valid_domains
-            ):
-                raise ValueError(f"{source}: direct URL must belong to {domain}" + (f" or {api_domain}" if api_domain else ""))
+            api_entry = API_DOMAINS.get(source)
+            
+            valid = url.scheme in {"http", "https"} and url.hostname and (
+                url.hostname == domain or url.hostname.endswith("." + domain)
+            )
+            
+            if not valid and api_entry:
+                api_host, api_path = api_entry
+                host_match = url.hostname == api_host or url.hostname.endswith("." + api_host)
+                if api_path:
+                    path_match = url.path == api_path or url.path.startswith(api_path + "/")
+                else:
+                    path_match = True
+                valid = host_match and path_match
+            
+            if not valid:
+                api_desc = f" or {api_entry[0]}{api_entry[1] or ''}" if api_entry else ""
+                raise ValueError(f"{source}: direct URL must belong to {domain}{api_desc}")
         if direct["outcome"] in {"inaccessible", "unavailable"}:
             fallback = entry.get("fallback", {})
             if not isinstance(fallback, dict) or not isinstance(fallback.get("query"), str) or suffix not in fallback["query"] or not isinstance(fallback.get("outcome"), str) or not fallback["outcome"].strip():
@@ -134,6 +152,8 @@ def check_search(path, paper_mode=False):
         if not isinstance(trails, list) or not trails:
             raise ValueError("paper search needs a citation_trails screening log")
         source_ids = seen_ids
+        core_sources = {paper["id"] for paper in sources if paper.get("relevance") == "core"}
+        required_trail_sources = core_sources if core_sources else source_ids
         for trail in trails:
             if not isinstance(trail, dict) or trail.get("source_id") not in source_ids or trail.get("kind") not in {"references", "cited_by", "related"}:
                 raise ValueError("each citation trail needs a recorded source and valid kind")
@@ -143,7 +163,7 @@ def check_search(path, paper_mode=False):
                 raise ValueError("inaccessible citation trail needs a reason")
             if trail["outcome"] == "inaccessible":
                 raise ValueError("citation trail inaccessible; report paper search partial")
-        for source_id in source_ids:
+        for source_id in sorted(required_trail_sources, key=natural_sort_key):
             source_trails = [trail["kind"] for trail in trails if trail["source_id"] == source_id]
             if "references" not in source_trails or not any(kind in {"cited_by", "related"} for kind in source_trails):
                 raise ValueError(f"{source_id}: screen both backward references and forward or related-paper trails")

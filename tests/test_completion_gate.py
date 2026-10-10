@@ -86,13 +86,82 @@ class CompletionGateTests(unittest.TestCase):
             self.assertIn("missing search attempt: medRxiv", run().stderr)
             record["searches"] = searches
             record["citation_trails"].pop()
-            self.assertIn("backward references", run().stderr)
+            stderr = run().stderr
+            self.assertIn("backward references", stderr)
+            self.assertTrue("S0" in stderr or "S1" in stderr or "S2" in stderr or "S3" in stderr or "S4" in stderr)
             record["citation_trails"].append({"source_id": "S4", "kind": "related", "outcome": "screened"})
             record["trail_leads"][0]["status"] = "pending"
             self.assertIn("screening outcome", run().stderr)
             record["trail_leads"][0]["status"] = "included"
             record["search_rounds"].pop()
             self.assertIn("final search round", run().stderr)
+    
+    def test_api_domains_accepted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(5)]
+            api_searches = [
+                {"source": "Crossref", "direct": {"url": "https://api.crossref.org/works?query=test", "outcome": "searched"}},
+                {"source": "OpenAlex", "direct": {"url": "https://api.openalex.org/works?search=test", "outcome": "searched"}},
+                {"source": "Europe PMC", "direct": {"url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=test", "outcome": "searched"}},
+                {"source": "PubMed", "direct": {"url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?term=test", "outcome": "searched"}},
+                {"source": "Semantic Scholar", "direct": {"url": "https://api.semanticscholar.org/graph/v1/paper/search?query=test", "outcome": "searched"}},
+            ]
+            site_searches = [
+                {"source": "Google Scholar", "direct": {"outcome": "unavailable", "reason": "No browser"}, 
+                 "fallback": {"query": "test site:scholar.google.com", "outcome": "results"}},
+                {"source": "ResearchGate", "direct": {"outcome": "unavailable", "reason": "No browser"},
+                 "fallback": {"query": "test site:researchgate.net/publication", "outcome": "results"}},
+            ]
+            path.write_text(json.dumps({"searches": api_searches + site_searches, "sources": papers}))
+            result = self.run_gate("search", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
+    
+    def test_europe_pmc_path_prefix_required(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(5)]
+            
+            # For paper-search mode, need all 11 sources
+            names = ["PubMed", "Europe PMC", "alphaXiv", "arXiv", "bioRxiv", "medRxiv"]
+            suffixes = ["site:pubmed.ncbi.nlm.nih.gov", "site:europepmc.org", "site:alphaxiv.org", 
+                       "site:arxiv.org", "site:biorxiv.org", "site:medrxiv.org"]
+            searches = [
+                {"source": name, "direct": {"outcome": "unavailable", "reason": "No browser"},
+                 "fallback": {"query": "topic " + suffix, "outcome": "no results"}}
+                for name, suffix in [("Google Scholar", "site:scholar.google.com"),
+                                    ("ResearchGate", "site:researchgate.net/publication"),
+                                    ("Crossref", "site:search.crossref.org"),
+                                    ("OpenAlex", "site:openalex.org"),
+                                    ("Semantic Scholar", "site:semanticscholar.org/paper")] + list(zip(names, suffixes))
+            ]
+            
+            record = {
+                "searches": searches,
+                "sources": papers,
+                "citation_trails": [{"source_id": f"S{i}", "kind": kind, "outcome": "screened"}
+                                    for i in range(5) for kind in ("references", "cited_by")],
+                "trail_leads": [{"title": "Paper 1", "status": "included", "source_id": "S1"}],
+                "search_rounds": [{"new_relevant": 1}, {"new_relevant": 0}],
+            }
+            
+            # Test rejection of non-europepmc paths
+            for bad_path in ["/ena/browser", "/europepmcfake/x"]:
+                for search in searches:
+                    if search["source"] == "Europe PMC":
+                        search["direct"] = {"url": f"https://www.ebi.ac.uk{bad_path}?query=test", "outcome": "searched"}
+                path.write_text(json.dumps(record))
+                result = self.run_gate("paper-search", path)
+                self.assertNotEqual(result.returncode, 0, f"Should reject {bad_path}")
+                self.assertIn("must belong to", result.stderr)
+            
+            # Test acceptance of valid paths
+            for search in searches:
+                if search["source"] == "Europe PMC":
+                    search["direct"] = {"url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=test", "outcome": "searched"}
+            path.write_text(json.dumps(record))
+            result = self.run_gate("paper-search", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_bibliography_aliases_and_substantive_sources_heading(self):
         with tempfile.TemporaryDirectory() as directory:

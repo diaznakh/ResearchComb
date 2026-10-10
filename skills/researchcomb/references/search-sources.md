@@ -25,7 +25,7 @@ For open-ended live academic searches in `comb-survey`, `comb-investigate`, and 
 
 For an open-ended academic topic or paper survey, first attempt one focused search through each broad source's own site: Google Scholar, ResearchGate, Crossref, OpenAlex, and Semantic Scholar. Open them individually through the host's browser tools; an access failure at one site says nothing about the others. Then use general web search and relevant field sources: PubMed and Europe PMC for biomedicine; arXiv or alphaXiv for AI and computing; bioRxiv or medRxiv for relevant life-science or medical preprints; GitHub or Hugging Face when code, models, or datasets matter. Use relevant primary websites, official documentation, and public institutional sources for broader topics. Follow promising results with further searches as needed. Narrow lookups, user-limited source sets, and explicit time or search budgets can use a smaller set; honor named sources even in a narrow task.
 
-For an open-ended `comb-paper` run, also attempt PubMed, Europe PMC, alphaXiv, arXiv, bioRxiv, and medRxiv, even when the topic is outside their main field. Record an actual no-results outcome when appropriate; do not infer it from the field label. Search relevant reviews and article bibliographies for primary studies, and follow backward references plus forward citations or related-paper links from key sources. Screen each relevant lead found against the paper question, deduplicate it, and repeat focused searches until a new round finds no new relevant leads. Report partial if access, the user's budget, or the host prevents this check. This is saturation within the stated scope, not a claim to have searched every paper ever published.
+For an open-ended `comb-paper` run, also attempt PubMed, Europe PMC, alphaXiv, arXiv, bioRxiv, and medRxiv, even when the topic is outside their main field. Record an actual outcome: `searched` with result counts, `inaccessible` when the site failed, or `out_of_scope` with a one-line reason when the direct search succeeded but the source is a poor fit (e.g. bioRxiv for physical chemistry). Do not infer outcomes from the field label alone. For out-of-scope sources, a separate fallback is not required when the direct search worked. Search relevant reviews and article bibliographies for primary studies, and follow backward references plus forward citations or related-paper links from key sources. Screen each relevant lead found against the paper question, deduplicate it, and repeat focused searches until a new round finds no new relevant leads. Report partial if access, the user's budget, or the host prevents this check. This is saturation within the stated scope, not a claim to have searched every paper ever published.
 
 ## Search and follow the evidence
 
@@ -54,6 +54,22 @@ If a relevant site's search interface cannot be used because the host lacks dire
 
 Record the exact fallback query and whether it returned relevant pages. A search engine may index only part of a site or no pages at all; no results do not establish that the site has no relevant papers. Label these as domain-restricted web searches, not searches inside the index. Never claim to have searched or read a blocked service. Continue with accessible publishers, repositories, and other sources for the underlying evidence.
 
-Do not bypass access controls, bulk scrape search results, replace browser searches with `curl` API calls, configure APIs, install search services, or add paid access. ResearchGate's "Request full-text" contacts authors; use it only with explicit user authorization to send that request. If browsing is unavailable, work from supplied sources and mark live discovery unavailable.
+Public, keyless scholarly APIs (OpenAlex, Crossref, Europe PMC REST, arXiv export API, PubMed E-utilities, and Semantic Scholar public API) count as direct search attempts when the site's browser interface is unavailable or times out. Record `method: api` in the evidence log. These APIs return bibliographic metadata and abstracts that site search would surface. Do not bypass access controls, bulk scrape search results, configure authentication-required APIs, install search services, or add paid access. ResearchGate's "Request full-text" contacts authors; use it only with explicit user authorization to send that request. If browsing is unavailable, work from supplied sources and mark live discovery unavailable.
+
+## Known access limits
+
+**Publisher blocking:** ACS (pubs.acs.org), RSC (pubs.rsc.org), and Elsevier (sciencedirect.com) block automated requests with HTTP 403. Direct fetch attempts will fail. Use Crossref, OpenAlex, or Europe PMC APIs for metadata and abstracts instead, or mark the publisher source inaccessible. DOI.org redirects to these publishers may also fail.
+
+**Stub pages:** Elsevier's linkinghub (doi.org → linkinghub.elsevier.com) returns a ~2.7 KB meta-refresh stub instead of the paper. Nature may redirect to a cookie error page. These stubs do not establish full-text access. Fetch tools detect and reject them; fallback to metadata APIs.
+
+**Non-functional search patterns:** Some documented search URLs no longer work:
+- alphaXiv `/search?q=` returns HTTP 404
+- Google Scholar direct search may return HTTP 400 for some queries; use the `site:` fallback
+- Semantic Scholar site shows JavaScript challenges; use the public API
+- bioRxiv, medRxiv, OpenAlex, and Europe PMC sites may time out due to JavaScript rendering; use their APIs
+- Crossref UI may not display DOIs; use the API
+- The Google Scholar `site:` fallback (`site:scholar.google.com`) may return author profiles instead of papers
+
+For reliable access, prefer the keyless APIs listed above over site browsing when both are available.
 
 Official search guidance: [Google Scholar help](https://scholar.google.com/intl/en/scholar/help.html) and [ResearchGate discovery help](https://help.researchgate.net/research-and-publications/discovering-and-requesting-research).
