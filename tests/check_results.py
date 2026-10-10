@@ -17,7 +17,7 @@ DOIS = {
     "10.1021/acscatal.2c01374",
     "10.3390/catal16020163",
 }
-CASES = ["survey", "check", "trace", "manuscript", "align", "investigate", "digest", "blueprint", "critique", "cycle", "rerun", "routing"]
+CASES = ["survey", "check", "trace", "manuscript", "align", "investigate", "digest", "blueprint", "critique", "cycle", "rerun", "paper", "routing"]
 
 
 def require(condition, message):
@@ -171,6 +171,14 @@ def check_case(root, case):
             require(new_sources[source["id"]]["doi"] == source["doi"], "Changed a source identity during handoff")
         require(set(claims) >= {claim["id"] for claim in original["claims"]}, "Lost claim IDs during handoff")
         require(linked_sources_present(record, report), "Manuscript lacks canonical source links")
+    elif case == "paper":
+        report = (directory / "paper.md").read_text()
+        require(bool(report.strip()), "Missing paper.md")
+        checks = (directory / "checks.md").read_text()
+        require(bool(checks.strip()), "Missing checks.md")
+        source_map = {source["id"]: source for source in record["sources"]}
+        for source_id in ("S-A", "S-B"):
+            require(source_id in source_map, "Lost supplied source ID")
     else:
         raise ValueError(f"Unknown case: {case}")
     return f"{case}: passed ({len(record['sources'])} sources, {len(claims)} claims, {body_word_count(report)} body words)"
