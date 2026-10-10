@@ -289,9 +289,11 @@ class SafeFetchTests(unittest.TestCase):
                     safe_fetch.fetch("https://local.example.org/", output, allow_private=True)
             
             # Test unspecified IPv4 (0.0.0.0/8 - connects to localhost on Linux)
-            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("0.0.0.0", 443))]):
-                with self.assertRaisesRegex(ValueError, "unspecified"):
-                    safe_fetch.fetch("https://zero.example.org/", output, allow_private=True)
+            for test_ip in ["0.0.0.0", "0.1.2.3"]:
+                with self.subTest(ip=test_ip):
+                    with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", (test_ip, 443))]):
+                        with self.assertRaisesRegex(ValueError, "unspecified"):
+                            safe_fetch.fetch("https://zero.example.org/", output, allow_private=True)
             
             # Test unspecified IPv6 (::)
             with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET6, socket.SOCK_STREAM, 0, "", ("::", 443))]):

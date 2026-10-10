@@ -36,7 +36,8 @@ def public_endpoint(url, allow_private=False):
     
     for ip_str in addresses:
         ip = ipaddress.ip_address(ip_str)
-        if ip.is_loopback or ip.is_link_local or ip.is_unspecified:
+        # Block loopback, link-local, and full 0.0.0.0/8 range (including 0.1.2.3, etc.)
+        if ip.is_loopback or ip.is_link_local or ip.is_unspecified or (isinstance(ip, ipaddress.IPv4Address) and ip in ipaddress.ip_network("0.0.0.0/8")):
             raise ValueError("loopback, link-local, and unspecified addresses are blocked")
         if not allow_private and not ip.is_global:
             raise ValueError("private or non-global DNS destination is blocked")
