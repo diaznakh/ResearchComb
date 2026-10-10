@@ -1,3 +1,15 @@
+#!/usr/bin/env python3
+"""Local CONNECT proxy for manual integration testing of safe_fetch.py.
+
+Usage: python3 local_proxy.py PORT LOG_FILE
+
+Example:
+    python3 tests/local_proxy.py 8080 proxy.log
+    HTTPS_PROXY=http://127.0.0.1:8080 python3 skills/researchcomb/scripts/safe_fetch.py --allow-private https://example.com/ test.html
+
+This helper is not used by automated tests (they use mocks), but is kept for 
+manual verification of proxy behavior during development.
+"""
 import socket, threading, sys, select, time
 LOG=open(sys.argv[2],"a",buffering=1)
 def log(m): LOG.write(f"{time.strftime('%H:%M:%S')} {m}\n")

@@ -33,8 +33,14 @@ def public_endpoint(url, allow_private=False):
     addresses = {item[4][0] for item in socket.getaddrinfo(host, port, type=socket.SOCK_STREAM)}
     if not addresses:
         raise ValueError("no addresses resolved")
-    if not allow_private and any(not ipaddress.ip_address(ip).is_global for ip in addresses):
-        raise ValueError("private or non-global DNS destination is blocked")
+    
+    for ip_str in addresses:
+        ip = ipaddress.ip_address(ip_str)
+        if ip.is_loopback or ip.is_link_local:
+            raise ValueError("loopback and link-local addresses are blocked")
+        if not allow_private and not ip.is_global:
+            raise ValueError("private or non-global DNS destination is blocked")
+    
     return parsed, sorted(addresses)[0], port
 
 
@@ -81,22 +87,18 @@ def fetch(url, output, allow_private=False, overwrite=False):
         
         if use_proxy:
             proxy_parsed = urlsplit(proxy_url if "://" in proxy_url else f"http://{proxy_url}")
-            if proxy_parsed.scheme not in {"http", "https"}:
-                raise ValueError("proxy URL must be HTTP or HTTPS")
-            proxy_port = proxy_parsed.port or (8080 if proxy_parsed.scheme == "http" else 443)
+            if proxy_parsed.scheme == "https":
+                raise ValueError("https:// proxy URLs are not supported; use http:// for CONNECT proxies")
+            if proxy_parsed.scheme != "http":
+                raise ValueError("proxy URL must be HTTP")
+            proxy_port = proxy_parsed.port or 8080
             
             if parsed.scheme == "https":
                 options = {"timeout": 10, "context": ssl.create_default_context()}
-                if proxy_parsed.scheme == "https":
-                    connection = http.client.HTTPSConnection(proxy_parsed.hostname, proxy_port, **options)
-                else:
-                    connection = http.client.HTTPSConnection(proxy_parsed.hostname, proxy_port, **options)
+                connection = http.client.HTTPSConnection(proxy_parsed.hostname, proxy_port, **options)
                 connection.set_tunnel(parsed.hostname, port)
             else:
-                if proxy_parsed.scheme == "https":
-                    connection = http.client.HTTPSConnection(proxy_parsed.hostname, proxy_port, timeout=10)
-                else:
-                    connection = http.client.HTTPConnection(proxy_parsed.hostname, proxy_port, timeout=10)
+                connection = http.client.HTTPConnection(proxy_parsed.hostname, proxy_port, timeout=10)
                 connection.set_tunnel(parsed.hostname, port)
             
             target = urlunsplit(("", "", parsed.path or "/", parsed.query, ""))

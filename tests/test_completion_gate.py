@@ -136,11 +136,6 @@ class CompletionGateTests(unittest.TestCase):
                                     ("Semantic Scholar", "site:semanticscholar.org/paper")] + list(zip(names, suffixes))
             ]
             
-            # Non-europepmc path on ebi.ac.uk should be rejected
-            for search in searches:
-                if search["source"] == "Europe PMC":
-                    search["direct"] = {"url": "https://www.ebi.ac.uk/ena/browser/api/search?query=test", "outcome": "searched"}
-            
             record = {
                 "searches": searches,
                 "sources": papers,
@@ -149,10 +144,24 @@ class CompletionGateTests(unittest.TestCase):
                 "trail_leads": [{"title": "Paper 1", "status": "included", "source_id": "S1"}],
                 "search_rounds": [{"new_relevant": 1}, {"new_relevant": 0}],
             }
+            
+            # Test rejection of non-europepmc paths
+            for bad_path in ["/ena/browser", "/europepmcfake/x"]:
+                for search in searches:
+                    if search["source"] == "Europe PMC":
+                        search["direct"] = {"url": f"https://www.ebi.ac.uk{bad_path}?query=test", "outcome": "searched"}
+                path.write_text(json.dumps(record))
+                result = self.run_gate("paper-search", path)
+                self.assertNotEqual(result.returncode, 0, f"Should reject {bad_path}")
+                self.assertIn("must belong to", result.stderr)
+            
+            # Test acceptance of valid paths
+            for search in searches:
+                if search["source"] == "Europe PMC":
+                    search["direct"] = {"url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=test", "outcome": "searched"}
             path.write_text(json.dumps(record))
             result = self.run_gate("paper-search", path)
-            self.assertNotEqual(result.returncode, 0)
-            self.assertIn("must belong to", result.stderr)
+            self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_bibliography_aliases_and_substantive_sources_heading(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -79,7 +79,10 @@ def check_search(path, paper_mode=False):
             if not valid and api_entry:
                 api_host, api_path = api_entry
                 host_match = url.hostname == api_host or url.hostname.endswith("." + api_host)
-                path_match = not api_path or (url.path and url.path.startswith(api_path))
+                if api_path:
+                    path_match = url.path == api_path or url.path.startswith(api_path + "/")
+                else:
+                    path_match = True
                 valid = host_match and path_match
             
             if not valid:

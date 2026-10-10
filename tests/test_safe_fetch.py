@@ -64,7 +64,7 @@ class SafeFetchTests(unittest.TestCase):
             with self.subTest(url=url), self.assertRaises(ValueError):
                 safe_fetch.public_endpoint(url)
         with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("169.254.169.254", 443))]):
-            with self.assertRaisesRegex(ValueError, "private"):
+            with self.assertRaisesRegex(ValueError, "loopback|link-local"):
                 safe_fetch.public_endpoint("https://paper.example.org/")
 
     def test_public_fetch_pins_checked_address(self):
@@ -212,12 +212,12 @@ class SafeFetchTests(unittest.TestCase):
             
             # Private DNS should be blocked even with proxy env set
             with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("10.0.0.1", 443))]):
-                with self.assertRaisesRegex(ValueError, "private"):
+                with self.assertRaisesRegex(ValueError, "private|non-global"):
                     safe_fetch.fetch("https://internal.example.org/", output)
             
-            # Non-global DNS should be blocked
+            # Link-local addresses should be blocked
             with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("169.254.169.254", 443))]):
-                with self.assertRaisesRegex(ValueError, "private"):
+                with self.assertRaisesRegex(ValueError, "loopback|link-local"):
                     safe_fetch.fetch("https://metadata.example.org/", output)
     
     def test_proxy_env_with_no_proxy_wildcard_still_blocks_private(self):
@@ -226,9 +226,9 @@ class SafeFetchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             output = Path(directory) / "paper.pdf"
             
-            # Private DNS should be blocked even when NO_PROXY bypasses the proxy
+            # Loopback should be blocked even when NO_PROXY bypasses the proxy
             with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("127.0.0.1", 443))]):
-                with self.assertRaisesRegex(ValueError, "private"):
+                with self.assertRaisesRegex(ValueError, "loopback|link-local"):
                     safe_fetch.fetch("https://localhost.example.org/", output)
     
     def test_proxy_env_blocks_private_destinations_on_redirect(self):
@@ -249,7 +249,7 @@ class SafeFetchTests(unittest.TestCase):
             
             dns.side_effect = resolve
             with patch.object(safe_fetch.http.client, "HTTPSConnection", Connection):
-                with self.assertRaisesRegex(ValueError, "private"):
+                with self.assertRaisesRegex(ValueError, "private|non-global"):
                     safe_fetch.fetch("https://public.example.org/", output)
     
     def test_no_proxy_supports_wildcard_in_list(self):
@@ -263,6 +263,38 @@ class SafeFetchTests(unittest.TestCase):
             Connection.responses = [Response()]
             safe_fetch.fetch("https://paper.example.org/study", output, allow_private=True)
             self.assertEqual(output.read_bytes(), b"paper")
+    
+    def test_loopback_blocked_even_in_allow_private_mode(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "paper.pdf"
+            
+            # Test IPv4 loopback
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("127.0.0.1", 443))]):
+                with self.assertRaisesRegex(ValueError, "loopback"):
+                    safe_fetch.fetch("https://localhost-alias.example.org/", output, allow_private=True)
+            
+            # Test IPv6 loopback
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET6, socket.SOCK_STREAM, 0, "", ("::1", 443))]):
+                with self.assertRaisesRegex(ValueError, "loopback"):
+                    safe_fetch.fetch("https://localhost-alias.example.org/", output, allow_private=True)
+            
+            # Test link-local IPv4 (169.254.x.x)
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("169.254.169.254", 443))]):
+                with self.assertRaisesRegex(ValueError, "link-local"):
+                    safe_fetch.fetch("https://metadata.example.org/", output, allow_private=True)
+            
+            # Test link-local IPv6 (fe80::/10)
+            with patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET6, socket.SOCK_STREAM, 0, "", ("fe80::1", 443))]):
+                with self.assertRaisesRegex(ValueError, "link-local"):
+                    safe_fetch.fetch("https://local.example.org/", output, allow_private=True)
+    
+    def test_https_proxy_url_rejected(self):
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))]):
+            output = Path(directory) / "paper.pdf"
+            safe_fetch.os.environ["HTTPS_PROXY"] = "https://proxy.example.org:8080"
+            with self.assertRaisesRegex(ValueError, "https:// proxy URLs are not supported"):
+                safe_fetch.fetch("https://paper.example.org/study", output, allow_private=True)
     
     def test_allow_private_mode_accepts_sandbox_addresses(self):
         Connection.responses = [Response()]
