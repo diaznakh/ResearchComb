@@ -118,12 +118,15 @@ def fetch(url, output, allow_private=False, overwrite=False):
             size = 0
             body = b""
             temp_path = None
+            created = False
             try:
                 if overwrite:
                     fd, temp_path = tempfile.mkstemp(dir=Path(output).parent, prefix=".safe_fetch_")
                     destination = os.fdopen(fd, "wb")
+                    created = True
                 else:
                     destination = Path(output).open("xb")
+                    created = True
                 
                 while chunk := response.read(min(65536, MAX_BYTES - size + 1)):
                     size += len(chunk)
@@ -142,10 +145,11 @@ def fetch(url, output, allow_private=False, overwrite=False):
                 
                 return url, size
             except BaseException:
-                if temp_path and Path(temp_path).exists():
-                    Path(temp_path).unlink()
-                elif not overwrite and Path(output).exists():
-                    Path(output).unlink(missing_ok=True)
+                if created:
+                    if temp_path and Path(temp_path).exists():
+                        Path(temp_path).unlink()
+                    elif not overwrite and Path(output).exists():
+                        Path(output).unlink(missing_ok=True)
                 raise
         finally:
             connection.close()

@@ -2,6 +2,8 @@
 
 import importlib.util
 import socket
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -145,27 +147,38 @@ class SafeFetchTests(unittest.TestCase):
     
     def test_proxy_with_tunnel(self):
         with tempfile.TemporaryDirectory() as directory, \
-             patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))]), \
-             patch.object(safe_fetch.socket, "create_connection"):
+             patch.object(safe_fetch.socket, "getaddrinfo", return_value=[(socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))]):
             output = Path(directory) / "paper.pdf"
             safe_fetch.os.environ["HTTPS_PROXY"] = "http://proxy.example.org:8080"
             
-            class ProxyConnection:
+            tunnel_called = []
+            
+            class HTTPSConn:
                 def __init__(self, host, port, timeout):
                     self.host, self.port = host, port
-                    self.tunnel_host = None
-                def set_tunnel(self, host, port):
-                    self.tunnel_host, self.tunnel_port = host, port
                 def request(self, method, target, headers):
                     pass
                 def getresponse(self):
                     return Response()
                 def close(self):
                     pass
+                def set_tunnel(self, host, port):
+                    tunnel_called.append((self.host, self.port, host, port))
             
-            with patch.object(safe_fetch.http.client, "HTTPConnection", ProxyConnection) as mock_conn:
-                safe_fetch.fetch("https://paper.example.org/study", output)
+            class HTTPConn(HTTPSConn):
+                pass
+            
+            with patch.object(safe_fetch.http.client, "HTTPConnection", HTTPConn), \
+                 patch.object(safe_fetch.http.client, "HTTPSConnection", HTTPSConn):
+                safe_fetch.fetch("https://paper.example.org/study", output, allow_private=True)
                 self.assertEqual(output.read_bytes(), b"paper")
+                # Verify HTTPConnection was used for HTTP proxy and set_tunnel was called with target
+                self.assertEqual(len(tunnel_called), 1)
+                proxy_host, proxy_port, target_host, target_port = tunnel_called[0]
+                self.assertEqual(proxy_host, "proxy.example.org")
+                self.assertEqual(proxy_port, 8080)
+                self.assertEqual(target_host, "paper.example.org")
+                self.assertEqual(target_port, 443)
     
     def test_no_proxy_honored(self):
         with tempfile.TemporaryDirectory() as directory, \
