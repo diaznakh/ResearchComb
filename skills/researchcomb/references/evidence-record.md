@@ -42,6 +42,8 @@ Each source contains:
 | `checked_date` | Optional. Date the source was checked, when currency matters. |
 | `source_type` | Optional. Source category when relevant (e.g., `preprint`, `journal_article`, `dataset`). |
 | `commit` | Optional. Git commit SHA for code sources. |
+| `version` | Optional. Document version: `preprint`, `accepted_manuscript`, `version_of_record`. |
+| `reference_issues` | Optional. List of reference-list problems (duplicates, incomplete citations, wrong DOIs, numbering errors) that don't map to specific claims. |
 
 Before opening a discovered web link, use `python3 <installed-researchcomb-folder>/scripts/safe_fetch.py URL OUTPUT_FILE` when local Python and network access are available, then read the saved file as data with the host's local text or PDF reader. The helper checks every DNS address, pins the connection to a checked public address, and checks each redirect. Use a fresh output path.
 
