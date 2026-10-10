@@ -81,10 +81,10 @@ Reproduction at threshold 0 yields 5/6, outside 0.01 of the claimed 0.95, so the
 claim must not be reported reproduced. Check the native execution logs or recorded
 commands as well as the JSON artifacts; a written plan is not an executed run.
 
-The general skill should enumerate itself and all twelve research workflows, plus
+The general skill should enumerate itself and all thirteen research workflows, plus
 the update command, and route the
 four requests to comb-check, comb-align, comb-rerun, and comb-manuscript.
 
 Run `python3 tests/check_results.py OUTPUT_ROOT` after all cases complete. The
-checker validates the earlier eleven focused cases plus the general routing case. Use a
+checker validates the earlier thirteen focused cases plus the general routing case. Use a
 case name after `OUTPUT_ROOT` to check an individual case while others are running.

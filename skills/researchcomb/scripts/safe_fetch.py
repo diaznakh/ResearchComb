@@ -48,7 +48,7 @@ def fetch(url, output):
         )
         try:
             target = urlunsplit(("", "", parsed.path or "/", parsed.query, ""))
-            connection.request("GET", target, headers={"Connection": "close"})
+            connection.request("GET", target, headers={"Connection": "close", "User-Agent": "ResearchComb"})
             response = connection.getresponse()
             if response.status in {301, 302, 303, 307, 308}:
                 location = response.getheader("Location")
