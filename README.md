@@ -24,7 +24,7 @@
 
 ResearchComb helps your AI assistant find literature, connect findings, inspect companion code, write manuscripts, and check claims against sources. Bring a question, a paper, or a draft; choose a workflow or let the general `researchcomb` skill guide the task.
 
-**Free and open source. Twelve research workflows plus an update command. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
+**Free and open source. Thirteen research workflows plus an update command. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
 
 ## Quick start
 
@@ -397,8 +397,8 @@ Earlier cases were recorded on **8 October 2026**, using native Codex runs and t
 | --- | --- |
 | Earlier focused workflow cases | **11 / 11 passed** |
 | One-request `/comb-paper` case | **567 measured body words** within the requested 400–600 range; source IDs and critique and verification records preserved |
-| Earlier general command discovery and routing | **Passed** — twelve skills discovered at that time and four requests routed |
-| Local checker tests | **4 / 4 passed** |
+| Earlier general command discovery and routing | **Passed** — thirteen workflow skills discovered and four requests routed |
+| Local checker tests | **16 / 16 passed** |
 | Long manuscript case | **6,201 measured body words**, within the requested range |
 | Experiment loop | Improvement kept, regression rejected, two-trial budget respected |
 | Reproduction case | A mismatched claimed result correctly reported as not reproduced |
@@ -439,7 +439,7 @@ Experiments need available local execution tools and an authorized environment. 
 
 ## Inside the repository
 
-- [`skills/`](skills/) — the general skill, twelve research workflows, the update command, and shared evidence guidance.
+- [`skills/`](skills/) — the general skill, thirteen research workflows, the update command, and shared evidence guidance.
 - [`plugin.json`](plugin.json) — portable package and Codex presentation metadata.
 - [`skills/researchcomb/VERSION`](skills/researchcomb/VERSION) — installed version for skills copied without the plugin manifest.
 - [Codex marketplace](.agents/plugins/marketplace.json) — GitHub installation source.

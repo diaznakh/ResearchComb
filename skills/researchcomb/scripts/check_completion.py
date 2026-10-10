@@ -170,10 +170,11 @@ def check_manuscript(path, minimum, maximum):
 
 def body_word_count(text):
     body = re.split(
-        r"(?im)^#{1,6}\s+(?:\d+[.)]?\s+)?(?:references|bibliography|sources)[ \t]*:?[ \t]*(?:#+[ \t]*)?$",
+        r"(?im)^#{1,6}\s+(?:\d+[.)]?\s+)?(?:references|bibliography|sources|works\s+cited)[ \t]*:?[ \t]*(?:#+[ \t]*)?$",
         text,
         maxsplit=1,
     )[0]
+    body = re.sub(r'\|', ' ', body)
     return len(body.split())
 
 

@@ -97,13 +97,17 @@ class CompletionGateTests(unittest.TestCase):
     def test_bibliography_aliases_and_substantive_sources_heading(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "paper.md"
-            for heading in ("## Sources", "## 8. Sources: ##", "## Bibliography", "## References"):
+            for heading in ("## Sources", "## 8. Sources: ##", "## Bibliography", "## References", "## Works Cited"):
                 with self.subTest(heading=heading):
                     path.write_text("one two three\n" + heading + "\n" + "reference " * 100)
                     self.assertIn("3 body words", self.run_gate("manuscript", path, 100, 110).stderr)
             text = "one two three\n## Sources of uncertainty\nmore evidence"
             path.write_text(text)
             self.assertEqual(self.run_gate("manuscript", path, len(text.split()), len(text.split())).returncode, 0)
+            table_text = "one two three | four | five\n| col | col |\n## References\nref"
+            path.write_text(table_text)
+            result = self.run_gate("manuscript", path, 7, 7)
+            self.assertEqual(result.returncode, 0, f"Table pipes should not count as words: {result.stderr}")
 
     def test_distinct_paper_validation_and_unavailable_browser(self):
         with tempfile.TemporaryDirectory() as directory:
