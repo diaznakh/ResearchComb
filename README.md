@@ -33,7 +33,7 @@ ResearchComb helps your AI assistant find literature, connect findings, inspect 
 Paste this into Codex or Antigravity with GitHub and local file access:
 
 ```text
-Install ResearchComb version v0.5.22 at commit
+Install ResearchComb version v0.5.23 at commit
 43b79e5f9d12d3d99759f44debc68514deb7f14a from
 https://github.com/diaznakh/ResearchComb for my account.
 Check out that exact commit before copying or installing.
@@ -398,7 +398,7 @@ Earlier cases were recorded on **8 October 2026**, using native Codex runs and t
 | Earlier focused workflow cases | **11 / 11 passed** |
 | One-request `/comb-paper` case | **567 measured body words** within the requested 400–600 range; source IDs and critique and verification records preserved |
 | Earlier general command discovery and routing | **Passed** — thirteen workflow skills discovered and four requests routed |
-| Local checker tests | **16 / 16 passed** |
+| Local checker tests | **21 / 21 passed** (8 safe_fetch, 6 completion_gate, 4 check_results, 3 update_packaging) |
 | Long manuscript case | **6,201 measured body words**, within the requested range |
 | Experiment loop | Improvement kept, regression rejected, two-trial budget respected |
 | Reproduction case | A mismatched claimed result correctly reported as not reproduced |

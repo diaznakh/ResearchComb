@@ -86,13 +86,36 @@ class CompletionGateTests(unittest.TestCase):
             self.assertIn("missing search attempt: medRxiv", run().stderr)
             record["searches"] = searches
             record["citation_trails"].pop()
-            self.assertIn("backward references", run().stderr)
+            stderr = run().stderr
+            self.assertIn("backward references", stderr)
+            self.assertTrue("S0" in stderr or "S1" in stderr or "S2" in stderr or "S3" in stderr or "S4" in stderr)
             record["citation_trails"].append({"source_id": "S4", "kind": "related", "outcome": "screened"})
             record["trail_leads"][0]["status"] = "pending"
             self.assertIn("screening outcome", run().stderr)
             record["trail_leads"][0]["status"] = "included"
             record["search_rounds"].pop()
             self.assertIn("final search round", run().stderr)
+    
+    def test_api_domains_accepted(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(5)]
+            api_searches = [
+                {"source": "Crossref", "direct": {"url": "https://api.crossref.org/works?query=test", "outcome": "searched"}},
+                {"source": "OpenAlex", "direct": {"url": "https://api.openalex.org/works?search=test", "outcome": "searched"}},
+                {"source": "Europe PMC", "direct": {"url": "https://www.ebi.ac.uk/europepmc/webservices/rest/search?query=test", "outcome": "searched"}},
+                {"source": "PubMed", "direct": {"url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?term=test", "outcome": "searched"}},
+                {"source": "Semantic Scholar", "direct": {"url": "https://api.semanticscholar.org/graph/v1/paper/search?query=test", "outcome": "searched"}},
+            ]
+            site_searches = [
+                {"source": "Google Scholar", "direct": {"outcome": "unavailable", "reason": "No browser"}, 
+                 "fallback": {"query": "test site:scholar.google.com", "outcome": "results"}},
+                {"source": "ResearchGate", "direct": {"outcome": "unavailable", "reason": "No browser"},
+                 "fallback": {"query": "test site:researchgate.net/publication", "outcome": "results"}},
+            ]
+            path.write_text(json.dumps({"searches": api_searches + site_searches, "sources": papers}))
+            result = self.run_gate("search", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
 
     def test_bibliography_aliases_and_substantive_sources_heading(self):
         with tempfile.TemporaryDirectory() as directory:

@@ -29,7 +29,13 @@ API_DOMAINS = {
     "Crossref": "api.crossref.org",
     "OpenAlex": "api.openalex.org",
     "Semantic Scholar": "api.semanticscholar.org",
+    "Europe PMC": "www.ebi.ac.uk/europepmc",
+    "PubMed": "eutils.ncbi.nlm.nih.gov",
 }
+
+
+def natural_sort_key(s):
+    return [int(part) if part.isdigit() else part.lower() for part in re.split(r'(\d+)', s)]
 
 
 def check_search(path, paper_mode=False):
@@ -134,6 +140,8 @@ def check_search(path, paper_mode=False):
         if not isinstance(trails, list) or not trails:
             raise ValueError("paper search needs a citation_trails screening log")
         source_ids = seen_ids
+        core_sources = {paper["id"] for paper in sources if paper.get("relevance") == "core"}
+        required_trail_sources = core_sources if core_sources else source_ids
         for trail in trails:
             if not isinstance(trail, dict) or trail.get("source_id") not in source_ids or trail.get("kind") not in {"references", "cited_by", "related"}:
                 raise ValueError("each citation trail needs a recorded source and valid kind")
@@ -143,7 +151,7 @@ def check_search(path, paper_mode=False):
                 raise ValueError("inaccessible citation trail needs a reason")
             if trail["outcome"] == "inaccessible":
                 raise ValueError("citation trail inaccessible; report paper search partial")
-        for source_id in source_ids:
+        for source_id in sorted(required_trail_sources, key=natural_sort_key):
             source_trails = [trail["kind"] for trail in trails if trail["source_id"] == source_id]
             if "references" not in source_trails or not any(kind in {"cited_by", "related"} for kind in source_trails):
                 raise ValueError(f"{source_id}: screen both backward references and forward or related-paper trails")
