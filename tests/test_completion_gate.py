@@ -97,13 +97,35 @@ class CompletionGateTests(unittest.TestCase):
     def test_bibliography_aliases_and_substantive_sources_heading(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "paper.md"
-            for heading in ("## Sources", "## 8. Sources: ##", "## Bibliography", "## References"):
+            for heading in ("## Sources", "## 8. Sources: ##", "## Bibliography", "## References", "## Works Cited"):
                 with self.subTest(heading=heading):
                     path.write_text("one two three\n" + heading + "\n" + "reference " * 100)
                     self.assertIn("3 body words", self.run_gate("manuscript", path, 100, 110).stderr)
             text = "one two three\n## Sources of uncertainty\nmore evidence"
             path.write_text(text)
             self.assertEqual(self.run_gate("manuscript", path, len(text.split()), len(text.split())).returncode, 0)
+            table_text = "one two three | four | five\n| col | col |\n## References\nref"
+            path.write_text(table_text)
+            result = self.run_gate("manuscript", path, 7, 7)
+            self.assertEqual(result.returncode, 0, f"Table pipes should not count as words: {result.stderr}")
+
+    def test_api_domains_accepted_and_pass_line_separates_outcomes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "evidence.json"
+            searches = [
+                {"source": "Crossref", "direct": {"url": "https://api.crossref.org/works", "outcome": "searched"}},
+                {"source": "OpenAlex", "direct": {"url": "https://api.openalex.org/works", "outcome": "inaccessible"},
+                 "fallback": {"query": "topic site:openalex.org", "outcome": "no results"}},
+                {"source": "Semantic Scholar", "direct": {"url": "https://api.semanticscholar.org/graph/v1/paper/search", "outcome": "searched"}},
+                {"source": "Google Scholar", "direct": {"outcome": "unavailable", "reason": "No browser"},
+                 "fallback": {"query": "topic site:scholar.google.com", "outcome": "no results"}},
+                {"source": "ResearchGate", "direct": {"url": "https://researchgate.net/publication/search", "outcome": "searched"}},
+            ]
+            papers = [{"id": f"S{i}", "title": f"Paper {i}", "url": f"https://example.org/paper/{i}"} for i in range(6)]
+            path.write_text(json.dumps({"searches": searches, "sources": papers}))
+            result = self.run_gate("search", path)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("3 searched, 1 inaccessible, 1 unavailable", result.stdout)
 
     def test_distinct_paper_validation_and_unavailable_browser(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -119,7 +141,7 @@ class CompletionGateTests(unittest.TestCase):
                 return self.run_gate("search", path)
             result = run()
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("0 direct attempts", result.stdout)
+            self.assertIn("0 searched, 0 inaccessible, 5 unavailable", result.stdout)
             for entries in ([{}] * 5, [papers[0]] * 5, papers[:4]):
                 self.assertNotEqual(run(entries).returncode, 0)
             for replacement in (

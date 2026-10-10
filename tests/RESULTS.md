@@ -13,7 +13,7 @@ No API client, server, dependency installation, or cloud compute was added.
 | Paper-to-code audit | Detected batch-size, dropout, and evaluation-split mismatches; correctly qualified the seed declaration because no run record exists. Inspected commit recorded; no code execution or measured accuracy claimed. Inputs unchanged. | Passed |
 | Long manuscript and handoff | 6,201 measured body words within the requested 6,000–6,500 range; nine sources and sixteen claims; original S1–S3 and C1–C8 IDs preserved; bibliography links present; unrendered page count left null. | Passed |
 
-All four artifact checks and four checker unit tests passed. The reports were also
+All artifact checks and sixteen checker unit tests passed. The reports were also
 reviewed for source access disclosure, attribution, inspection-versus-execution
 claims, and honest completion reporting. The artifact checks do not prove every
 scientific assertion correct.
@@ -42,11 +42,11 @@ fixture facts and constraints.
 
 The native logs show the four actual Python benchmark commands for the cycle and
 reproduction cases. These were executed tests rather than written run plans.
-The general `researchcomb` skill also passed discovery of all twelve skills and
+The general `researchcomb` skill also passed discovery of all thirteen workflow skills and
 routing of citation, comparison, reproduction, and writing requests.
 
 At the time of this run, coverage included one passing representative behavioral
-case for **all eleven workflow skills**, plus the general discovery/routing case. This covers the tested
+case for **all thirteen workflow skills**, plus the general discovery/routing case. This covers the tested
 inputs and constraints, not every possible research task. The seven added cases
 are local synthetic tests; the original survey and citation check used real public
 paper sources. Antigravity behavioral coverage remains unavailable as noted below.
@@ -60,8 +60,8 @@ code mismatches and two citation errors remain required findings.
 ## Search source checks — 8 October 2026
 
 Version 0.5.3 adds a shared browser search guide for Google Scholar and ResearchGate.
-All twelve skills reach it through the existing evidence reference. Local links,
-skill metadata, and all four checker unit tests passed.
+All thirteen workflow skills reach it through the existing evidence reference. Local links,
+skill metadata, and all sixteen checker unit tests passed.
 
 A live lookup for "Attention Is All You Need" could not fetch either service's
 direct search results through the host web tool. An ordinary web search restricted

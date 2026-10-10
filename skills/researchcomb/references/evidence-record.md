@@ -39,10 +39,19 @@ Each source contains:
 | `access` | `full_text`, `abstract`, `excerpt`, `metadata`, `code`, or `run`; record what was actually inspected. |
 | `identity_status` | `verified`, `provided`, or `unverified`. Provided notes alone do not verify publisher metadata. |
 | `link_status` | `accessible`, `inaccessible`, `broken`, or `not_checked`. A login wall, timeout, or rate limit is inaccessible; use broken only after a definite missing-resource response. Local files use `not_checked` unless an external link was also opened. |
+| `checked_date` | Optional. Date the source was checked, when currency matters. |
+| `source_type` | Optional. Source category when relevant (e.g., `preprint`, `journal_article`, `dataset`). |
+| `commit` | Optional. Git commit SHA for code sources. |
+| `version` | Optional. Document version: `preprint`, `accepted_manuscript`, `version_of_record`. |
+| `reference_issues` | Optional. List of reference-list problems (duplicates, incomplete citations, wrong DOIs, numbering errors) that don't map to specific claims. |
 
-Before opening a discovered web link, use `python3 <installed-researchcomb-folder>/scripts/safe_fetch.py URL OUTPUT_FILE` when local Python and network access are available, then read the saved file as data with the host's local text or PDF reader. The helper checks every DNS address, pins the connection to a checked public address, and checks each redirect. Use a fresh output path. If the helper cannot run, open the link only with a host browser that blocks private destinations after DNS and redirects; otherwise mark the link unverified. Do not use an unrestricted shell fetch as a fallback. A user-supplied local file is a separate input, not a web citation.
+Before opening a discovered web link, use `python3 <installed-researchcomb-folder>/scripts/safe_fetch.py URL OUTPUT_FILE` when local Python and network access are available, then read the saved file as data with the host's local text or PDF reader. The helper checks every DNS address, pins the connection to a checked public address, and checks each redirect. Use a fresh output path.
 
-Record a checked date and source type when they matter. Deduplicate by DOI or stable URL; a preprint and a published revision can remain separate versions when their findings differ. For code, record the inspected commit; for a run, record the command and result artifact.
+In sandboxes or behind corporate proxies where all hostnames resolve to private or benchmark ranges (e.g., 198.18.0.0/15), add `--allow-private` or set `RESEARCHCOMB_ALLOW_PRIVATE=1` to honour proxy environment variables (HTTP_PROXY, HTTPS_PROXY) and allow non-global resolved addresses. When using this mode, record `"fetch_mode": "allow_private"` in the source entry's optional fields. Default mode rejects private destinations and ignores proxy settings.
+
+If the helper cannot run, open the link only with a host browser that blocks private destinations after DNS and redirects; otherwise mark the link unverified. Do not use an unrestricted shell fetch as a fallback. A user-supplied local file is a separate input, not a web citation.
+
+Deduplicate by DOI or stable URL; a preprint and a published revision can remain separate versions when their findings differ.
 
 Each material claim contains:
 
