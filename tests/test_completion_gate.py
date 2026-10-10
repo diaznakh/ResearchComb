@@ -141,7 +141,7 @@ class CompletionGateTests(unittest.TestCase):
                 return self.run_gate("search", path)
             result = run()
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("0 direct attempts", result.stdout)
+            self.assertIn("0 searched, 0 inaccessible, 5 unavailable", result.stdout)
             for entries in ([{}] * 5, [papers[0]] * 5, papers[:4]):
                 self.assertNotEqual(run(entries).returncode, 0)
             for replacement in (
