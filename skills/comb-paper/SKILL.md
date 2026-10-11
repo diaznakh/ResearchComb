@@ -1,6 +1,6 @@
 ---
 name: comb-paper
-description: Draft evidence-backed literature reviews and research syntheses from source discovery through citation checks. For researchers building sourced drafts to revise and complete. Use when the user wants the whole research synthesis workflow in one request.
+description: Build a sourced literature synthesis through the full workflow, delivering a draft with verification records for the researcher to revise. Use when starting from a topic and seeking a complete evidence-backed scaffold.
 ---
 
 # Draft a sourced literature review

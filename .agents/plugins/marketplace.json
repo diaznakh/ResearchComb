@@ -10,7 +10,7 @@
         "source": "local",
         "path": "./"
       },
-      "description": "Find research papers, assess evidence, and verify citations in the current chat.",
+      "description": "Search indexes, verify claims against sources, and produce evidence-backed research documents.",
       "policy": {
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"

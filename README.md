@@ -116,19 +116,19 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 
 | Your goal | Workflow | What you receive |
 | --- | --- | --- |
-| Draft a sourced literature review | [`/comb-paper`](skills/comb-paper/SKILL.md) | A sourced draft, evidence record, critique and verification findings, and disclosure note for you to revise |
-| Find the literature | [`/comb-survey`](skills/comb-survey/SKILL.md) | A literature matrix, themes, gaps, and bibliography |
-| Investigate a question | [`/comb-investigate`](skills/comb-investigate/SKILL.md) | A cited brief with a search strategy and verification record |
-| Understand a source | [`/comb-digest`](skills/comb-digest/SKILL.md) | A focused summary with source locations and limitations |
-| Compare findings | [`/comb-align`](skills/comb-align/SKILL.md) | Agreements, disagreements, and a grounded comparison matrix |
-| Check a paper's code | [`/comb-trace`](skills/comb-trace/SKILL.md) | Claim-to-code findings and reproducibility gaps |
-| Plan an implementation | [`/comb-blueprint`](skills/comb-blueprint/SKILL.md) | Ranked options and a concrete technical plan |
-| Write a manuscript | [`/comb-manuscript`](skills/comb-manuscript/SKILL.md) | A sourced draft with a checked length target |
-| Challenge the reasoning | [`/comb-critique`](skills/comb-critique/SKILL.md) | Severity-graded findings and a revision plan |
-| Verify claims and citations | [`/comb-check`](skills/comb-check/SKILL.md) | A correction table with evidence and unresolved statuses |
-| Try measured improvements | [`/comb-cycle`](skills/comb-cycle/SKILL.md) | A bounded experiment ledger and the best measured configuration |
-| Reproduce a result | [`/comb-rerun`](skills/comb-rerun/SKILL.md) | Expected-versus-observed results with commands and deviations |
-| Check for an update | [`/comb-update`](skills/comb-update/SKILL.md) | Installed and latest versions, with the right update step |
+| Draft a sourced literature review | [`/comb-paper`](skills/comb-paper/SKILL.md) | A cited draft with verification records and disclosure note for you to revise and complete |
+| Find the literature | [`/comb-survey`](skills/comb-survey/SKILL.md) | A thematic synthesis with source-coverage records and deduplicated bibliography |
+| Investigate a question | [`/comb-investigate`](skills/comb-investigate/SKILL.md) | A documented investigation with claim-verification records and remaining gaps |
+| Understand a source | [`/comb-digest`](skills/comb-digest/SKILL.md) | A focused reading with methods, findings, constraints, and location references |
+| Compare findings | [`/comb-align`](skills/comb-align/SKILL.md) | A cited matrix showing which conclusions agree, conflict, or aren't comparable |
+| Check a paper's code | [`/comb-trace`](skills/comb-trace/SKILL.md) | A severity-graded audit of where code diverges from paper descriptions |
+| Plan an implementation | [`/comb-blueprint`](skills/comb-blueprint/SKILL.md) | Feasibility-ranked options with resource estimates and supporting evidence |
+| Write a manuscript | [`/comb-manuscript`](skills/comb-manuscript/SKILL.md) | A measured-length draft with inline citations and completion verification |
+| Challenge the reasoning | [`/comb-critique`](skills/comb-critique/SKILL.md) | Graded weaknesses with concrete revisions and supporting locations |
+| Verify claims and citations | [`/comb-check`](skills/comb-check/SKILL.md) | A correction table with identity checks, support statuses, and unverified items |
+| Try measured improvements | [`/comb-cycle`](skills/comb-cycle/SKILL.md) | An attempt ledger showing which changes improved the metric and which didn't |
+| Reproduce a result | [`/comb-rerun`](skills/comb-rerun/SKILL.md) | Expected and observed outcomes with recorded commands and deviations |
+| Check for an update | [`/comb-update`](skills/comb-update/SKILL.md) | Current and available versions with the appropriate update command |
 
 ## From a topic to a research paper
 

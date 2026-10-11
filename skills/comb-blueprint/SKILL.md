@@ -1,6 +1,6 @@
 ---
 name: comb-blueprint
-description: Find and rank implementable machine-learning or technical approaches supported by papers, datasets, documentation, and code. Use when the user wants practical training or implementation plans.
+description: Rank technical options by feasibility with resource estimates and supporting evidence. Use when choosing which method to implement.
 ---
 
 # Build an implementation blueprint

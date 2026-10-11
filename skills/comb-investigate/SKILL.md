@@ -1,6 +1,6 @@
 ---
 name: comb-investigate
-description: Investigate an open-ended technical or academic question across primary sources and produce a cited research brief. Use for a substantial investigation beyond a narrow lookup.
+description: Pursue a research question across multiple sources and deliver a documented investigation with claim verification records. Use for exploratory research rather than single-source reading.
 ---
 
 # Investigate a research question

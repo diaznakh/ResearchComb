@@ -1,6 +1,6 @@
 ---
 name: comb-survey
-description: Map literature on a research topic, laboratory, investigator, or author with search criteria and primary-source synthesis. Use for literature reviews and academic landscape surveys.
+description: Search scholarly indexes and build a thematic literature synthesis with recorded coverage and deduplication. Use for comprehensive literature reviews.
 ---
 
 # Survey the literature

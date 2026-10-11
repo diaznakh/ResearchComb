@@ -1,6 +1,6 @@
 ---
 name: comb-rerun
-description: Plan or execute a local reproduction of a paper, technical claim, or benchmark. Use when asked to reproduce results under recorded conditions.
+description: Reproduce reported results in an isolated environment and record deviations. Use when testing whether a finding holds under the stated conditions.
 ---
 
 # Reproduce a reported result

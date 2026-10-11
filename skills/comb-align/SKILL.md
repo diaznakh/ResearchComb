@@ -1,6 +1,6 @@
 ---
 name: comb-align
-description: Compare research papers or other sources using a grounded matrix of methods, findings, disagreements, and evidence strength. Use for source comparison rather than a new broad literature survey.
+description: Build a cited comparison matrix showing where sources agree, conflict, or measure different things. Use when comparing specific sources rather than discovering new ones.
 ---
 
 # Align sources and findings

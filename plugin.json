@@ -2,14 +2,14 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "researchcomb",
   "version": "0.5.23",
-  "description": "Find research papers, assess evidence, and verify citations in the current chat.",
+  "description": "Search indexes, verify claims against sources, and produce evidence-backed research documents.",
   "repository": "https://github.com/diaznakh/ResearchComb",
   "license": "MIT",
   "extensions": {
     "com.openai": {
       "interface": {
         "displayName": "ResearchComb",
-        "shortDescription": "Find papers and verify citations",
+        "shortDescription": "Evidence-backed research workflows",
         "developerName": "ResearchComb contributors",
         "category": "Productivity",
         "logo": "./assets/logo.png",

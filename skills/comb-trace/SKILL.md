@@ -1,6 +1,6 @@
 ---
 name: comb-trace
-description: Check a research paper against its companion code, configurations, data pipeline, and reported benchmarks. Use for paper-to-code consistency and reproducibility audits.
+description: Audit how paper claims map to code implementation with severity-graded findings. Use when checking whether code matches what the paper describes.
 ---
 
 # Trace paper claims into code
