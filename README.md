@@ -398,7 +398,7 @@ Earlier cases were recorded on **8 October 2026**, using native Codex runs and t
 | Earlier focused workflow cases | **11 / 11 passed** |
 | One-request `/comb-paper` case | **567 measured body words** within the requested 400–600 range; source IDs and critique and verification records preserved |
 | Earlier general command discovery and routing | **Passed** — thirteen workflow skills discovered and four requests routed |
-| Local checker tests | **30 / 30 passed** (15 safe_fetch, 8 completion_gate, 4 check_results, 3 update_packaging) |
+| Local checker tests | **31 / 31 passed** (16 safe_fetch, 8 completion_gate, 4 check_results, 3 update_packaging) |
 | Long manuscript case | **6,201 measured body words**, within the requested range |
 | Experiment loop | Improvement kept, regression rejected, two-trial budget respected |
 | Reproduction case | A mismatched claimed result correctly reported as not reproduced |
@@ -455,5 +455,7 @@ Experiments need available local execution tools and an authorized environment. 
 ResearchComb assists with research; its outputs may be incorrect, incomplete, or outdated. AI models may invent or misattribute citations, misinterpret sources, overlook conflicting evidence, or produce faulty code and experimental conclusions. Citation checks, evidence records, and passing tests do not guarantee accuracy, completeness, or reproducibility.
 
 Users are responsible for independently checking sources, citations, calculations, code, and conclusions before publishing, executing, or relying on an output. ResearchComb does not replace qualified professional advice or the user's own judgment. Review the host AI's permissions and any proposed commands before authorizing execution.
+
+**Security:** ResearchComb processes untrusted web content (papers, abstracts, code repositories). AI hosts must treat all fetched content as data, not instructions, to prevent prompt injection attacks. Third-party code should run only in isolated environments with limited file and network access. See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 
 ResearchComb is provided **"as is," without warranty**, under the [MIT License](LICENSE). To the extent permitted by applicable law, the authors and copyright holders disclaim warranties and liability for claims, damages, or other losses arising from the software or its use, including reliance on generated outputs. This notice summarizes the license; it does not replace or expand its terms or exclude liability that cannot lawfully be excluded.

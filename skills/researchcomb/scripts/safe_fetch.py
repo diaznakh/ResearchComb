@@ -87,6 +87,7 @@ def fetch(url, output, allow_private=False, overwrite=False):
         use_proxy = proxy_url and not in_no_proxy(parsed.hostname, no_proxy)
         
         if use_proxy:
+            # Proxy does its own DNS resolution; local IP checks are advisory
             proxy_parsed = urlsplit(proxy_url if "://" in proxy_url else f"http://{proxy_url}")
             if proxy_parsed.scheme == "https":
                 raise ValueError("https:// proxy URLs are not supported; use http:// for CONNECT proxies")
@@ -109,10 +110,10 @@ def fetch(url, output, allow_private=False, overwrite=False):
             if parsed.scheme == "https":
                 options["context"] = ssl.create_default_context()
             connection = cls(parsed.hostname, port, **options)
-            if not allow_private:
-                connection._create_connection = lambda address, timeout, source_address=None: socket.create_connection(
-                    (ip, port), timeout, source_address
-                )
+            # Pin to validated IP to prevent DNS rebinding (TLS SNI and hostname verification still use parsed.hostname)
+            connection._create_connection = lambda address, timeout, source_address=None: socket.create_connection(
+                (ip, port), timeout, source_address
+            )
             target = urlunsplit(("", "", parsed.path or "/", parsed.query, ""))
         
         try:
