@@ -73,7 +73,7 @@ def check_case(root, case):
         normalize = lambda value: value.rsplit(":", 1)[-1].lstrip("/$")
         expected = {path.parent.name for path in (Path(__file__).parent.parent / "skills").glob("*/SKILL.md")}
         require({normalize(name) for name in result["commands"]} == expected, "General skill did not list the installed workflows")
-        for request, skill in {"citations": "comb-check", "comparison": "comb-align", "reproduction": "comb-rerun", "writing": "comb-manuscript"}.items():
+        for request, skill in {"citations": "comb-check", "comparison": "comb-part", "reproduction": "comb-trace", "writing": "comb-weave"}.items():
             require(normalize(result["routes"][request]) == skill, f"Incorrect routing for {request}")
         return f"routing: passed ({len(expected)} skills discovered and four requests routed)"
     record = read_json(directory / "evidence.json")

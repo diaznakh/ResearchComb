@@ -11,36 +11,21 @@ Read the [shared evidence record](references/evidence-record.md) when gathering 
 
 ## Select a workflow
 
-The package supports Codex and Antigravity and includes these focused skills. Use `comb-paper` to draft a sourced literature review from a research topic and `comb-manuscript` when the user already has evidence to write from. Use the matching available skill for an explicit workflow request; keep this general workflow for other tasks combining several stages. If asked for help or available commands, show the names and their purposes. Invocation syntax belongs to the host: slash commands in Antigravity and skill selection with `$` in Codex.
+The package supports Codex and Antigravity and includes these focused skills. Use `comb-paper` to draft a sourced literature review from a research topic and `comb-weave` when the user already has evidence to write from. Use the matching available skill for an explicit workflow request; keep this general workflow for other tasks combining several stages. If asked for help or available commands, show the names and their purposes. Invocation syntax belongs to the host: slash commands in Antigravity and skill selection with `$` in Codex.
 
-<<<<<<< HEAD
-- `comb-trace`: Trace paper claims into companion code and identify mismatches.
-- `comb-cycle`: Run a bounded local experiment loop against a fixed metric.
-- `comb-align`: Compare sources, methods, findings, and disagreements.
-- `comb-investigate`: Investigate an open-ended question with sources and verification records.
-- `comb-paper`: Draft a sourced literature review from a topic through research, synthesis, critique, and verification.
-- `comb-manuscript`: Write a paper or report to the requested scope and length.
-- `comb-survey`: Survey literature on a topic, lab, investigator, or author.
-- `comb-blueprint`: Rank implementable approaches and produce concrete technical plans.
-- `comb-rerun`: Plan or perform a local reproduction of a reported result.
-- `comb-critique`: Review research weaknesses and produce a severity-graded revision plan.
-- `comb-check`: Verify citations and claims against their sources and produce a correction table.
-- `comb-digest`: Summarize a source through focused reading with source locations.
-=======
 - `comb-check`: Verify that citations resolve correctly and claims match what the sources actually say.
-- `comb-paper`: Complete the full research workflow—search, read, draft, critique, verify—and produce a paper with its evidence record.
-- `comb-survey`: Search scholarly indexes and build a thematic literature synthesis with recorded coverage and deduplication.
+- `comb-cycle`: [Experimental] Test changes against a fixed evaluation set, keep what improves the target metric, and record the attempts.
 - `comb-digest`: Read a single source and extract its methods, findings, and constraints with location references.
 - `comb-investigate`: Pursue a research question across multiple sources and deliver a documented investigation with claim verification records.
-- `comb-manuscript`: Draft a research document to a measured word target with inline citations and verified length.
-- `comb-critique`: Inspect research methods and claims for weaknesses, then grade each finding by severity and provide concrete revisions.
-- `comb-align`: Build a cited comparison matrix showing where sources agree, conflict, or measure different things.
-- `comb-trace`: Audit how paper claims map to code implementation with severity-graded findings.
-- `comb-rerun`: Reproduce reported results in an isolated environment and record deviations.
-- `comb-blueprint`: Rank technical options by feasibility with resource estimates and supporting evidence.
-- `comb-cycle`: Test changes against a fixed evaluation set, keep what improves the target metric, and record the attempts.
->>>>>>> 97d251e (Rewrite workflow descriptions in ResearchComb's own voice)
+- `comb-paper`: Complete the full research workflow—search, read, draft, critique, verify—and produce a paper with its evidence record.
+- `comb-part`: Build a cited comparison matrix showing where sources agree, conflict, or measure different things.
+- `comb-snag`: Inspect research methods and claims for weaknesses, then grade each finding by severity and provide concrete revisions.
+- `comb-sweep`: Search scholarly indexes and build a thematic literature synthesis with recorded coverage and deduplication.
+- `comb-trace`: Connect paper and code—audit claims against implementation, plan an implementation, or reproduce a result.
 - `comb-update`: Check GitHub for a newer ResearchComb release when the user asks.
+- `comb-weave`: Draft a research document to a measured word target with inline citations and verified length.
+
+**Deprecated aliases** (use the new names): `comb-align` → `comb-part`, `comb-blueprint` → `comb-trace`, `comb-critique` → `comb-snag`, `comb-manuscript` → `comb-weave`, `comb-rerun` → `comb-trace`, `comb-survey` → `comb-sweep`.
 
 ## Frame the question and gather evidence
 
@@ -52,7 +37,7 @@ The package supports Codex and Antigravity and includes these focused skills. Us
 ## Inspect code and experiments
 
 - When a paper makes implementation or benchmark claims and its code is available, inspect the linked repository at a recorded commit. Trace the model, data pipeline, evaluation metric, configuration, and checkpoint or result files relevant to the claim. Cite file paths and lines where the host supports them. Separate code that exists from code actually executed.
-- For replication requests, extract the required code, data, local environment, metrics, and expected result before running anything. Follow [comb-rerun](../comb-rerun/SKILL.md) for isolation before executing third-party code. Do not provision cloud compute or use paid services. Record commands, versions, inputs, outputs, and deviations. Call a result replicated only if the defined checks passed. Without local execution, deliver a runnable plan and mark the result untested.
+- For replication requests, extract the required code, data, local environment, metrics, and expected result before running anything. Follow [comb-trace](../comb-trace/SKILL.md) for isolation before executing third-party code. Do not provision cloud compute or use paid services. Record commands, versions, inputs, outputs, and deviations. Call a result replicated only if the defined checks passed. Without local execution, deliver a runnable plan and mark the result untested.
 
 ## Compose and challenge the draft
 
