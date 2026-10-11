@@ -50,11 +50,11 @@ The host may ask for its normal approval to fetch GitHub or write to its skills 
 ### 2. Start a new chat and give it a task
 
 ```text
-Use comb-paper to write a 3,000–3,500-word review of
-when retrieval-augmented generation improves factual
-accuracy. Research the topic, compare primary studies,
-draft the paper, critique it, verify claims and citations,
-and save paper.md, evidence.json, and checks.md.
+Use comb-paper to draft a 3,000–3,500-word sourced
+literature review on when retrieval-augmented generation
+improves factual accuracy. Search and compare primary
+studies, synthesize findings, check citations, and save
+paper.md with evidence.json and checks.md for me to revise.
 ```
 
 In **Codex**, type `$` and select a skill. In **Antigravity**, use its `/comb-*` slash command. Plain-language requests such as “Use comb-check to…” work in either host. A plugin may display the ResearchComb namespace with the skill name.
@@ -116,7 +116,7 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 
 | Your goal | Workflow | What you receive |
 | --- | --- | --- |
-| Write a paper from a topic | [`/comb-paper`](skills/comb-paper/SKILL.md) | A sourced paper, evidence record, and critique and verification findings |
+| Draft a sourced literature review | [`/comb-paper`](skills/comb-paper/SKILL.md) | A sourced draft, evidence record, critique and verification findings, and disclosure note for you to revise |
 | Find the literature | [`/comb-survey`](skills/comb-survey/SKILL.md) | A literature matrix, themes, gaps, and bibliography |
 | Investigate a question | [`/comb-investigate`](skills/comb-investigate/SKILL.md) | A cited brief with a search strategy and verification record |
 | Understand a source | [`/comb-digest`](skills/comb-digest/SKILL.md) | A focused summary with source locations and limitations |
@@ -197,17 +197,17 @@ underlying papers or abstracts before citing them.
 Expand a workflow and copy its prompt. Replace filenames, topics, folders, and environment choices with your own.
 
 <details>
-<summary><strong>Complete research paper</strong> · <code>comb-paper</code></summary>
+<summary><strong>Sourced literature review draft</strong> · <code>comb-paper</code></summary>
 
 ```text
-Use comb-paper to write a 3,000–3,500-word literature
-review on CO2-assisted propane dehydrogenation. Search
-primary studies, record what you could actually read,
-compare catalyst pathways, and write the paper in
-sections. Then critique the draft and verify its claims
-and citations. Save paper.md, evidence.json, and
-checks.md. If evidence is insufficient, label the paper
-partial and name the specific gaps.
+Use comb-paper to draft a 3,000–3,500-word sourced
+literature review on CO2-assisted propane dehydrogenation.
+Search primary studies, record what you could read,
+compare catalyst pathways, and synthesize the findings.
+Critique the draft, verify claims and citations, and
+append a disclosure note. Save paper.md, evidence.json,
+and checks.md for me to revise. If evidence is
+insufficient, label it partial and name the gaps.
 ```
 
 </details>

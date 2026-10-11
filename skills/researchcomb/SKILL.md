@@ -11,13 +11,13 @@ Read the [shared evidence record](references/evidence-record.md) when gathering 
 
 ## Select a workflow
 
-The package supports Codex and Antigravity and includes these focused skills. Use `comb-paper` for a topic-to-paper request and `comb-manuscript` when the user already has evidence to write from. Use the matching available skill for an explicit workflow request; keep this general workflow for other tasks combining several stages. If asked for help or available commands, show the names and their purposes. Invocation syntax belongs to the host: slash commands in Antigravity and skill selection with `$` in Codex.
+The package supports Codex and Antigravity and includes these focused skills. Use `comb-paper` to draft a sourced literature review from a research topic and `comb-manuscript` when the user already has evidence to write from. Use the matching available skill for an explicit workflow request; keep this general workflow for other tasks combining several stages. If asked for help or available commands, show the names and their purposes. Invocation syntax belongs to the host: slash commands in Antigravity and skill selection with `$` in Codex.
 
 - `comb-trace`: Trace paper claims into companion code and identify mismatches.
 - `comb-cycle`: Run a bounded local experiment loop against a fixed metric.
 - `comb-align`: Compare sources, methods, findings, and disagreements.
 - `comb-investigate`: Investigate an open-ended question with sources and verification records.
-- `comb-paper`: Take a topic through the full research, writing, critique, and verification workflow.
+- `comb-paper`: Draft a sourced literature review from a topic through research, synthesis, critique, and verification.
 - `comb-manuscript`: Write a paper or report to the requested scope and length.
 - `comb-survey`: Survey literature on a topic, lab, investigator, or author.
 - `comb-blueprint`: Rank implementable approaches and produce concrete technical plans.
