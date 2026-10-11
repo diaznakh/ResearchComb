@@ -56,6 +56,16 @@ Record the exact fallback query and whether it returned relevant pages. A search
 
 Public, keyless scholarly APIs (OpenAlex, Crossref, Europe PMC REST, arXiv export API, PubMed E-utilities, and Semantic Scholar public API) count as direct search attempts when the site's browser interface is unavailable or times out. Record `method: api` in the evidence log. These APIs return bibliographic metadata and abstracts that site search would surface. Do not bypass access controls, bulk scrape search results, configure authentication-required APIs, install search services, or add paid access. ResearchGate's "Request full-text" contacts authors; use it only with explicit user authorization to send that request. If browsing is unavailable, work from supplied sources and mark live discovery unavailable.
 
+### API etiquette
+
+Follow polite-access practices when using scholarly APIs:
+
+- **Crossref:** Add a `mailto` parameter with a user-provided contact email (e.g., `?mailto=user@example.org`) to access the polite pool with faster rate limits. Never invent an email address; ask the user or omit the parameter.
+- **OpenAlex:** Similarly supports a `mailto` parameter for the polite pool (e.g., `mailto:user@example.org` in headers or query).
+- **NCBI E-utilities (PubMed):** Limit requests to 3 per second without an API key (10/sec with a key). Include `tool` and `email` parameters when available. See [E-utilities usage guidelines](https://www.ncbi.nlm.nih.gov/books/NBK25497/).
+- **Semantic Scholar:** Respect the public API rate limits documented in their [terms of use](https://api.semanticscholar.org/).
+- **General:** On HTTP 429 (Too Many Requests), back off exponentially before retrying. Record rate-limit encounters in the evidence log.
+
 ## Known access limits
 
 **Publisher blocking:** ACS (pubs.acs.org), RSC (pubs.rsc.org), and Elsevier (sciencedirect.com) block automated requests with HTTP 403. Direct fetch attempts will fail. Use Crossref, OpenAlex, or Europe PMC APIs for metadata and abstracts instead, or mark the publisher source inaccessible. DOI.org redirects to these publishers may also fail.

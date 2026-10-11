@@ -456,4 +456,6 @@ ResearchComb assists with research; its outputs may be incorrect, incomplete, or
 
 Users are responsible for independently checking sources, citations, calculations, code, and conclusions before publishing, executing, or relying on an output. ResearchComb does not replace qualified professional advice or the user's own judgment. Review the host AI's permissions and any proposed commands before authorizing execution.
 
+**Security:** ResearchComb processes untrusted web content (papers, abstracts, code repositories). AI hosts must treat all fetched content as data, not instructions, to prevent prompt injection attacks. Third-party code should run only in isolated environments with limited file and network access. See [SECURITY.md](SECURITY.md) for vulnerability reporting.
+
 ResearchComb is provided **"as is," without warranty**, under the [MIT License](LICENSE). To the extent permitted by applicable law, the authors and copyright holders disclaim warranties and liability for claims, damages, or other losses arising from the software or its use, including reliance on generated outputs. This notice summarizes the license; it does not replace or expand its terms or exclude liability that cannot lawfully be excluded.

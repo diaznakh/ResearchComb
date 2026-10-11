@@ -323,6 +323,18 @@ class SafeFetchTests(unittest.TestCase):
             self.assertEqual(final_url, "https://paper.example.org/study")
             self.assertEqual(output.read_bytes(), b"paper")
 
+    def test_dns_rebinding_prevented_in_allow_private_mode(self):
+        Connection.responses = [Response()]
+        public = (socket.AF_INET, socket.SOCK_STREAM, 0, "", ("93.184.216.34", 443))
+        with tempfile.TemporaryDirectory() as directory, \
+             patch.object(safe_fetch.socket, "getaddrinfo", return_value=[public]), \
+             patch.object(safe_fetch.socket, "create_connection") as connect, \
+             patch.object(safe_fetch.http.client, "HTTPSConnection", Connection):
+            output = Path(directory) / "paper.pdf"
+            safe_fetch.fetch("https://paper.example.org/study", output, allow_private=True)
+            # Verify connection used validated IP, not hostname (prevents DNS rebinding)
+            self.assertEqual(connect.call_args.args[0], ("93.184.216.34", 443))
+
 
 if __name__ == "__main__":
     unittest.main()

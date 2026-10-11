@@ -1,3 +1,15 @@
 __pycache__/
 *.pyc
 .DS_Store
+*.pdf
+.env
+.env.*
+.venv/
+venv/
+output/
+evidence.json
+paper.md
+manuscript.md
+report.md
+checks.md
+*.log
