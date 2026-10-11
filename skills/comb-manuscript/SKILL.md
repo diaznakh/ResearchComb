@@ -1,6 +1,6 @@
 ---
 name: comb-manuscript
-description: Turn gathered research evidence into a paper-style manuscript or technical report with citations, equations, and requested length. Use for writing from evidence rather than source discovery alone.
+description: Draft a research document to a measured word target with inline citations and verified length. Use when writing from existing evidence.
 ---
 
 # Write a research manuscript

@@ -1,6 +1,6 @@
 ---
 name: comb-check
-description: Verify a research draft's citations, numerical claims, quotations, and attribution against underlying sources. Use for fact checking and citation checks rather than methodological peer review alone.
+description: Verify that citations resolve correctly and claims match what the sources actually say. Use for fact-checking rather than evaluating research design.
 ---
 
 # Check claims and citations

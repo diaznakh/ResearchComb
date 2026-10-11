@@ -1,6 +1,6 @@
 ---
 name: comb-cycle
-description: Optimize a user-defined research metric through a bounded local experiment loop. Use when asked to try hypotheses, benchmark alternatives, and retain measured improvements.
+description: Test changes against a fixed evaluation set, keep what improves the target metric, and record the attempts. Use for iterative optimization within a stated budget.
 ---
 
 # Run a bounded experiment cycle

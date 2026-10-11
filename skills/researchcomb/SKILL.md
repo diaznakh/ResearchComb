@@ -1,6 +1,6 @@
 ---
 name: researchcomb
-description: Run end-to-end research, find papers and citations, review drafts, audit paper code, plan replications, or monitor a topic. Use for evidence-backed academic and technical research tasks.
+description: Coordinate research workflows—search, verify claims, trace code, write drafts—with evidence records throughout. Use for multi-stage research tasks.
 ---
 
 # ResearchComb
@@ -13,6 +13,7 @@ Read the [shared evidence record](references/evidence-record.md) when gathering 
 
 The package supports Codex and Antigravity and includes these focused skills. Use `comb-paper` to draft a sourced literature review from a research topic and `comb-manuscript` when the user already has evidence to write from. Use the matching available skill for an explicit workflow request; keep this general workflow for other tasks combining several stages. If asked for help or available commands, show the names and their purposes. Invocation syntax belongs to the host: slash commands in Antigravity and skill selection with `$` in Codex.
 
+<<<<<<< HEAD
 - `comb-trace`: Trace paper claims into companion code and identify mismatches.
 - `comb-cycle`: Run a bounded local experiment loop against a fixed metric.
 - `comb-align`: Compare sources, methods, findings, and disagreements.
@@ -25,6 +26,20 @@ The package supports Codex and Antigravity and includes these focused skills. Us
 - `comb-critique`: Review research weaknesses and produce a severity-graded revision plan.
 - `comb-check`: Verify citations and claims against their sources and produce a correction table.
 - `comb-digest`: Summarize a source through focused reading with source locations.
+=======
+- `comb-check`: Verify that citations resolve correctly and claims match what the sources actually say.
+- `comb-paper`: Complete the full research workflow—search, read, draft, critique, verify—and produce a paper with its evidence record.
+- `comb-survey`: Search scholarly indexes and build a thematic literature synthesis with recorded coverage and deduplication.
+- `comb-digest`: Read a single source and extract its methods, findings, and constraints with location references.
+- `comb-investigate`: Pursue a research question across multiple sources and deliver a documented investigation with claim verification records.
+- `comb-manuscript`: Draft a research document to a measured word target with inline citations and verified length.
+- `comb-critique`: Inspect research methods and claims for weaknesses, then grade each finding by severity and provide concrete revisions.
+- `comb-align`: Build a cited comparison matrix showing where sources agree, conflict, or measure different things.
+- `comb-trace`: Audit how paper claims map to code implementation with severity-graded findings.
+- `comb-rerun`: Reproduce reported results in an isolated environment and record deviations.
+- `comb-blueprint`: Rank technical options by feasibility with resource estimates and supporting evidence.
+- `comb-cycle`: Test changes against a fixed evaluation set, keep what improves the target metric, and record the attempts.
+>>>>>>> 97d251e (Rewrite workflow descriptions in ResearchComb's own voice)
 - `comb-update`: Check GitHub for a newer ResearchComb release when the user asks.
 
 ## Frame the question and gather evidence
@@ -50,9 +65,5 @@ The package supports Codex and Antigravity and includes these focused skills. Us
 - Verify bibliographic fields against the DOI record, publisher page, or paper. Open citation links where tools permit and report broken or inaccessible links. Preserve the requested citation style. Never invent a DOI, author, page, quotation, result, or link.
 - Prefer primary research for research claims and official sources for statistics, rules, or dataset descriptions. Citation counts are discovery signals, not proof of quality. Disclose whether evidence came from full text, abstract, metadata, code inspection, or an actual run.
 - For a substantial research deliverable, perform the `comb-check` workflow before claiming verification. Preserve unresolved statuses and report the checks actually completed. Check requested sections and measured length before calling a manuscript complete.
-
-## Monitor
-
-When the user requests recurring monitoring, save a baseline search strategy, query and source list, last checked time, and stable paper IDs for deduplication. Use the host's scheduler only if available and authorized by the user. On later runs, report meaningful new or changed results with verified links; stay quiet when nothing material changed. If no scheduler exists, provide a reusable watch query and state that automatic monitoring is unavailable.
 
 Keep output proportional to the task. State the search date for time-sensitive surveys and any material coverage, access, code execution, or verification limits.

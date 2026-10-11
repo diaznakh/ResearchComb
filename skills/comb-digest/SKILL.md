@@ -1,6 +1,6 @@
 ---
 name: comb-digest
-description: Summarize a paper, PDF, report, repository README, or local research artifact while preserving methods, findings, limitations, and source locations.
+description: Read a single source and extract its methods, findings, and constraints with location references. Use for focused source summaries.
 ---
 
 # Digest a research source

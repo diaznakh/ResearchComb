@@ -1,6 +1,6 @@
 ---
 name: comb-critique
-description: Review a paper, report, or research draft for methodological weaknesses, unsupported claims, and likely objections, with severity and a revision plan. Use for research review rather than ordinary code review.
+description: Inspect research methods and claims for weaknesses, then grade each finding by severity and provide concrete revisions. Use for substantive research review.
 ---
 
 # Critique research evidence
