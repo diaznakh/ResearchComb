@@ -16,7 +16,7 @@ class UpdatePackaging(unittest.TestCase):
 
     def test_update_check_is_separate_from_research_workflows(self):
         skills = sorted((ROOT / "skills").glob("*/SKILL.md"))
-        self.assertEqual(len(skills), 14)
+        self.assertEqual(len(skills), 18)  # 11 workflows + 1 update + 6 deprecated aliases
         for skill in skills:
             with self.subTest(skill=skill.parent.name):
                 text = skill.read_text()
