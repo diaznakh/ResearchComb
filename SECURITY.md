@@ -2,9 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in ResearchComb, please report it via [GitHub's private vulnerability reporting](https://github.com/diaznakh/ResearchComb/security/advisories/new). This allows us to coordinate disclosure and prepare fixes before public announcement.
-
-Alternatively, you may contact the maintainers directly through GitHub.
+If you discover a security vulnerability in ResearchComb, please report it via [GitHub's private vulnerability reporting](https://github.com/diaznakh/ResearchComb/security/advisories/new) if enabled, or open a minimal public issue requesting a private channel (without disclosing vulnerability details). You may also contact the maintainers directly through GitHub.
 
 Please include:
 - Description of the vulnerability
@@ -12,7 +10,7 @@ Please include:
 - Potential impact
 - Suggested fix (if any)
 
-We aim to respond within 48 hours and will work with you to coordinate responsible disclosure.
+We will make our best effort to respond promptly and will work with you to coordinate responsible disclosure.
 
 ## Supported Versions
 

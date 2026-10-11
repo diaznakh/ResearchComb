@@ -54,16 +54,16 @@ If a relevant site's search interface cannot be used because the host lacks dire
 
 Record the exact fallback query and whether it returned relevant pages. A search engine may index only part of a site or no pages at all; no results do not establish that the site has no relevant papers. Label these as domain-restricted web searches, not searches inside the index. Never claim to have searched or read a blocked service. Continue with accessible publishers, repositories, and other sources for the underlying evidence.
 
-Public, keyless scholarly APIs (OpenAlex, Crossref, Europe PMC REST, arXiv export API, PubMed E-utilities, and Semantic Scholar public API) count as direct search attempts when the site's browser interface is unavailable or times out. Record `method: api` in the evidence log. These APIs return bibliographic metadata and abstracts that site search would surface. Do not bypass access controls, bulk scrape search results, configure authentication-required APIs, install search services, or add paid access. ResearchGate's "Request full-text" contacts authors; use it only with explicit user authorization to send that request. If browsing is unavailable, work from supplied sources and mark live discovery unavailable.
+Public scholarly APIs (Crossref, Europe PMC REST, arXiv export API, PubMed E-utilities, and Semantic Scholar public API) count as direct search attempts when the site's browser interface is unavailable or times out. OpenAlex is free for light use without a key but requires a free API key at scale. Record `method: api` in the evidence log. These APIs return bibliographic metadata and abstracts that site search would surface. Do not bypass access controls, bulk scrape search results, configure authentication-required APIs, install search services, or add paid access. ResearchGate's "Request full-text" contacts authors; use it only with explicit user authorization to send that request. If browsing is unavailable, work from supplied sources and mark live discovery unavailable.
 
 ### API etiquette
 
 Follow polite-access practices when using scholarly APIs:
 
 - **Crossref:** Add a `mailto` parameter with a user-provided contact email (e.g., `?mailto=user@example.org`) to access the polite pool with faster rate limits. Never invent an email address; ask the user or omit the parameter.
-- **OpenAlex:** Similarly supports a `mailto` parameter for the polite pool (e.g., `mailto:user@example.org` in headers or query).
+- **OpenAlex:** Free for casual use; heavier use needs a free API key from [openalex.org/settings/api](https://openalex.org/settings/api). See [rate limits and authentication](https://docs.openalex.org/how-to-use-the-api/rate-limits-and-authentication).
 - **NCBI E-utilities (PubMed):** Limit requests to 3 per second without an API key (10/sec with a key). Include `tool` and `email` parameters when available. See [E-utilities usage guidelines](https://www.ncbi.nlm.nih.gov/books/NBK25497/).
-- **Semantic Scholar:** Respect the public API rate limits documented in their [terms of use](https://api.semanticscholar.org/).
+- **Semantic Scholar:** Respect the public API rate limits documented in their [API license](https://www.semanticscholar.org/product/api/license).
 - **General:** On HTTP 429 (Too Many Requests), back off exponentially before retrying. Record rate-limit encounters in the evidence log.
 
 ## Known access limits
