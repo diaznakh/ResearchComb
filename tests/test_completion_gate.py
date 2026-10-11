@@ -251,6 +251,19 @@ class CompletionGateTests(unittest.TestCase):
             searches[0].pop("fallback")
             self.assertIn("fallback query", run().stderr)
 
+    def test_body_word_count_excludes_disclosure_keeps_normal_headings(self):
+        sys.path.insert(0, str(SCRIPT.parent))
+        from check_completion import body_word_count
+        
+        text = "one two three\n## Normal Heading\nfour five six\n## References\nseven eight"
+        self.assertEqual(body_word_count(text), 9)
+        
+        text = "one two three\n## AI Assistance Disclosure\nfour five six\n## References\nseven eight"
+        self.assertEqual(body_word_count(text), 3)
+        
+        text = "one two three\n## Author Note\nfour five\n"
+        self.assertEqual(body_word_count(text), 8)
+
 
 if __name__ == "__main__":
     unittest.main()
