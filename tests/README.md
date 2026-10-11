@@ -23,7 +23,7 @@ not exhaustive coverage of every input or host condition.
 
 ## Survey
 
-> Use comb-survey at REPO/skills/comb-survey/SKILL.md to survey CO2-assisted
+> Use comb-sweep at REPO/skills/comb-sweep/SKILL.md to survey CO2-assisted
 > oxidative dehydrogenation of propane and how catalyst composition changes
 > selectivity or reaction pathways. Restrict this small survey to
 > https://www.nature.com/articles/s41467-018-03793-w,
@@ -72,7 +72,7 @@ should be invented. Check the reported source locations against the fixture file
 
 ## Long manuscript and evidence handoff
 
-> Use comb-manuscript at REPO/skills/comb-manuscript/SKILL.md to turn
+> Use comb-weave at REPO/skills/comb-weave/SKILL.md to turn
 > OUTPUT/survey/report.md and OUTPUT/survey/evidence.json into a substantial
 > review manuscript on CO2-assisted propane dehydrogenation catalyst pathways
 > and evidence limitations. Preserve source and claim IDs. You may add verified
