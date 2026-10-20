@@ -22,7 +22,7 @@ paths when asking a host to work outside its current directory.
 
 ## Prompts
 
-1. **comb-align:** Compare `inputs/source-a.md` and `inputs/source-b.md` using
+1. **comb-part:** Compare `inputs/source-a.md` and `inputs/source-b.md` using
    `inputs/evidence.json`. Explain comparability and controls. In `result.json`
    include `direct_ranking_supported` and `studies`, a list containing `source_id`,
    `sample_size`, `positive_fraction`, `accuracy`, and `baseline_accuracy`.
@@ -37,13 +37,13 @@ paths when asking a host to work outside its current directory.
    quantitative conditions and limitations. In `result.json` include `sample_size`,
    `positive_fraction`, `accuracy`, `baseline_accuracy`, `access`, and
    `generalization_verified`. Express rates as fractions.
-4. **comb-blueprint:** Rank options from both excerpts for CPU-only local work,
+4. **comb-trace (implementation planning):** Rank options from both excerpts for CPU-only local work,
    zero added packages, and no downloads. Use `inputs/evidence.json` and inspect
    `benchmark/` without executing it. Give a concrete setup/evaluation plan.
    Distinguish study performance from the separate six-example demonstration.
    In `result.json` include `recommended_source_id`, `execution_performed`, and
    `candidates` containing `source_id`, `feasible`, `measured_here`, and `reason`.
-5. **comb-critique:** Review `inputs/draft.md` against both excerpts and the supplied
+5. **comb-snag:** Review `inputs/draft.md` against both excerpts and the supplied
    evidence record. Do not edit the draft. Preserve D1 and D2 as claim IDs. Give a
    concrete revision plan. In `result.json` include `findings` containing
    `claim_id`, `severity`, `location`, `evidence`, and `revision`.
@@ -56,7 +56,7 @@ paths when asking a host to work outside its current directory.
    `baseline` (threshold, accuracy), `trials` (threshold, accuracy, decision:
    kept or rejected), `best` (threshold, accuracy), `budget_used`, and
    `execution_performed`.
-7. **comb-rerun:** Execute the authored fixture to reproduce `benchmark/claim.md`
+7. **comb-trace (reproduction):** Execute the authored fixture to reproduce `benchmark/claim.md`
    without changing the code, data, threshold, or claim. Save actual stdout to
    `observed.json`. In `result.json` include `expected_accuracy`,
    `observed_accuracy`, `tolerance`, `status` (reproduced, not_reproduced, partial,
@@ -83,7 +83,7 @@ commands as well as the JSON artifacts; a written plan is not an executed run.
 
 The general skill should enumerate itself and all thirteen research workflows, plus
 the update command, and route the
-four requests to comb-check, comb-align, comb-rerun, and comb-manuscript.
+four requests to comb-check, comb-part, comb-trace, and comb-weave.
 
 Run `python3 tests/check_results.py OUTPUT_ROOT` after all cases complete. The
 checker validates the earlier thirteen focused cases plus the general routing case. Use a

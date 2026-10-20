@@ -8,7 +8,7 @@
 <p align="center">Research workflows for Codex and Antigravity, right inside your AI chat.</p>
 
 <p align="center">
-  <img src="assets/badges.svg" alt="Supports Codex and Antigravity; thirteen commands; MIT licensed" width="366" height="28">
+  <img src="assets/badges.svg" alt="Supports Codex and Antigravity; eleven commands plus deprecated aliases; MIT licensed" width="366" height="28">
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@
 
 ResearchComb helps your AI assistant find literature, connect findings, inspect companion code, write manuscripts, and check claims against sources. Bring a question, a paper, or a draft; choose a workflow or let the general `researchcomb` skill guide the task.
 
-**Free and open source. Thirteen research workflows plus an update command. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
+**Free and open source. Eleven research workflows plus an update command and deprecated aliases. No ResearchComb server or API keys to configure.** It uses your host's existing browsing, file, execution, and scheduling tools.
 
 ## Quick start
 
@@ -41,7 +41,8 @@ Use your native plugin installer if it accepts this
 GitHub repository; otherwise copy every complete skill
 folder under skills/, including supporting files, into
 your user skills directory. Confirm researchcomb and all
-thirteen comb-* commands are available. Do not execute
+researchcomb and all eleven comb-* commands are available (plus
+deprecated aliases). Do not execute
 repository code during installation.
 ```
 
@@ -85,7 +86,7 @@ Ask the agent to copy every complete folder under `skills/`, preserving names an
 | All workspaces | `~/.gemini/config/skills/` |
 | One workspace | `<workspace-root>/.agents/skills/` |
 
-Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the thirteen `comb-*` skills.
+Check **Customizations → Installed → Skills & Rules** for `researchcomb` and the eleven `comb-*` skills (plus deprecated aliases).
 
 For a verifiable install, use the exact commit in the prompt above; a bare GitHub CLI install may fetch the moving branch.
 
@@ -117,18 +118,18 @@ Use [`researchcomb`](skills/researchcomb/SKILL.md) for a task spanning several s
 | Your goal | Workflow | What you receive |
 | --- | --- | --- |
 | Draft a sourced literature review | [`/comb-paper`](skills/comb-paper/SKILL.md) | A cited draft with verification records and disclosure note for you to revise and complete |
-| Find the literature | [`/comb-survey`](skills/comb-survey/SKILL.md) | A thematic synthesis with source-coverage records and deduplicated bibliography |
+| Find the literature | [`/comb-sweep`](skills/comb-sweep/SKILL.md) | A thematic synthesis with source-coverage records and deduplicated bibliography |
 | Investigate a question | [`/comb-investigate`](skills/comb-investigate/SKILL.md) | A documented investigation with claim-verification records and remaining gaps |
 | Understand a source | [`/comb-digest`](skills/comb-digest/SKILL.md) | A focused reading with methods, findings, constraints, and location references |
-| Compare findings | [`/comb-align`](skills/comb-align/SKILL.md) | A cited matrix showing which conclusions agree, conflict, or aren't comparable |
-| Check a paper's code | [`/comb-trace`](skills/comb-trace/SKILL.md) | A severity-graded audit of where code diverges from paper descriptions |
-| Plan an implementation | [`/comb-blueprint`](skills/comb-blueprint/SKILL.md) | Feasibility-ranked options with resource estimates and supporting evidence |
-| Write a manuscript | [`/comb-manuscript`](skills/comb-manuscript/SKILL.md) | A measured-length draft with inline citations and completion verification |
-| Challenge the reasoning | [`/comb-critique`](skills/comb-critique/SKILL.md) | Graded weaknesses with concrete revisions and supporting locations |
+| Compare findings | [`/comb-part`](skills/comb-part/SKILL.md) | A cited matrix showing which conclusions agree, conflict, or aren't comparable |
+| Connect paper and code | [`/comb-trace`](skills/comb-trace/SKILL.md) | Claim-to-code audits, implementation plans, or reproduction records with deviations |
+| Write a manuscript | [`/comb-weave`](skills/comb-weave/SKILL.md) | A measured-length draft with inline citations and completion verification |
+| Challenge the reasoning | [`/comb-snag`](skills/comb-snag/SKILL.md) | Graded weaknesses with concrete revisions and supporting locations |
 | Verify claims and citations | [`/comb-check`](skills/comb-check/SKILL.md) | A correction table with identity checks, support statuses, and unverified items |
-| Try measured improvements | [`/comb-cycle`](skills/comb-cycle/SKILL.md) | An attempt ledger showing which changes improved the metric and which didn't |
-| Reproduce a result | [`/comb-rerun`](skills/comb-rerun/SKILL.md) | Expected and observed outcomes with recorded commands and deviations |
+| Try measured improvements | [`/comb-cycle`](skills/comb-cycle/SKILL.md) | [Experimental] An attempt ledger showing which changes improved the metric and which didn't |
 | Check for an update | [`/comb-update`](skills/comb-update/SKILL.md) | Current and available versions with the appropriate update command |
+
+**Deprecated workflow names** (aliases that redirect to the new names, scheduled for removal): `/comb-survey` (use `/comb-sweep`), `/comb-align` (use `/comb-part`), `/comb-critique` (use `/comb-snag`), `/comb-manuscript` (use `/comb-weave`), `/comb-blueprint` and `/comb-rerun` (both now part of `/comb-trace`).
 
 ## From a topic to a research paper
 
@@ -136,14 +137,14 @@ Use `/comb-paper` for the complete workflow in one request. The chart shows the 
 
 ```mermaid
 flowchart TD
-    A["Topic and paper goal → /comb-paper"] --> B["/comb-survey + /comb-investigate<br/>find and assess sources"]
-    B --> C["/comb-digest + /comb-align<br/>read and compare evidence"]
-    C --> D["/comb-manuscript<br/>draft to the requested length"]
-    D --> E["/comb-critique + /comb-check<br/>review and verify"]
+    A["Topic and paper goal → /comb-paper"] --> B["/comb-sweep + /comb-investigate<br/>find and assess sources"]
+    B --> C["/comb-digest + /comb-part<br/>read and compare evidence"]
+    C --> D["/comb-weave<br/>draft to the requested length"]
+    D --> E["/comb-snag + /comb-check<br/>review and verify"]
     E --> F{"Complete and supported?"}
     F -- No --> B
     F -- Yes --> G["Final paper with sources and limitations"]
-    C -. "If relevant and authorized" .-> H["/comb-trace + /comb-blueprint<br/>/comb-rerun or /comb-cycle"]
+    C -. "If relevant and authorized" .-> H["/comb-trace<br/>(audit, plan, or reproduce)"]
     H -.-> D
 ```
 
@@ -183,7 +184,7 @@ The [shared search guide](skills/researchcomb/references/search-sources.md) incl
 For an open-ended academic topic, ResearchComb directs the host to attempt Google Scholar, ResearchGate, Crossref, OpenAlex, and Semantic Scholar through their own search pages. `comb-paper` also attempts PubMed, Europe PMC, alphaXiv, arXiv, bioRxiv, and medRxiv. If a site's own search is unavailable, it directs a separate general web query such as `battery recycling site:researchgate.net/publication` for each source. Its source table should record direct attempts and the exact fallback queries separately. A `site:` query finds pages indexed by a general search engine; it does not search the site's complete index. Narrow lookups and user-limited source sets stay within the requested scope. ResearchComb uses the host's existing browser and has no separate search index or API integration. The host model may still skip or misreport searches, so check its tool history when complete coverage matters.
 
 ```text
-Use comb-survey to find papers on battery recycling.
+Use comb-sweep to find papers on battery recycling.
 Search Google Scholar and ResearchGate alongside other
 relevant sources. If a site cannot be opened, run a
 separate web query using its site: domain suffix. Record
@@ -253,10 +254,10 @@ and record which measured changes you keep or reject.
 </details>
 
 <details>
-<summary><strong>Source comparison</strong> · <code>comb-align</code></summary>
+<summary><strong>Source comparison</strong> · <code>comb-part</code></summary>
 
 ```text
-Use comb-align to compare paper-a.pdf and paper-b.pdf.
+Use comb-part to compare paper-a.pdf and paper-b.pdf.
 Build a cited matrix covering study design, datasets,
 baselines, results, and limitations. Explain agreements
 and disagreements, and identify results that cannot be
@@ -280,10 +281,10 @@ evidence.json.
 </details>
 
 <details>
-<summary><strong>Manuscript writing</strong> · <code>comb-manuscript</code></summary>
+<summary><strong>Manuscript writing</strong> · <code>comb-weave</code></summary>
 
 ```text
-Use comb-manuscript to turn findings.md and
+Use comb-weave to turn findings.md and
 evidence.json into a 6,000–6,500-word review, excluding
 the bibliography. Include an abstract, introduction,
 thematic comparison, limitations, research priorities,
@@ -295,10 +296,10 @@ word count.
 </details>
 
 <details>
-<summary><strong>Literature survey</strong> · <code>comb-survey</code></summary>
+<summary><strong>Literature survey</strong> · <code>comb-sweep</code></summary>
 
 ```text
-Use comb-survey to review research on CO2-assisted
+Use comb-sweep to review research on CO2-assisted
 propane dehydrogenation published during the past five
 years. Record search terms and screening criteria,
 distinguish primary studies from reviews and preprints,
@@ -309,10 +310,10 @@ gaps, and linked bibliography.
 </details>
 
 <details>
-<summary><strong>Implementation planning</strong> · <code>comb-blueprint</code></summary>
+<summary><strong>Implementation planning</strong> · <code>comb-trace</code></summary>
 
 ```text
-Use comb-blueprint to rank practical methods for
+Use comb-trace to rank practical methods for
 searching my local document collection on a CPU-only
 laptop with 8 GB RAM. Support the options with papers,
 code, and documentation. Give prerequisites, resource
@@ -323,10 +324,10 @@ a plan without installing or executing anything.
 </details>
 
 <details>
-<summary><strong>Result reproduction</strong> · <code>comb-rerun</code></summary>
+<summary><strong>Result reproduction</strong> · <code>comb-trace</code></summary>
 
 ```text
-Use comb-rerun to reproduce the accuracy in Table 2 of
+Use comb-trace to reproduce the accuracy in Table 2 of
 paper.pdf using ./paper-code, ./data, and my existing
 local .venv. Local execution is authorized; preserve the
 original code and data and do not install dependencies.
@@ -338,10 +339,10 @@ reproduces within one percentage point.
 </details>
 
 <details>
-<summary><strong>Research critique</strong> · <code>comb-critique</code></summary>
+<summary><strong>Research critique</strong> · <code>comb-snag</code></summary>
 
 ```text
-Use comb-critique to review draft.md with evidence.json.
+Use comb-snag to review draft.md with evidence.json.
 Check methods, controls, baselines, uncertainty, and
 whether the conclusions follow from the evidence. Give
 critical, major, and minor findings with source
@@ -397,7 +398,7 @@ Earlier cases were recorded on **8 October 2026**, using native Codex runs and t
 | --- | --- |
 | Earlier focused workflow cases | **11 / 11 passed** |
 | One-request `/comb-paper` case | **567 measured body words** within the requested 400–600 range; source IDs and critique and verification records preserved |
-| Earlier general command discovery and routing | **Passed** — thirteen workflow skills discovered and four requests routed |
+| Earlier general command discovery and routing | **Passed** — eleven workflow skills discovered and routed correctly |
 | Local checker tests | **32 / 32 passed** (16 safe_fetch, 9 completion_gate, 4 check_results, 3 update_packaging) |
 | Long manuscript case | **6,201 measured body words**, within the requested range |
 | Experiment loop | Improvement kept, regression rejected, two-trial budget respected |
@@ -439,7 +440,7 @@ Experiments need available local execution tools and an authorized environment. 
 
 ## Inside the repository
 
-- [`skills/`](skills/) — the general skill, thirteen research workflows, the update command, and shared evidence guidance.
+- [`skills/`](skills/) — the general skill, eleven research workflows, the update command, deprecated aliases, and shared evidence guidance.
 - [`plugin.json`](plugin.json) — portable package and Codex presentation metadata.
 - [`skills/researchcomb/VERSION`](skills/researchcomb/VERSION) — installed version for skills copied without the plugin manifest.
 - [Codex marketplace](.agents/plugins/marketplace.json) — GitHub installation source.
