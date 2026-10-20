@@ -17,7 +17,6 @@ from urllib.parse import urljoin, urlsplit, urlunsplit
 MAX_BYTES = 20 * 1024 * 1024
 MAX_REDIRECTS = 5
 USER_AGENT = "ResearchComb/0.5.23 (+https://github.com/diaznakh/ResearchComb)"
-DEFAULT_CACHE_DIRNAME = ".researchcomb-cache"
 DEFAULT_CACHE_TTL = 24 * 60 * 60
 DEFAULT_CACHE_MAX_BYTES = 64 * 1024 * 1024
 
@@ -65,8 +64,8 @@ def in_no_proxy(hostname, no_proxy):
     return False
 
 
-def cache_enabled(use_cache=None, no_cache=False):
-    if no_cache or os.environ.get("RESEARCHCOMB_NO_CACHE") == "1":
+def cache_enabled(use_cache=None, no_cache=False, allow_private=False):
+    if allow_private or no_cache or os.environ.get("RESEARCHCOMB_NO_CACHE") == "1":
         return False
     if use_cache is True:
         return True
@@ -97,7 +96,15 @@ def cache_max_bytes():
 
 def cache_directory():
     override = os.environ.get("RESEARCHCOMB_CACHE_DIR")
-    return Path(override) if override else Path.cwd() / DEFAULT_CACHE_DIRNAME
+    if override:
+        return Path(override)
+    xdg = os.environ.get("XDG_CACHE_HOME")
+    if xdg:
+        return Path(xdg) / "researchcomb"
+    if os.name == "nt":
+        local = os.environ.get("LOCALAPPDATA")
+        return Path(local) / "researchcomb" if local else Path.home() / "AppData" / "Local" / "researchcomb"
+    return Path.home() / ".cache" / "researchcomb"
 
 
 def normalize_url(url):
@@ -236,7 +243,7 @@ def fetch(url, output, allow_private=False, overwrite=False, use_cache=None, no_
     else:
         proxy_url = None
         no_proxy = ""
-    enabled_cache = cache_enabled(use_cache, no_cache)
+    enabled_cache = cache_enabled(use_cache, no_cache, allow_private)
     
     for _ in range(MAX_REDIRECTS + 1):
         parsed, ip, port = public_endpoint(url, allow_private)

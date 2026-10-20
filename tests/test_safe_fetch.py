@@ -6,7 +6,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
-from pathlib import Path
+from pathlib import Path, PosixPath
 from unittest.mock import patch
 
 
@@ -58,6 +58,7 @@ class SafeFetchTests(unittest.TestCase):
             "HTTP_PROXY", "HTTPS_PROXY", "NO_PROXY", "http_proxy", "https_proxy", "no_proxy",
             "RESEARCHCOMB_CACHE", "RESEARCHCOMB_NO_CACHE", "RESEARCHCOMB_CACHE_DIR",
             "RESEARCHCOMB_CACHE_TTL", "RESEARCHCOMB_CACHE_MAX_BYTES",
+            "XDG_CACHE_HOME", "LOCALAPPDATA",
         ]:
             self.old_env[key] = safe_fetch.os.environ.pop(key, None)
         Connection.requests = []
@@ -466,6 +467,32 @@ class SafeFetchTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "private"):
                     safe_fetch.fetch("https://paper.example.org/study", second, use_cache=True)
             self.assertFalse(second.exists())
+
+    def test_allow_private_does_not_read_or_write_cache(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cache_dir = Path(directory) / "cache"
+            first, second, third = Path(directory) / "a.pdf", Path(directory) / "b.pdf", Path(directory) / "c.pdf"
+            Connection.responses = [Response(body=b"cached"), Response(body=b"private-one"), Response(body=b"private-two")]
+            self._cached_fetch(directory, "https://paper.example.org/study", first, use_cache=True)
+            self.assertTrue(list(cache_dir.glob("*.bin")))
+            requests_after_store = len(Connection.requests)
+            self._cached_fetch(directory, "https://paper.example.org/study", second, use_cache=True, allow_private=True)
+            self._cached_fetch(directory, "https://paper.example.org/study", third, use_cache=True, allow_private=True)
+            self.assertEqual(len(Connection.requests), requests_after_store + 2)
+            self.assertEqual(second.read_bytes(), b"private-one")
+            self.assertEqual(third.read_bytes(), b"private-two")
+
+    def test_default_cache_dir_xdg_home_and_windows(self):
+        safe_fetch.os.environ["RESEARCHCOMB_CACHE_DIR"] = "/override/cache"
+        self.assertEqual(safe_fetch.cache_directory(), Path("/override/cache"))
+        del safe_fetch.os.environ["RESEARCHCOMB_CACHE_DIR"]
+        safe_fetch.os.environ["XDG_CACHE_HOME"] = "/xdg/cache"
+        self.assertEqual(safe_fetch.cache_directory(), Path("/xdg/cache") / "researchcomb")
+        del safe_fetch.os.environ["XDG_CACHE_HOME"]
+        self.assertEqual(safe_fetch.cache_directory(), Path.home() / ".cache" / "researchcomb")
+        safe_fetch.os.environ["LOCALAPPDATA"] = "/win/appdata"
+        with patch.object(safe_fetch, "Path", PosixPath), patch.object(safe_fetch.os, "name", "nt"):
+            self.assertEqual(safe_fetch.cache_directory(), PosixPath("/win/appdata") / "researchcomb")
 
 
 if __name__ == "__main__":
