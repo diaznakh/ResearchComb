@@ -13,6 +13,15 @@ Entries below are taken from git history and the GitHub Releases for tags
 
 ### Added
 
+- Opt-in on-disk cache for `safe_fetch.py` (`--cache` / `RESEARCHCOMB_CACHE=1`), stored under
+  `$XDG_CACHE_HOME/researchcomb` (or `~/.cache/researchcomb`; `%LOCALAPPDATA%\researchcomb` on
+  Windows), keyed by the final validated URL after redirects, with a 24-hour TTL.
+  `RESEARCHCOMB_CACHE_DIR` overrides the location. Cache hits copy into a fresh output file.
+  `--no-cache` / `RESEARCHCOMB_NO_CACHE=1` forces a new fetch. The cache is not read or written
+  when `--allow-private` is on. Error responses, HTTP 429, non-2xx, and `Cache-Control: no-store`
+  are not stored.
+- CI installs pinned `jsonschema==4.26.0` so the evidence-schema cross-check runs on GitHub Actions.
+
 - Keep a Changelog covering tags `v0.5.21`, `v0.5.22`, and `v0.5.23` from git
   history and the GitHub Releases for those tags.
 - Live GitHub Actions status badge for `.github/workflows/test.yml` in the README

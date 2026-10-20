@@ -66,6 +66,10 @@ Follow polite-access practices when using scholarly APIs:
 - **Semantic Scholar:** Respect the public API rate limits documented in their [API license](https://www.semanticscholar.org/product/api/license).
 - **General:** On HTTP 429 (Too Many Requests), back off exponentially before retrying. Record rate-limit encounters in the evidence log.
 
+### Local fetch cache
+
+On a long review, `safe_fetch.py` can reuse successful 2xx bodies when you pass `--cache` or set `RESEARCHCOMB_CACHE=1`. The cache is opt-in and is skipped entirely when `--allow-private` / `RESEARCHCOMB_ALLOW_PRIVATE=1` is on. Entries live under `$XDG_CACHE_HOME/researchcomb`, or `~/.cache/researchcomb` if that is unset (`%LOCALAPPDATA%\researchcomb` on Windows). `RESEARCHCOMB_CACHE_DIR` overrides the location. Entries are keyed by the final validated URL after redirects plus the User-Agent, and expire after 24 hours so `link_status` in `evidence.json` does not go stale. A cache hit still runs DNS and host checks, then copies the body into a fresh output path; it never returns or symlinks the shared cache file. Use a new output path for each fetch, as the evidence guide requires. For re-verification, pass `--no-cache` or set `RESEARCHCOMB_NO_CACHE=1`. Error responses, HTTP 429, non-2xx statuses, and `Cache-Control: no-store` are never stored. Default remains uncached.
+
 ## Known access limits
 
 **Publisher blocking:** ACS (pubs.acs.org), RSC (pubs.rsc.org), and Elsevier (sciencedirect.com) block automated requests with HTTP 403. Direct fetch attempts will fail. Use Crossref, OpenAlex, or Europe PMC APIs for metadata and abstracts instead, or mark the publisher source inaccessible. DOI.org redirects to these publishers may also fail.

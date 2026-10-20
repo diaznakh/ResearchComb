@@ -400,7 +400,7 @@ Earlier cases were recorded on **8 October 2026**, using native Codex runs and t
 | Earlier focused workflow cases | **11 / 11 passed** |
 | One-request `/comb-paper` case | **567 measured body words** within the requested 400–600 range; source IDs and critique and verification records preserved |
 | Earlier general command discovery and routing | **Passed** — eleven workflow skills discovered and routed correctly |
-| Local checker tests | **41 tests** (16 safe_fetch, 9 completion_gate, 4 check_results, 3 update_packaging, 9 evidence_schema; the jsonschema library check is skipped unless that package is installed) |
+| Local checker tests | **52 tests** (27 safe_fetch, 9 completion_gate, 4 check_results, 3 update_packaging, 9 evidence_schema; CI installs jsonschema==4.26.0) |
 | Long manuscript case | **6,201 measured body words**, within the requested range |
 | Experiment loop | Improvement kept, regression rejected, two-trial budget respected |
 | Reproduction case | A mismatched claimed result correctly reported as not reproduced |

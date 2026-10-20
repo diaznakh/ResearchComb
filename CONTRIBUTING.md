@@ -10,7 +10,7 @@ From the repository root, with Python 3 (CI uses 3.11):
 python3 -m unittest discover -s tests -p 'test_*.py'
 ```
 
-That is the same command as `.github/workflows/test.yml`. It covers `safe_fetch.py`, the completion gate, artifact checks, packaging, and the evidence-record schema. Schema tests use Python's standard library; they also call the `jsonschema` package when it is importable and skip that cross-check otherwise. It does not run live Codex or Antigravity workflow cases; those are described in `tests/README.md`.
+That is the same command as `.github/workflows/test.yml`. It covers `safe_fetch.py`, the completion gate, artifact checks, packaging, and the evidence-record schema. Schema tests use Python's standard library and, when `jsonschema` is importable, the Draft 2020-12 validator. CI installs `jsonschema==4.26.0` so that cross-check runs on GitHub Actions. It does not run live Codex or Antigravity workflow cases; those are described in `tests/README.md`.
 
 Do not execute third-party research code or fetch untrusted URLs as part of a unit-test run. `safe_fetch.py` tests mock the network.
 
