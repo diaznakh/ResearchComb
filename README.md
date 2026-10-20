@@ -9,6 +9,7 @@
 
 <p align="center">
   <img src="assets/badges.svg" alt="Supports Codex and Antigravity; thirteen commands; MIT licensed" width="366" height="28">
+  <a href="https://github.com/diaznakh/ResearchComb/actions/workflows/test.yml"><img src="https://github.com/diaznakh/ResearchComb/actions/workflows/test.yml/badge.svg" alt="Test workflow status"></a>
 </p>
 
 <p align="center">
