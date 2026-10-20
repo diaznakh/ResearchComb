@@ -1,0 +1,19 @@
+{
+  "question": "Compare the supplied synthetic study excerpts",
+  "sources": [],
+  "claims": [],
+  "searches": [
+    {
+      "source": "Crossref",
+      "direct": {
+        "url": "https://search.crossref.org/?q=example",
+        "outcome": "unavailable",
+        "reason": "Host only offers web search"
+      },
+      "fallback": {
+        "query": "example site:search.crossref.org",
+        "outcome": "relevant results found"
+      }
+    }
+  ]
+}

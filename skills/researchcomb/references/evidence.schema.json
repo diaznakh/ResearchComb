@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/diaznakh/ResearchComb/main/skills/researchcomb/references/evidence.schema.json",
   "title": "ResearchComb evidence record",
-  "description": "Shape of evidence.json as documented in evidence-record.md and checked by tests/check_results.py. Live search coverage and manuscript length stay in check_completion.py and are not encoded here.",
+  "description": "Shape of evidence.json as documented in evidence-record.md and checked by tests/check_results.py. Live search coverage and manuscript length stay in check_completion.py and are not encoded here. Closed $defs objects set additionalProperties to false. The record root stays open for user-requested fields and loosely typed inclusion/exclusion.",
   "type": "object",
   "required": ["question", "sources", "claims"],
   "properties": {
@@ -39,6 +39,7 @@
   "$defs": {
     "source": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["id", "title", "authors", "year", "url", "doi", "access", "identity_status", "link_status"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
@@ -91,6 +92,7 @@
     },
     "claim": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["id", "text", "status", "evidence", "note"],
       "properties": {
         "id": { "type": "string", "minLength": 1 },
@@ -118,6 +120,7 @@
     },
     "evidence_item": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["source_id", "location", "observation"],
       "properties": {
         "source_id": { "type": "string", "minLength": 1 },
@@ -127,6 +130,7 @@
     },
     "search": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["source", "direct"],
       "properties": {
         "source": { "type": "string", "minLength": 1 },
@@ -150,6 +154,7 @@
     },
     "direct_attempt": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["outcome"],
       "properties": {
         "outcome": { "enum": ["searched", "inaccessible", "unavailable"] },
@@ -186,6 +191,7 @@
     },
     "fallback": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["query", "outcome"],
       "properties": {
         "query": { "type": "string", "minLength": 1 },
@@ -194,6 +200,7 @@
     },
     "citation_trail": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["source_id", "kind", "outcome"],
       "properties": {
         "source_id": { "type": "string", "minLength": 1 },
@@ -214,6 +221,7 @@
     },
     "trail_lead": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["title", "status"],
       "properties": {
         "title": { "type": "string", "minLength": 1 },
@@ -250,6 +258,7 @@
     },
     "search_round": {
       "type": "object",
+      "additionalProperties": false,
       "required": ["new_relevant"],
       "properties": {
         "new_relevant": { "type": "integer", "minimum": 0 }

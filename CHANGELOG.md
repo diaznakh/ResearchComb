@@ -22,7 +22,10 @@ Entries below are taken from git history and the GitHub Releases for tags
 - Draft 2020-12 JSON Schema for `evidence.json` at
   `skills/researchcomb/references/evidence.schema.json`, linked from
   `evidence-record.md`, with a standard-library test that validates every fixture
-  `evidence.json`.
+  `evidence.json`. Closed objects (`source`, `claim`, evidence items, search
+  entries, citation trails, trail leads, and search rounds) set
+  `additionalProperties` to false. Schema tests cross-check with `jsonschema`
+  when that library is importable and include invalid evidence fixtures.
 
 ### Changed
 
