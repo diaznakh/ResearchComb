@@ -1,0 +1,25 @@
+{
+  "question": "Compare the supplied synthetic study excerpts",
+  "sources": [
+    {
+      "id": "S-A",
+      "title": "CPU threshold classifier",
+      "authors": ["ResearchComb Tests"],
+      "year": 2024,
+      "url": "inputs/source-a.md",
+      "doi": null,
+      "access": "excerpt",
+      "identity_status": "provided",
+      "link_status": "not_checked"
+    }
+  ],
+  "claims": [
+    {
+      "id": "C1",
+      "text": "The CPU classifier is preferable.",
+      "status": "supported",
+      "evidence": [],
+      "note": ""
+    }
+  ]
+}

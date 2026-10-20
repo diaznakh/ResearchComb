@@ -1,0 +1,279 @@
+"""Validate fixture evidence.json files against the Draft 2020-12 schema."""
+
+import json
+import re
+import unittest
+from pathlib import Path
+
+
+try:
+    import jsonschema
+    from jsonschema.validators import Draft202012Validator
+except ImportError:
+    jsonschema = None
+    Draft202012Validator = None
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SCHEMA_PATH = ROOT / "skills/researchcomb/references/evidence.schema.json"
+EVIDENCE_RECORD = ROOT / "skills/researchcomb/references/evidence-record.md"
+INVALID_FIXTURE_ROOT = ROOT / "tests/fixtures/invalid-evidence"
+VALID_FIXTURE_EVIDENCE = sorted(
+    path for path in ROOT.glob("tests/fixtures/**/evidence.json")
+    if INVALID_FIXTURE_ROOT not in path.parents
+)
+INVALID_FIXTURE_EVIDENCE = sorted(INVALID_FIXTURE_ROOT.glob("*/evidence.json"))
+DRAFT_2020_12 = "https://json-schema.org/draft/2020-12/schema"
+CLOSED_DEFS = (
+    "source", "claim", "evidence_item", "search", "direct_attempt", "fallback",
+    "citation_trail", "trail_lead", "search_round",
+)
+
+
+class SchemaError(ValueError):
+    """A JSON Schema validation failure with a JSON Pointer path."""
+
+
+def _is_type(instance, name):
+    if name == "null":
+        return instance is None
+    if name == "boolean":
+        return isinstance(instance, bool)
+    if name == "object":
+        return isinstance(instance, dict)
+    if name == "array":
+        return isinstance(instance, list)
+    if name == "string":
+        return isinstance(instance, str)
+    if name == "number":
+        return isinstance(instance, (int, float)) and not isinstance(instance, bool)
+    if name == "integer":
+        return isinstance(instance, int) and not isinstance(instance, bool)
+    raise SchemaError(f"unsupported type name {name!r}")
+
+
+def _resolve_ref(ref, root):
+    if not ref.startswith("#/"):
+        raise SchemaError(f"unsupported $ref {ref}")
+    node = root
+    for part in ref[2:].split("/"):
+        part = part.replace("~1", "/").replace("~0", "~")
+        if not isinstance(node, dict) or part not in node:
+            raise SchemaError(f"unresolved $ref {ref}")
+        node = node[part]
+    return node
+
+
+def _ok(instance, schema, root):
+    try:
+        validate(instance, schema, root)
+    except SchemaError:
+        return False
+    return True
+
+
+def validate(instance, schema, root=None, path="$"):
+    """Validate instance against a subset of JSON Schema Draft 2020-12."""
+    if schema is True:
+        return
+    if schema is False:
+        raise SchemaError(f"{path}: boolean schema false")
+    if not isinstance(schema, dict):
+        raise SchemaError(f"{path}: schema must be an object or boolean")
+    if root is None:
+        root = schema
+    if "$ref" in schema:
+        validate(instance, _resolve_ref(schema["$ref"], root), root, path)
+    if "type" in schema:
+        names = schema["type"] if isinstance(schema["type"], list) else [schema["type"]]
+        if not any(_is_type(instance, name) for name in names):
+            raise SchemaError(f"{path}: expected type {schema['type']!r}, got {type(instance).__name__}")
+    if "const" in schema and instance != schema["const"]:
+        raise SchemaError(f"{path}: expected const {schema['const']!r}")
+    if "enum" in schema and instance not in schema["enum"]:
+        raise SchemaError(f"{path}: {instance!r} is not in enum {schema['enum']!r}")
+    if "allOf" in schema:
+        for subschema in schema["allOf"]:
+            validate(instance, subschema, root, path)
+    if "anyOf" in schema:
+        if not any(_ok(instance, subschema, root) for subschema in schema["anyOf"]):
+            raise SchemaError(f"{path}: anyOf matched no alternative")
+    if "oneOf" in schema:
+        matches = sum(_ok(instance, subschema, root) for subschema in schema["oneOf"])
+        if matches != 1:
+            raise SchemaError(f"{path}: oneOf matched {matches} alternatives")
+    if "if" in schema:
+        if _ok(instance, schema["if"], root):
+            if "then" in schema:
+                validate(instance, schema["then"], root, path)
+        elif "else" in schema:
+            validate(instance, schema["else"], root, path)
+    if isinstance(instance, dict):
+        for key in schema.get("required", []):
+            if key not in instance:
+                raise SchemaError(f"{path}: missing required property {key!r}")
+        extras = set(instance)
+        for key, subschema in schema.get("properties", {}).items():
+            extras.discard(key)
+            if key in instance:
+                validate(instance[key], subschema, root, f"{path}/{key}")
+        additional = schema.get("additionalProperties", True)
+        if additional is False and extras:
+            raise SchemaError(f"{path}: unexpected properties {sorted(extras)}")
+        if isinstance(additional, (dict, bool)) and additional is not True:
+            for key in extras:
+                validate(instance[key], additional, root, f"{path}/{key}")
+    if isinstance(instance, list):
+        if "minItems" in schema and len(instance) < schema["minItems"]:
+            raise SchemaError(f"{path}: expected at least {schema['minItems']} items")
+        if "items" in schema:
+            for index, item in enumerate(instance):
+                validate(item, schema["items"], root, f"{path}/{index}")
+    if isinstance(instance, str) and "minLength" in schema and len(instance) < schema["minLength"]:
+        raise SchemaError(f"{path}: string shorter than {schema['minLength']}")
+    if _is_type(instance, "number") and "minimum" in schema and instance < schema["minimum"]:
+        raise SchemaError(f"{path}: {instance} is below minimum {schema['minimum']}")
+
+
+def _fenced_json_examples(markdown):
+    return [json.loads(block) for block in re.findall(r"```json\n(.*?)```", markdown, flags=re.S)]
+
+
+class EvidenceSchemaTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.schema = json.loads(SCHEMA_PATH.read_text())
+        cls.library_validator = Draft202012Validator(cls.schema) if Draft202012Validator else None
+
+    def assert_valid(self, instance):
+        validate(instance, self.schema)
+        if self.library_validator is not None:
+            self.library_validator.validate(instance)
+
+    def assert_invalid(self, instance):
+        with self.assertRaises(SchemaError):
+            validate(instance, self.schema)
+        if self.library_validator is not None:
+            with self.assertRaises(jsonschema.ValidationError):
+                self.library_validator.validate(instance)
+
+    def test_schema_declares_draft_2020_12(self):
+        self.assertEqual(self.schema["$schema"], DRAFT_2020_12)
+        self.assertEqual(self.schema["type"], "object")
+        self.assertEqual(self.schema["required"], ["question", "sources", "claims"])
+        for name in CLOSED_DEFS:
+            with self.subTest(name=name):
+                self.assertIs(self.schema["$defs"][name]["additionalProperties"], False)
+
+    @unittest.skipUnless(Draft202012Validator, "jsonschema is not installed")
+    def test_jsonschema_library_accepts_the_schema(self):
+        Draft202012Validator.check_schema(self.schema)
+
+    def test_every_fixture_evidence_json_matches_schema(self):
+        self.assertTrue(VALID_FIXTURE_EVIDENCE, "expected at least one valid tests/fixtures/**/evidence.json")
+        for path in VALID_FIXTURE_EVIDENCE:
+            with self.subTest(path=str(path.relative_to(ROOT))):
+                self.assert_valid(json.loads(path.read_text()))
+
+    def test_documented_examples_match_schema(self):
+        examples = _fenced_json_examples(EVIDENCE_RECORD.read_text())
+        self.assertGreaterEqual(len(examples), 2)
+        self.assert_valid(examples[0])
+        record = {"question": "", "sources": [], "claims": [], "searches": [examples[1]]}
+        self.assert_valid(record)
+        record["searches"] = [{
+            "source": "Crossref",
+            "direct": {"outcome": "unavailable", "reason": "Host only offers web search"},
+            "fallback": {"query": "example site:search.crossref.org", "outcome": "relevant results found"},
+        }]
+        self.assert_valid(record)
+        record.update({
+            "sources": [{
+                "id": "S1", "title": "Paper", "authors": ["Author"], "year": 2024,
+                "url": "https://example.org/paper", "doi": None, "access": "abstract",
+                "identity_status": "unverified", "link_status": "accessible",
+                "relevance": "core", "fetch_mode": "allow_private",
+            }],
+            "citation_trails": [{"source_id": "S1", "kind": "references", "outcome": "screened"}],
+            "trail_leads": [{"title": "Follow-on paper", "status": "included", "source_id": "S1"}],
+            "search_rounds": [{"new_relevant": 0}],
+            "inclusion": "peer-reviewed primary studies",
+            "exclusion": "non-English records",
+        })
+        self.assert_valid(record)
+
+    def test_invalid_evidence_fixtures_are_rejected(self):
+        expected = {
+            "misspelt-field",
+            "bad-enum",
+            "supported-claim-without-evidence",
+            "unavailable-search-with-url",
+        }
+        found = {path.parent.name for path in INVALID_FIXTURE_EVIDENCE}
+        self.assertEqual(found, expected)
+        for path in INVALID_FIXTURE_EVIDENCE:
+            with self.subTest(path=str(path.relative_to(ROOT))):
+                self.assert_invalid(json.loads(path.read_text()))
+
+    def test_check_results_fixture_shape_matches_schema(self):
+        record = {
+            "question": "Test a claim",
+            "sources": [{
+                "id": "S1", "title": "Fixture", "authors": [], "year": None,
+                "url": "fixture.md", "doi": None, "access": "excerpt",
+                "identity_status": "provided", "link_status": "not_checked",
+            }],
+            "claims": [{
+                "id": "C1", "text": "Claim", "status": "supported",
+                "evidence": [{"source_id": "S1", "location": "section 1", "observation": "Evidence"}],
+                "note": "Checked against the supplied excerpt",
+            }],
+        }
+        self.assert_valid(record)
+
+    def test_schema_rejects_values_already_invalid_in_check_code(self):
+        record = json.loads((ROOT / "tests/fixtures/workflows/evidence.json").read_text())
+        record["sources"][0]["access"] = "snippet"
+        self.assert_invalid(record)
+        del record["question"]
+        record["sources"][0]["access"] = "excerpt"
+        self.assert_invalid(record)
+
+    def test_assessed_claim_requires_evidence_item(self):
+        record = {
+            "question": "q",
+            "sources": [{
+                "id": "S1", "title": "T", "authors": None, "year": None,
+                "url": None, "doi": None, "access": "metadata",
+                "identity_status": "unverified", "link_status": "not_checked",
+            }],
+            "claims": [{
+                "id": "C1", "text": "Claim", "status": "supported",
+                "evidence": [], "note": "",
+            }],
+        }
+        self.assert_invalid(record)
+        record["claims"][0]["status"] = "unverified"
+        self.assert_valid(record)
+
+    def test_unavailable_search_needs_reason_and_fallback(self):
+        record = {
+            "question": "q",
+            "sources": [],
+            "claims": [],
+            "searches": [{
+                "source": "Crossref",
+                "direct": {"outcome": "unavailable", "reason": "Host only offers web search"},
+                "fallback": {"query": "example site:search.crossref.org", "outcome": "relevant results found"},
+            }],
+        }
+        self.assert_valid(record)
+        record["searches"][0]["direct"]["url"] = "https://search.crossref.org/"
+        self.assert_invalid(record)
+        record["searches"][0]["direct"] = {"outcome": "unavailable", "reason": "Host only offers web search"}
+        del record["searches"][0]["fallback"]
+        self.assert_invalid(record)
+
+
+if __name__ == "__main__":
+    unittest.main()

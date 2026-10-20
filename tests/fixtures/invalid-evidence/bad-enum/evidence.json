@@ -1,0 +1,17 @@
+{
+  "question": "Compare the supplied synthetic study excerpts",
+  "sources": [
+    {
+      "id": "S-A",
+      "title": "CPU threshold classifier",
+      "authors": ["ResearchComb Tests"],
+      "year": 2024,
+      "url": "inputs/source-a.md",
+      "doi": null,
+      "access": "snippet",
+      "identity_status": "provided",
+      "link_status": "not_checked"
+    }
+  ],
+  "claims": []
+}

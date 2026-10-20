@@ -1,0 +1,60 @@
+name: Bug report
+description: Report broken ResearchComb behavior in Codex or Antigravity
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Search existing issues first. For vulnerabilities, use [private reporting](https://github.com/diaznakh/ResearchComb/security/advisories/new) as described in SECURITY.md.
+  - type: dropdown
+    id: host
+    attributes:
+      label: Host
+      description: Which AI host showed the problem?
+      options:
+        - Codex
+        - Antigravity
+    validations:
+      required: true
+  - type: input
+    id: skill
+    attributes:
+      label: Skill name
+      description: The skill you were using (`researchcomb`, a `comb-*` workflow, or `comb-update`).
+      placeholder: comb-check
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: Installed version from `plugin.json` or `skills/researchcomb/VERSION`. Include the git tag or commit if you know it.
+      placeholder: v0.5.23
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Prompts, files, and host actions. Do not paste secrets, tokens, or private papers.
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should have happened.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead. Include error text or saved `evidence.json` excerpts when they help, with secrets removed.
+    validations:
+      required: true

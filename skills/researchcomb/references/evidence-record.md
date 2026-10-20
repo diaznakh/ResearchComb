@@ -18,6 +18,8 @@ The JSON form has a question, a source register, and a claim register:
 }
 ```
 
+A Draft 2020-12 JSON Schema for this JSON form is [evidence.schema.json](evidence.schema.json). Use it to check record shape. Completeness of live searches and manuscript length remain the job of `scripts/check_completion.py`; the schema does not add or remove those completion-gate rules.
+
 For an open-ended live academic search with file access, add a `searches` list. Include one entry per broad source in the [search guide](search-sources.md), using the URL from the actual browser call. Example:
 
 ```json

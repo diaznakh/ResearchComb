@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/diaznakh/ResearchComb/main/skills/researchcomb/references/evidence.schema.json",
+  "title": "ResearchComb evidence record",
+  "description": "Shape of evidence.json as documented in evidence-record.md and checked by tests/check_results.py. Live search coverage and manuscript length stay in check_completion.py and are not encoded here. Closed $defs objects set additionalProperties to false. The record root stays open for user-requested fields and loosely typed inclusion/exclusion.",
+  "type": "object",
+  "required": ["question", "sources", "claims"],
+  "properties": {
+    "question": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/source" }
+    },
+    "claims": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/claim" }
+    },
+    "searches": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/search" }
+    },
+    "citation_trails": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/citation_trail" }
+    },
+    "trail_leads": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/trail_lead" }
+    },
+    "search_rounds": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/search_round" }
+    },
+    "inclusion": true,
+    "exclusion": true
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "title", "authors", "year", "url", "doi", "access", "identity_status", "link_status"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "title": { "type": "string", "minLength": 1 },
+        "authors": {
+          "description": "Bibliographic authors as a list, or null when unknown.",
+          "type": ["array", "null"],
+          "items": { "type": "string" }
+        },
+        "year": {
+          "description": "Publication year, or null when unknown.",
+          "type": ["integer", "null"]
+        },
+        "url": {
+          "description": "Canonical publisher, repository, or supplied local source location.",
+          "type": ["string", "null"]
+        },
+        "doi": { "type": ["string", "null"] },
+        "access": {
+          "enum": ["full_text", "abstract", "excerpt", "metadata", "code", "run"]
+        },
+        "identity_status": {
+          "enum": ["verified", "provided", "unverified"]
+        },
+        "link_status": {
+          "enum": ["accessible", "inaccessible", "broken", "not_checked"]
+        },
+        "checked_date": { "type": "string" },
+        "source_type": { "type": "string" },
+        "commit": { "type": "string" },
+        "version": {
+          "enum": ["preprint", "accepted_manuscript", "version_of_record"]
+        },
+        "reference_issues": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "fetch_mode": { "const": "allow_private" },
+        "relevance": { "type": "string" },
+        "exclusion_reason": { "type": "string" },
+        "peer_reviewed": {
+          "anyOf": [
+            { "type": "boolean" },
+            { "const": "preprint" }
+          ]
+        },
+        "versions": true,
+        "discovered_via": true
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "text", "status", "evidence", "note"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "text": { "type": "string" },
+        "status": {
+          "enum": ["supported", "qualified", "contradicted", "unsupported", "unverified"]
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/evidence_item" }
+        },
+        "note": { "type": "string" }
+      },
+      "if": {
+        "properties": {
+          "status": { "enum": ["supported", "qualified", "contradicted"] }
+        },
+        "required": ["status"]
+      },
+      "then": {
+        "properties": {
+          "evidence": { "minItems": 1 }
+        }
+      }
+    },
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "location", "observation"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "location": { "type": "string", "minLength": 1 },
+        "observation": { "type": "string", "minLength": 1 }
+      }
+    },
+    "search": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "direct"],
+      "properties": {
+        "source": { "type": "string", "minLength": 1 },
+        "direct": { "$ref": "#/$defs/direct_attempt" },
+        "fallback": { "$ref": "#/$defs/fallback" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "direct": {
+                "properties": { "outcome": { "enum": ["inaccessible", "unavailable"] } },
+                "required": ["outcome"]
+              }
+            },
+            "required": ["direct"]
+          },
+          "then": { "required": ["fallback"] }
+        }
+      ]
+    },
+    "direct_attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["outcome"],
+      "properties": {
+        "outcome": { "enum": ["searched", "inaccessible", "unavailable"] },
+        "url": { "type": ["string", "null"] },
+        "reason": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "outcome": { "const": "unavailable" } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "required": ["reason"],
+            "properties": {
+              "reason": { "type": "string", "minLength": 1 },
+              "url": { "type": "null" }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "outcome": { "enum": ["searched", "inaccessible"] } },
+            "required": ["outcome"]
+          },
+          "then": {
+            "required": ["url"],
+            "properties": {
+              "url": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "fallback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["query", "outcome"],
+      "properties": {
+        "query": { "type": "string", "minLength": 1 },
+        "outcome": { "type": "string", "minLength": 1 }
+      }
+    },
+    "citation_trail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "kind", "outcome"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["references", "cited_by", "related"] },
+        "outcome": { "enum": ["screened", "inaccessible"] },
+        "reason": { "type": "string" }
+      },
+      "if": {
+        "properties": { "outcome": { "const": "inaccessible" } },
+        "required": ["outcome"]
+      },
+      "then": {
+        "required": ["reason"],
+        "properties": {
+          "reason": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "trail_lead": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "status"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["included", "excluded", "inaccessible"] },
+        "source_id": { "type": "string" },
+        "reason": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "status": { "const": "included" } },
+            "required": ["status"]
+          },
+          "then": {
+            "required": ["source_id"],
+            "properties": {
+              "source_id": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": { "status": { "const": "excluded" } },
+            "required": ["status"]
+          },
+          "then": {
+            "required": ["reason"],
+            "properties": {
+              "reason": { "type": "string", "minLength": 1 }
+            }
+          }
+        }
+      ]
+    },
+    "search_round": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["new_relevant"],
+      "properties": {
+        "new_relevant": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
