@@ -11,6 +11,19 @@ Entries below are taken from git history and the GitHub Releases for tags
 
 ## [Unreleased]
 
+### Added
+
+- Keep a Changelog covering tags `v0.5.21`, `v0.5.22`, and `v0.5.23` from git
+  history and the GitHub Releases for those tags.
+- Live GitHub Actions status badge for `.github/workflows/test.yml` in the README
+  header.
+- `CONTRIBUTING.md`, `.github/ISSUE_TEMPLATE/` issue forms, and
+  `.github/pull_request_template.md`.
+- Draft 2020-12 JSON Schema for `evidence.json` at
+  `skills/researchcomb/references/evidence.schema.json`, linked from
+  `evidence-record.md`, with a standard-library test that validates every fixture
+  `evidence.json`.
+
 ### Changed
 
 - Pin README install instructions to ResearchComb `v0.5.23` at commit
