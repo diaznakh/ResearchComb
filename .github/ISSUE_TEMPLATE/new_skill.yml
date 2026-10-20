@@ -1,0 +1,56 @@
+name: New comb-* skill
+description: Propose a focused ResearchComb workflow skill
+title: "[Skill]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Propose one new `comb-*` skill. Read [CONTRIBUTING.md](https://github.com/diaznakh/ResearchComb/blob/main/CONTRIBUTING.md) for layout, naming, and test expectations.
+  - type: input
+    id: skill_name
+    attributes:
+      label: Proposed skill name
+      description: Must start with `comb-` followed by a verb. Example `comb-annotate`.
+      placeholder: comb-
+    validations:
+      required: true
+  - type: dropdown
+    id: hosts
+    attributes:
+      label: Target hosts
+      description: Where the skill should run.
+      multiple: true
+      options:
+        - Codex
+        - Antigravity
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What research task is missing from the current skills, and when would someone invoke this skill?
+    validations:
+      required: true
+  - type: textarea
+    id: existing
+    attributes:
+      label: Relation to existing skills
+      description: Why `researchcomb` or an existing `comb-*` skill is not enough. Name overlaps and differences.
+    validations:
+      required: true
+  - type: textarea
+    id: contract
+    attributes:
+      label: Inputs, outputs, and evidence
+      description: Expected user inputs, deliverable files, and how the skill will use `evidence.json` (source IDs, claim statuses, searches).
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Host tools and limits
+      description: Browser, files, local execution, or scheduler needs. How the skill reports partial work when a tool is missing. Confirm it needs no ResearchComb server or API key.
+    validations:
+      required: true
