@@ -405,7 +405,7 @@ Earlier cases were recorded on **8 October 2026**, using native Codex runs and t
 | Experiment loop | Improvement kept, regression rejected, two-trial budget respected |
 | Reproduction case | A mismatched claimed result correctly reported as not reproduced |
 
-Coverage is one representative Codex case per research workflow. Eight cases use local synthetic fixtures; the initial survey and citation checks use real public paper sources. Some publisher text was inaccessible and remained labelled as abstract or excerpt evidence. Antigravity skill installation was checked; its behavioral tests remain unverified.
+Coverage is one representative Codex case per research workflow. Eight cases use local synthetic fixtures; the initial survey and citation checks use real public paper sources. Some publisher text was inaccessible and remained labelled as abstract or excerpt evidence. Antigravity skill installation was checked, and one manual `comb-check` case passed in Antigravity on Windows with schema-valid `evidence.json` ([#11](https://github.com/diaznakh/ResearchComb/issues/11)); other Antigravity workflows remain unverified.
 
 [Read the results and limits](tests/RESULTS.md) · [Run the regression checks](tests/README.md)
 
