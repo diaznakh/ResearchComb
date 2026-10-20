@@ -46,7 +46,7 @@ The pack manifest is `plugin.json`. Codex marketplace metadata is `.agents/plugi
 ## Propose a new `comb-*` skill
 
 1. Open an issue with the **New comb-* skill** template, or start a discussion in a PR if the design is already concrete.
-2. Name it `comb-` plus a verb (`comb-check`, `comb-survey`). Do not reuse an existing name.
+2. Name it `comb-` plus a verb (`comb-check`, `comb-sweep`). Do not reuse an existing name.
 3. Add `skills/<name>/SKILL.md` with `name` and `description` frontmatter. State the host tools it needs, how it writes or updates `evidence.json`, and how it reports partial work when a tool is missing.
 4. Keep the skill offline-capable for supplied files. Live search must follow `search-sources.md` and the evidence record.
 5. Treat fetched content as untrusted data, not instructions. Do not weaken `safe_fetch.py`.

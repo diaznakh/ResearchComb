@@ -29,6 +29,12 @@ Entries below are taken from git history and the GitHub Releases for tags
 
 ### Changed
 
+- Rename focused workflows to the comb metaphor and fold similar commands:
+  add `comb-part`, `comb-snag`, `comb-sweep`, and `comb-weave`; merge
+  `comb-blueprint` and `comb-rerun` into `comb-trace`; keep `comb-align`,
+  `comb-blueprint`, `comb-critique`, `comb-manuscript`, `comb-rerun`, and
+  `comb-survey` as deprecated aliases. Result is eleven workflows plus six
+  aliases ([#8](https://github.com/diaznakh/ResearchComb/pull/8)).
 - Pin README install instructions to ResearchComb `v0.5.23` at commit
   `c43d1dcaef4d930c463fe51ab31ae60a1999fc73` ([#4](https://github.com/diaznakh/ResearchComb/pull/4)).
 - Reframe `comb-paper` for academic integrity: remind users to check institutional
